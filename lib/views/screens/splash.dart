@@ -15,7 +15,7 @@ class _SplashscreenState extends State<Splashscreen> {
 
   @override
   void initState() {
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 2), () {
       if (authController.isAuth()) {
         Get.toNamed(AppRoutes.dashboard);
       } else {
@@ -41,6 +41,5 @@ class _SplashscreenState extends State<Splashscreen> {
         ),
       ),
     );
-    ;
   }
 }

@@ -4,18 +4,18 @@ import 'package:get/get.dart';
 
 import '../widgets/nav-drawer.dart';
 
-class HomeScreen extends GetView {
-  HomeScreen({Key? key}) : super(key: key);
+class ListeCondidat extends GetView {
+  ListeCondidat({Key? key}) : super(key: key);
   final AuthController authController = Get.find();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Bienvenu'),
+        title: const Text('Liste Condidat'),
       ),
       drawer: const NavDrawer(),
-      body: const Center(child: Text("Calendar page")),
+      body: const Center(child: Text("Liste Condidat page")),
     );
   }
 }

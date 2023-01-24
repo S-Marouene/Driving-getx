@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import '../../database/models/user.dart';
 import '../../database/services/auth_service.dart';
 import '../../routes/routes.dart';
 
@@ -36,13 +38,29 @@ class LoginController extends GetxController {
       try {
         var data = await AuthService.login(
             email: emailController.text, password: passwordController.text);
-        if (data != null) {
-          print(data);
-          await storage.write(key: 'token', value: data);
+
+        if (data["access_token"] != null) {
+          var getinfo = jsonDecode((json.encode(data["user"])).toString());
+          User user = User(
+            id: getinfo["id"],
+            name: getinfo["name"],
+            email: getinfo["email"],
+            fname: getinfo["fname"],
+            schoolname: getinfo["school_name"],
+            status: getinfo["status"],
+            path: getinfo["path"],
+            role: getinfo["role"],
+          );
+
+          //print(getinfo);
+
+          await storage.write(key: 'token', value: data["access_token"]);
+          await storage.write(key: 'user', value: User.serialize(user));
+
           loginformKey.currentState!.save();
           Get.toNamed(AppRoutes.dashboard);
         } else {
-          Get.snackbar("login", "problem");
+          Get.snackbar("login", "problemaaaaaaaaaa");
         }
       } finally {
         isLoading(false);

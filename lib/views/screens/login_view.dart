@@ -19,7 +19,9 @@ class LoginView extends GetView<LoginController> {
               children: [
                 TextFormField(
                   controller: controller.emailController,
-                  validator: (v) {},
+                  validator: (v) {
+                    return null;
+                  },
                   onSaved: (v) {},
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
@@ -33,7 +35,9 @@ class LoginView extends GetView<LoginController> {
                 const SizedBox(height: 10),
                 TextFormField(
                   controller: controller.passwordController,
-                  validator: (v) {},
+                  validator: (v) {
+                    return null;
+                  },
                   onSaved: (v) {},
                   keyboardType: TextInputType.visiblePassword,
                   obscureText: true,
