@@ -1,9 +1,12 @@
 // ignore_for_file: unused_local_variable
 
+import 'package:driving_getx/logic/controllers/listecondidatcontroller.dart';
 import 'package:driving_getx/main/utils/AppWidget.dart';
 import 'package:driving_getx/main/utils/SDColors.dart';
 import 'package:driving_getx/views/screens/liste_condidat.dart';
+import 'package:driving_getx/views/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'dashboard.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -16,11 +19,14 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
 
+  final ListeCondidatController listeCondidatController =
+      Get.put(ListeCondidatController());
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     changeStatusColor(sdAppBackground);
-    final tab = [Dashboard(context), ListeCondidat()];
+    final tab = [Dashboard(context), ListeCondidat(), ProfileScreen()];
 
     return SafeArea(
       child: Scaffold(
@@ -61,16 +67,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     label: "test2"
                     //title: Text('a'),
                     ),
-                /* BottomNavigationBarItem(
-                  icon: Image.asset('images/smartDeck/images/sdleaderboard.png',
-                      height: 28, width: 28, color: sdIconColor),
-                  activeIcon: Image.asset(
-                      'images/smartDeck/images/sdleaderboard.png',
-                      height: 28,
-                      width: 28,
-                      color: sdPrimaryColor),
-                  //title: Text('a'),
-                ),
+                BottomNavigationBarItem(
+                    icon: Image.asset('images/appbar/sdleaderboard.png',
+                        height: 28, width: 28, color: sdIconColor),
+                    activeIcon: Image.asset('images/appbar/sdleaderboard.png',
+                        height: 28, width: 28, color: sdPrimaryColor),
+                    label: "test2"
+                    //title: Text('a'),
+                    ),
+                /* 
                 BottomNavigationBarItem(
                   icon: Stack(
                     children: <Widget>[
@@ -148,11 +153,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-/* 
-class HomeScreen extends GetView {
-  HomeScreen({Key? key}) : super(key: key);
-  final AuthController authController = Get.find();
-  
-  }
-}
- */

@@ -2,6 +2,7 @@ import 'package:driving_getx/logic/controllers/auth_controller.dart';
 import 'package:driving_getx/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:nb_utils/nb_utils.dart';
 
 class Splashscreen extends StatefulWidget {
   const Splashscreen({super.key});
@@ -28,16 +29,19 @@ class _SplashscreenState extends State<Splashscreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: Colors.blue,
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        child: const Center(
-          child: Text(
-            "SM-DEV",
-            style: TextStyle(
-                fontSize: 40, fontWeight: FontWeight.bold, color: Colors.white),
-          ),
+      backgroundColor: const Color(0xFF076ACF),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: <Widget>[
+            Image.asset('images/app/sdlogo.png', height: 105),
+            Container(
+              margin: const EdgeInsets.only(top: 16),
+              child: Text("SM-DEV",
+                  style: secondaryTextStyle(size: 25, color: Colors.white)),
+            ),
+          ],
         ),
       ),
     );
