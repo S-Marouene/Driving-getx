@@ -14,7 +14,6 @@ class AuthService {
       },
       body: jsonEncode(<String, String>{"email": email, "password": password}),
     );
-
     if (response.statusCode == 200) {
       //var stringObject = response.body;
       var data = jsonDecode(response.body.toString());

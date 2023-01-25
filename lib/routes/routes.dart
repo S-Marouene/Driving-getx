@@ -18,7 +18,7 @@ class AppRoutes {
         page: () => const LoginView(),
         binding: LoginBuinding()),
     GetPage(name: Routes.dashboard, page: () => HomeScreen()),
-    GetPage(name: Routes.liste_condidat, page: () => ListeCondidat()),
+    //GetPage(name: Routes.liste_condidat, page: () => HomeScreen()),
     GetPage(
         name: Routes.splash,
         page: () => const Splashscreen(),

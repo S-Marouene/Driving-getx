@@ -2,6 +2,7 @@ import 'package:driving_getx/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 
+//AppStore appStore = AppStore();
 void main() {
   runApp(GetMaterialApp(
     theme: ThemeData(

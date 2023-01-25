@@ -4,6 +4,17 @@ import 'package:get/get.dart';
 
 import '../widgets/nav-drawer.dart';
 
+Widget ListeCondidat(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: const Text('Bienvenu'),
+    ),
+    drawer: const NavDrawer(),
+    body: const Center(child: Text("Liste Condidat page")),
+  );
+}
+
+/* 
 class ListeCondidat extends GetView {
   ListeCondidat({Key? key}) : super(key: key);
   final AuthController authController = Get.find();
@@ -19,3 +30,4 @@ class ListeCondidat extends GetView {
     );
   }
 }
+ */

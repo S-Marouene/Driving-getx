@@ -51,9 +51,6 @@ class LoginController extends GetxController {
             path: getinfo["path"],
             role: getinfo["role"],
           );
-
-          //print(getinfo);
-
           await storage.write(key: 'token', value: data["access_token"]);
           await storage.write(key: 'user', value: User.serialize(user));
 
