@@ -11,3 +11,12 @@ const sdIconColor = Color(0xFFA6A7AA);
 const sdShadowColor = Color(0x95E9EBF0);
 const sdAppBackground = Color(0xFFf8f8f8);
 const sdViewColor = Color(0xFFDADADA);
+
+const kBackgroundColor = Color(0xFFF1EFF1);
+const kPrimaryColor = Color(0xFF219ebc);
+const kSecondaryColor = Color(0xFFfcca46);
+const kTextColor = Color(0xFF023047);
+const kTextLightColor = Color(0xFF747474);
+const kBlueColor = Color(0xFF40BAD5);
+
+const kDefaultPadding = 20.0;

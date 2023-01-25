@@ -1,14 +1,9 @@
 import 'package:dio/dio.dart';
-
 import '../../logic/controllers/auth_controller.dart';
 
 Dio dio() {
   var dio = Dio(BaseOptions(
-
-      /**for production */
       baseUrl: 'https://smdev.tn/api/auth',
-
-      // baseUrl: 'http://172.21.11.196/Driving/backend/api/auth',
       responseType: ResponseType.plain,
       headers: {
         'accept': 'application/json',
@@ -21,7 +16,6 @@ Dio dio() {
       return handler.next(options); //continue
     },
   ));
-
   return dio;
 }
 

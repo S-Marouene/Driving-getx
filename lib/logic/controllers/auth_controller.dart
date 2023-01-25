@@ -1,8 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
-
 import '../../routes/routes.dart';
 
 class AuthController extends GetxController {
@@ -19,15 +17,9 @@ class AuthController extends GetxController {
     super.onInit();
   }
 
-  authdata() async {
+  Future authdata() async {
     token = (await storage.read(key: 'token'))!;
-  }
-
-  gtuserInfo() async {
-    user.value = (await storage.read(key: 'user'))!;
-    if (kDebugMode) {
-      print(user.value);
-    }
+    return token;
   }
 
   bool isAuth() {

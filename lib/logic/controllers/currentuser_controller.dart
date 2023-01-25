@@ -11,4 +11,9 @@ class CurrentUserController extends GetxController {
     User? getfromlocal = User.deserialize((await storage.read(key: 'user'))!);
     _currentuser.value = getfromlocal;
   }
+
+  getToken() async {
+    String token = (await storage.read(key: 'token'))!;
+    return token;
+  }
 }

@@ -1,3 +1,4 @@
+import 'package:driving_getx/logic/bindings/condidats_binding.dart';
 import 'package:driving_getx/logic/bindings/login_binding.dart';
 import 'package:driving_getx/views/screens/liste_condidat.dart';
 import 'package:driving_getx/views/screens/splash.dart';
@@ -18,7 +19,10 @@ class AppRoutes {
         page: () => const LoginView(),
         binding: LoginBuinding()),
     GetPage(name: Routes.dashboard, page: () => HomeScreen()),
-    //GetPage(name: Routes.liste_condidat, page: () => HomeScreen()),
+    GetPage(
+        name: Routes.liste_condidat,
+        page: () => ListeCondidat(),
+        binding: CondidatsBuinding()),
     GetPage(
         name: Routes.splash,
         page: () => const Splashscreen(),

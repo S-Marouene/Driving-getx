@@ -1,12 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:driving_getx/logic/controllers/auth_controller.dart';
+// ignore_for_file: unused_local_variable
+
 import 'package:driving_getx/main/utils/AppWidget.dart';
 import 'package:driving_getx/main/utils/SDColors.dart';
 import 'package:driving_getx/views/screens/liste_condidat.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
-import '../widgets/nav-drawer.dart';
 import 'dashboard.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -23,7 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     changeStatusColor(sdAppBackground);
-    final tab = [Dashboard(context), ListeCondidat(context)];
+    final tab = [Dashboard(context), ListeCondidat()];
 
     return SafeArea(
       child: Scaffold(
