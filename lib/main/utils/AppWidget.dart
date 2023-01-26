@@ -200,7 +200,8 @@ class ExampleItemWidget extends StatelessWidget {
   final bool showTrailing;
 
   const ExampleItemWidget(this.tabBarType,
-      {super.key, required this.onTap, this.showTrailing = false});
+      {Key? key, required this.onTap, this.showTrailing = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -235,16 +236,16 @@ String convertDate(date) {
 class CustomTheme extends StatelessWidget {
   final Widget? child;
 
-  const CustomTheme({super.key, required this.child});
+  const CustomTheme({Key? key, required this.child}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Theme(
       data: appStore.isDarkModeOn
           ? ThemeData.dark().copyWith(
-              backgroundColor: appStore.scaffoldBackground,
-              colorScheme:
-                  ColorScheme.fromSwatch().copyWith(secondary: appColorPrimary),
+              colorScheme: ColorScheme.fromSwatch()
+                  .copyWith(secondary: appColorPrimary)
+                  .copyWith(background: appStore.scaffoldBackground),
             )
           : ThemeData.light(),
       child: child!,
@@ -331,7 +332,8 @@ class ContainerX extends StatelessWidget {
   final Widget? web;
   final bool? useFullWidth;
 
-  const ContainerX({super.key, this.mobile, this.web, this.useFullWidth});
+  const ContainerX({Key? key, this.mobile, this.web, this.useFullWidth})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

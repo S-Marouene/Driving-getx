@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:driving_getx/logic/controllers/auth_controller.dart';
 import 'package:driving_getx/routes/routes.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +7,9 @@ import 'package:get/get.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 class Splashscreen extends StatefulWidget {
-  const Splashscreen({super.key});
+  const Splashscreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<Splashscreen> createState() => _SplashscreenState();

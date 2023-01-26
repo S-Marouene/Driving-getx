@@ -49,7 +49,7 @@ class DetailsBody extends StatelessWidget {
                     const EdgeInsets.symmetric(vertical: kDefaultPadding / 2),
                 child: Text(
                   condidat.nom! + ' ' + condidat.prenom!,
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.titleLarge,
                 ),
               ),
               Text(

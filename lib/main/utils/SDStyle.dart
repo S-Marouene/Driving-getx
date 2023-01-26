@@ -48,11 +48,12 @@ class SDButton extends StatefulWidget {
   var height = 40.0;
 
   SDButton(
-      {super.key,
+      {Key? key,
       required this.textContent,
       required this.onPressed,
       this.isStroked = false,
-      this.height = 45.0});
+      this.height = 45.0})
+      : super(key: key);
 
   @override
   SDButtonState createState() => SDButtonState();

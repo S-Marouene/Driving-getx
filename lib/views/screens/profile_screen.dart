@@ -1,4 +1,5 @@
 // ignore_for_file: depend_on_referenced_packages
+import 'package:driving_getx/logic/controllers/currentuser_controller.dart';
 import 'package:driving_getx/main/utils/AppWidget.dart';
 import 'package:driving_getx/main/utils/SDColors.dart';
 import 'package:driving_getx/main/utils/SDStyle.dart';
@@ -7,18 +8,26 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-import 'SDSettingScreen.dart';
-
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  const ProfileScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  final _currentuserController = Get.put(CurrentUserController());
+  static const URLpic = 'https://smdev.tn/storage/profile_pic/';
+
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _currentuserController.gtuserInfo();
+      setState(() {});
+    });
+
     super.initState();
   }
 
@@ -57,9 +66,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 borderRadius: BorderRadius.circular(40),
                 child: FadeInImage(
                   fit: BoxFit.cover,
-                  placeholder: AssetImage('Loading'),
+                  placeholder: AssetImage('images/app/loading.gif'),
                   image: Image.network(
-                          'https://i.insider.com/5de6dd81fd9db241b00c04d3?width=1100&format=jpeg&auto=webp',
+                          URLpic +
+                              (_currentuserController.user.path == null
+                                  ? 'unknown_profile.png'
+                                  : _currentuserController.user.path!),
                           height: 35,
                           width: 10)
                       .image,
@@ -68,13 +80,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             Container(
               margin: EdgeInsets.only(top: 20),
-              child:
-                  Text('Mark Paul', style: boldTextStyle(color: Colors.white)),
+              child: Text(
+                  (_currentuserController.user.name ?? "") +
+                      ' ' +
+                      (_currentuserController.user.fname ?? ""),
+                  style: boldTextStyle(color: Colors.white)),
             ),
             Container(
               margin: EdgeInsets.only(top: 10),
               child: Text(
-                'Senior High School - 12th Grade',
+                'Auto Ecole - ${_currentuserController.user.schoolname ?? ""}',
                 style: secondaryTextStyle(
                     size: 12, color: Colors.white.withOpacity(0.7)),
               ),
@@ -115,7 +130,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text('Highest Score',
+                    Text('Condidat en cours',
                         style: boldTextStyle(color: Colors.black, size: 14)),
                     SizedBox(height: 10),
                     Text(
@@ -144,7 +159,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text('Lowest Score',
+                    Text('Nbr Examens',
                         style: boldTextStyle(color: Colors.black, size: 14)),
                     SizedBox(height: 10),
                     Text(

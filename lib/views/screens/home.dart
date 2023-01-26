@@ -1,5 +1,3 @@
-// ignore_for_file: unused_local_variable
-
 import 'package:driving_getx/logic/controllers/listecondidatcontroller.dart';
 import 'package:driving_getx/main/utils/AppWidget.dart';
 import 'package:driving_getx/main/utils/SDColors.dart';
@@ -7,10 +5,13 @@ import 'package:driving_getx/views/screens/liste_condidat.dart';
 import 'package:driving_getx/views/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'allcondidat_screen.dart';
 import 'dashboard.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -26,7 +27,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     changeStatusColor(sdAppBackground);
-    final tab = [Dashboard(context), ListeCondidat(), ProfileScreen()];
+    final tab = [
+      Dashboard(context),
+      ListeCondidat(),
+      ListeAllCondidat(size),
+      ProfileScreen()
+    ];
 
     return SafeArea(
       child: Scaffold(
@@ -60,10 +66,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     ///title: Text('a'),
                     ),
                 BottomNavigationBarItem(
-                    icon: Image.asset('images/appbar/sdexamcard.png',
-                        height: 28, width: 28, color: sdIconColor),
-                    activeIcon: Image.asset('images/appbar/sdexamcard.png',
-                        height: 28, width: 28, color: sdPrimaryColor),
+                    icon: Icon(
+                      Icons.people_alt_rounded,
+                    ),
+                    activeIcon: Icon(
+                      Icons.people_alt_rounded,
+                    ),
                     label: "test2"
                     //title: Text('a'),
                     ),
@@ -75,35 +83,35 @@ class _HomeScreenState extends State<HomeScreen> {
                     label: "test2"
                     //title: Text('a'),
                     ),
-                /* 
                 BottomNavigationBarItem(
-                  icon: Stack(
-                    children: <Widget>[
-                      Image.asset('images/smartDeck/images/sdchats.png',
-                          height: 28, width: 28, color: sdIconColor),
-                      const Positioned(
-                        top: -2,
-                        right: -6,
-                        child: CircleAvatar(
-                            radius: 3, backgroundColor: sdSecondaryColorRed),
-                      )
-                    ],
-                  ),
-                  activeIcon: Stack(
-                    children: <Widget>[
-                      Image.asset('images/smartDeck/images/sdchats.png',
-                          height: 28, width: 28, color: sdPrimaryColor),
-                      const Positioned(
-                        top: -2,
-                        right: -6,
-                        child: CircleAvatar(
-                            radius: 3, backgroundColor: sdSecondaryColorRed),
-                      )
-                    ],
-                  ),
-                  //title: Text('a'),
-                ),
-                BottomNavigationBarItem(
+                    icon: Stack(
+                      children: <Widget>[
+                        Image.asset('images/appbar/sdchats.png',
+                            height: 28, width: 28, color: sdIconColor),
+                        const Positioned(
+                          top: -2,
+                          right: -6,
+                          child: CircleAvatar(
+                              radius: 3, backgroundColor: sdSecondaryColorRed),
+                        )
+                      ],
+                    ),
+                    activeIcon: Stack(
+                      children: <Widget>[
+                        Image.asset('images/appbar/sdchats.png',
+                            height: 28, width: 28, color: sdPrimaryColor),
+                        const Positioned(
+                          top: -2,
+                          right: -6,
+                          child: CircleAvatar(
+                              radius: 3, backgroundColor: sdSecondaryColorRed),
+                        )
+                      ],
+                    ),
+                    label: "test2"
+                    //title: Text('a'),
+                    ),
+                /*BottomNavigationBarItem(
                   icon: Container(
                     decoration: const BoxDecoration(shape: BoxShape.circle),
                     height: 30,

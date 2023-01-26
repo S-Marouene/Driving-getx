@@ -29,6 +29,7 @@ class AuthController extends GetxController {
 
   doLogout() async {
     await storage.deleteAll();
+    //Get.offAll(AppRoutes.login);
     Get.toNamed(AppRoutes.login);
   }
 }

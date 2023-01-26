@@ -5,7 +5,9 @@ import '../../logic/controllers/currentuser_controller.dart';
 import '../../routes/routes.dart';
 
 class NavDrawer extends StatefulWidget {
-  const NavDrawer({super.key});
+  const NavDrawer({
+    Key? key,
+  }) : super(key: key);
   @override
   State<NavDrawer> createState() => _NavDrawerState();
 }
