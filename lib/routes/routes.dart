@@ -1,11 +1,8 @@
-import 'package:driving_getx/logic/bindings/condidats_binding.dart';
 import 'package:driving_getx/logic/bindings/login_binding.dart';
 import 'package:driving_getx/logic/bindings/settings_binding.dart';
 import 'package:driving_getx/views/screens/SDSettingScreen.dart';
-import 'package:driving_getx/views/screens/liste_condidat.dart';
 import 'package:driving_getx/views/screens/splash.dart';
 import 'package:get/get.dart';
-
 import '../views/screens/home.dart';
 import '../views/screens/login_view.dart';
 
@@ -13,7 +10,6 @@ class AppRoutes {
   static const dashboard = Routes.dashboard;
   static const splash = Routes.splash;
   static const login = Routes.login;
-  static const liste_condidat = Routes.liste_condidat;
   static const settings = Routes.settings;
 
   static final routes = [
@@ -27,10 +23,6 @@ class AppRoutes {
         page: () => SDSettingScreen(),
         binding: Settingsbuinding()),
     GetPage(
-        name: Routes.liste_condidat,
-        page: () => ListeCondidat(),
-        binding: CondidatsBuinding()),
-    GetPage(
         name: Routes.splash,
         page: () => const Splashscreen(),
         binding: LoginBuinding()),
@@ -41,6 +33,5 @@ class Routes {
   static const dashboard = '/dashboard';
   static const login = '/login';
   static const splash = '/splash';
-  static const liste_condidat = '/liste_condidat';
   static const settings = '/settings';
 }

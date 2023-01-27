@@ -1,3 +1,4 @@
+// ignore_for_file: depend_on_referenced_packages
 import 'package:driving_getx/database/models/condidats.dart';
 import 'package:driving_getx/main/utils/SDColors.dart';
 import 'package:driving_getx/main/utils/SDStyle.dart';
@@ -28,6 +29,7 @@ class CondidatInfoScreen extends StatelessWidget {
       );
     }
 
+    // ignore: unused_element
     Widget mLeaderList(Condidat thisCondidat) {
       return Container(
         decoration: boxDecorations(showShadow: true),
@@ -138,6 +140,8 @@ class CondidatInfoScreen extends StatelessWidget {
                       padding: EdgeInsets.only(bottom: 16),
                       physics: NeverScrollableScrollPhysics(),
                       itemBuilder: (BuildContext context, int index) {
+                        return null;
+
                         // return mLeaderList(mScoreList[index]);
                       },
                     )

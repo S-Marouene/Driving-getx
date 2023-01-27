@@ -1,8 +1,8 @@
+// ignore_for_file: depend_on_referenced_packages
 import 'package:driving_getx/logic/controllers/auth_controller.dart';
 import 'package:driving_getx/logic/controllers/listecondidatcontroller.dart';
 import 'package:driving_getx/main/utils/SDColors.dart';
 import 'package:driving_getx/main/utils/SDStyle.dart';
-import 'package:driving_getx/routes/routes.dart';
 import 'package:driving_getx/views/screens/condidat_info_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

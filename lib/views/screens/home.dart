@@ -1,12 +1,11 @@
 import 'package:driving_getx/logic/controllers/listecondidatcontroller.dart';
 import 'package:driving_getx/main/utils/AppWidget.dart';
 import 'package:driving_getx/main/utils/SDColors.dart';
-import 'package:driving_getx/views/screens/liste_condidat.dart';
 import 'package:driving_getx/views/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'allcondidat_screen.dart';
-import 'dashboard.dart';
+import 'dashboard_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -27,12 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     changeStatusColor(sdAppBackground);
-    final tab = [
-      Dashboard(context),
-      ListeCondidat(),
-      ListeAllCondidat(size),
-      ProfileScreen()
-    ];
+    final tab = [Dashboard(context), ListeAllCondidat(size), ProfileScreen()];
 
     return SafeArea(
       child: Scaffold(
@@ -72,14 +66,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     activeIcon: Icon(
                       Icons.people_alt_rounded,
                     ),
-                    label: "test2"
-                    //title: Text('a'),
-                    ),
-                BottomNavigationBarItem(
-                    icon: Image.asset('images/appbar/sdleaderboard.png',
-                        height: 28, width: 28, color: sdIconColor),
-                    activeIcon: Image.asset('images/appbar/sdleaderboard.png',
-                        height: 28, width: 28, color: sdPrimaryColor),
                     label: "test2"
                     //title: Text('a'),
                     ),

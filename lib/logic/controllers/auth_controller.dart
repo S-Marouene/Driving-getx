@@ -19,7 +19,7 @@ class AuthController extends GetxController {
   }
 
   Future authdata() async {
-    token = (await storage.read(key: 'token'))!;
+    token = (await storage.read(key: 'token')) ?? "";
     return token;
   }
 
@@ -27,9 +27,13 @@ class AuthController extends GetxController {
     return token.isNotEmpty;
   }
 
-  doLogout() async {
-    await storage.deleteAll();
-    //Get.offAll(AppRoutes.login);
-    Get.toNamed(AppRoutes.login);
+  deleteinfoStored() async {
+    await storage.delete(key: 'token');
+    await storage.delete(key: 'user');
+  }
+
+  doLogout() {
+    deleteinfoStored();
+    Get.offAllNamed(AppRoutes.splash);
   }
 }
