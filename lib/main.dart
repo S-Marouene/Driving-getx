@@ -1,16 +1,15 @@
 import 'package:driving_getx/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:flutter/services.dart';
 
-//AppStore appStore = AppStore();
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [
+    SystemUiOverlay.bottom, //This line is used for showing the bottom bar
+  ]);
+
   runApp(GetMaterialApp(
-    /* theme: ThemeData(
-        primarySwatch: Colors.blue,
-        appBarTheme: AppBarTheme(
-            iconTheme: IconThemeData(color: Colors.black),
-            color: Colors.deepPurpleAccent)), */
-    //title: "SM-DEV",
     initialRoute: AppRoutes.splash,
     getPages: AppRoutes.routes,
     debugShowCheckedModeBanner: false,

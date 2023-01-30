@@ -17,7 +17,7 @@ class ListeAllCondidat extends GetView<ListeCondidatController> {
   @override
   Widget build(BuildContext context) {
     return controller.obx((condidat) => Column(
-          children: <Widget>[
+          children: [
             Container(
               padding: EdgeInsets.only(top: 25, left: 16, bottom: 16),
               width: size!.width,

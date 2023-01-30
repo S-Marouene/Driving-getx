@@ -38,3 +38,4 @@ flutter:
   assets:
     - images/app/
     - images/appbar/
+    - images/LikeButton/image/

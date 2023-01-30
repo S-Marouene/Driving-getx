@@ -1,3 +1,4 @@
+import 'package:driving_getx/logic/controllers/currentuser_controller.dart';
 import 'package:driving_getx/logic/controllers/listecondidatcontroller.dart';
 import 'package:driving_getx/main/utils/AppWidget.dart';
 import 'package:driving_getx/main/utils/SDColors.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'allcondidat_screen.dart';
 import 'dashboard_screen.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -19,6 +21,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
+  static const URLpic = 'https://smdev.tn/storage/profile_pic/';
+  final _currentuserController = Get.put(CurrentUserController());
 
   final ListeCondidatController listeCondidatController =
       Get.put(ListeCondidatController());
@@ -61,31 +65,21 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: 28, width: 28, color: sdIconColor),
                     activeIcon: Image.asset('images/appbar/sdhome.png',
                         height: 28, width: 28, color: sdPrimaryColor),
-                    label: "test"
+                    label: "test"),
+                BottomNavigationBarItem(
+                    icon: Image.asset('images/appbar/calendar.png',
+                        height: 28, width: 28, color: kTextLightColor),
+                    activeIcon: Image.asset('images/appbar/calendar.png',
+                        height: 28, width: 28, color: sdPrimaryColor),
+                    label: "Calendar"),
+                BottomNavigationBarItem(
+                    icon: Image.asset('images/appbar/users3.png',
+                        height: 28, width: 28, color: kTextLightColor),
+                    activeIcon: Image.asset('images/appbar/users3.png',
+                        height: 28, width: 28, color: sdPrimaryColor),
+                    label: "Condidats"),
 
-                    ///title: Text('a'),
-                    ),
-                BottomNavigationBarItem(
-                    icon: Icon(
-                      Icons.people_alt_rounded,
-                    ),
-                    activeIcon: Icon(
-                      Icons.people_alt_rounded,
-                    ),
-                    label: "test2"
-                    //title: Text('a'),
-                    ),
-                BottomNavigationBarItem(
-                    icon: Icon(
-                      Icons.people_alt_rounded,
-                    ),
-                    activeIcon: Icon(
-                      Icons.people_alt_rounded,
-                    ),
-                    label: "test2"
-                    //title: Text('a'),
-                    ),
-                BottomNavigationBarItem(
+                /*BottomNavigationBarItem(
                     icon: Stack(
                       children: <Widget>[
                         Image.asset('images/appbar/sdchats.png',
@@ -112,8 +106,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     label: "test2"
                     //title: Text('a'),
-                    ),
-                /*BottomNavigationBarItem(
+                    ),*/
+                BottomNavigationBarItem(
                   icon: Container(
                     decoration: const BoxDecoration(shape: BoxShape.circle),
                     height: 30,
@@ -123,14 +117,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: CachedNetworkImage(
                         placeholder: placeholderWidgetFn() as Widget Function(
                             BuildContext, String)?,
-                        imageUrl:
-                            'https://i.insider.com/5de6dd81fd9db241b00c04d3?width=1100&format=jpeg&auto=webp',
+                        imageUrl: URLpic +
+                            (_currentuserController.user.path == null
+                                ? 'unknown_profile.png'
+                                : _currentuserController.user.path!),
                         fit: BoxFit.cover,
                         height: 35,
                         width: 10,
                       ),
                     ),
                   ),
+                  label: "test2",
                   activeIcon: Container(
                     decoration: BoxDecoration(
                         shape: BoxShape.circle,
@@ -141,15 +138,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       borderRadius: BorderRadius.circular(40),
                       child: CachedNetworkImage(
                         fit: BoxFit.cover,
-                        imageUrl:
-                            'https://i.insider.com/5de6dd81fd9db241b00c04d3?width=1100&format=jpeg&auto=webp',
+                        imageUrl: URLpic +
+                            (_currentuserController.user.path == null
+                                ? 'unknown_profile.png'
+                                : _currentuserController.user.path!),
                         height: 35,
                         width: 10,
                       ),
                     ),
                   ),
                   //title: Text('a'),
-                ), */
+                ),
               ],
               onTap: (index) {
                 setState(() {
