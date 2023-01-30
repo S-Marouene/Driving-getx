@@ -31,11 +31,6 @@ class ListeAllCondidat extends GetView<ListeCondidatController> {
             backgroundColor:
                 innerBoxIsScrolled ? db6_colorPrimary : sdPrimaryColor,
             actionsIconTheme: IconThemeData(opacity: 0.0),
-            /* leading: IconButton(
-                icon: Icon(Icons.arrow_back, color: Colors.white),
-                onPressed: () {
-                  //finish(context);
-                }), */
             title: SizedBox(
               height: 60,
               child: Padding(
@@ -53,34 +48,6 @@ class ListeAllCondidat extends GetView<ListeCondidatController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    /* Container(
-                      padding: EdgeInsets.only(top: 25, left: 16, bottom: 16),
-                      width: size!.width,
-                      color: sdPrimaryColor,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            'Liste des condidats',
-                            style: boldTextStyle(
-                                size: 18,
-                                color: Colors.white,
-                                letterSpacing: 0.5),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(top: 5),
-                            child: Text(
-                              'Liste de tous les condidats en cours',
-                              style: secondaryTextStyle(
-                                size: 12,
-                                color: Colors.white.withOpacity(0.7),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ), */
                     Padding(
                       padding: EdgeInsets.fromLTRB(16, 2, 16, 0),
                       child: Row(
@@ -140,32 +107,6 @@ class ListeAllCondidat extends GetView<ListeCondidatController> {
       },
       body: controller.obx((condidat) => Column(
             children: [
-              /* Container(
-              padding: EdgeInsets.only(top: 25, left: 16, bottom: 16),
-              width: size!.width,
-              color: sdPrimaryColor,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'Liste des condidats',
-                    style: boldTextStyle(
-                        size: 18, color: Colors.white, letterSpacing: 0.5),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 5),
-                    child: Text(
-                      'Liste de tous les condidats en cours',
-                      style: secondaryTextStyle(
-                        size: 12,
-                        color: Colors.white.withOpacity(0.7),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ), */
               Expanded(
                 child: ListView.builder(
                   padding: EdgeInsets.only(bottom: 16),
