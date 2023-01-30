@@ -1,6 +1,7 @@
 import 'package:driving_getx/logic/controllers/listecondidatcontroller.dart';
 import 'package:driving_getx/main/utils/AppWidget.dart';
 import 'package:driving_getx/main/utils/SDColors.dart';
+import 'package:driving_getx/views/screens/dashboard_screen_test.dart';
 import 'package:driving_getx/views/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,7 +27,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     changeStatusColor(sdAppBackground);
-    final tab = [Dashboard(context), ListeAllCondidat(size), ProfileScreen()];
+    final tab = [
+      MWTabBarScreen4(),
+      DashboardScreen(),
+      ListeAllCondidat(size),
+      ProfileScreen()
+    ];
 
     return SafeArea(
       child: Scaffold(
@@ -58,6 +64,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     label: "test"
 
                     ///title: Text('a'),
+                    ),
+                BottomNavigationBarItem(
+                    icon: Icon(
+                      Icons.people_alt_rounded,
+                    ),
+                    activeIcon: Icon(
+                      Icons.people_alt_rounded,
+                    ),
+                    label: "test2"
+                    //title: Text('a'),
                     ),
                 BottomNavigationBarItem(
                     icon: Icon(

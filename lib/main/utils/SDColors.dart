@@ -20,3 +20,19 @@ const kTextLightColor = Color(0xFF747474);
 const kBlueColor = Color(0xFF40BAD5);
 
 const kDefaultPadding = 20.0;
+
+//Dashboard 6
+const db6_colorPrimary = Color(0xFF0060D5);
+const db6_colorPrimaryDark = Color(0xFF0060D5);
+const db6_colorSecondary = Color(0xFF0c82DD);
+const db6_textColorPrimary = Color(0xFF0060D5);
+const db6_textColorSecondary = Color(0xFF757575);
+const db6_white = Color(0xFFffffff);
+const db6_black = Color(0xFF000000);
+const db6_grey = Color(0xFFB9B9B9);
+const db6_yellow = Color(0xFFf4b428);
+const db6_viewColor = Color(0xFFEEEEF1);
+const db6_layout_background = Color(0xFFF6F7FA);
+const db6_white_trans = Color(0xFFF1F1F1);
+
+const dbShadowColor = Color(0x95E9EBF0);
