@@ -12,16 +12,6 @@ class ServiceGetCondidats {
     if (response.statusCode == 200) {
       final List condidats = json.decode(response.toString());
       return condidats.map((json) => Condidat.fromJson(json)).toList();
-      //return condidats.toList();
-
-      /*  return condidats.map((value) => Condidat.fromJson(value)).where((book) {
-        final titleLower = book.nom!.toLowerCase();
-        final authorLower = book.prenom!.toLowerCase();
-        final searchLower = query.toLowerCase();
-
-        return titleLower.contains(searchLower) ||
-            authorLower.contains(searchLower);
-      }).toList(); */
     } else {
       throw Exception();
     }

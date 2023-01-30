@@ -1,3 +1,4 @@
+// ignore_for_file: depend_on_referenced_packages
 import 'package:driving_getx/main/utils/AppConstant.dart';
 import 'package:driving_getx/main/utils/AppWidget.dart';
 import 'package:driving_getx/main/utils/SDColors.dart';
@@ -48,7 +49,7 @@ class _MWTabBarScreen4State extends State<MWTabBarScreen4> {
             ),
             bottom: TabBar(
               onTap: (index) {
-                print(index);
+                //print(index);
               },
               isScrollable: true,
               labelStyle: boldTextStyle(),

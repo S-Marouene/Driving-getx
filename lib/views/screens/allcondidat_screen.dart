@@ -9,12 +9,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nb_utils/nb_utils.dart';
 
+// ignore: must_be_immutable
 class ListeAllCondidat extends GetView<ListeCondidatController> {
   ListeAllCondidat(this.size, {Key? key}) : super(key: key);
   final AuthController authController = Get.find();
   final size;
   static const URLpic = 'https://smdev.tn/storage/condidat_pic/';
   double expandHeight = 200;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

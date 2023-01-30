@@ -4,9 +4,6 @@ import 'package:get/get.dart';
 
 class ListeCondidatController extends GetxController
     with StateMixin<List<Condidat>> {
-  //String query = '';
-  //List<Condidat> condidats = [];
-
   @override
   void onInit() {
     super.onInit();
@@ -22,14 +19,4 @@ class ListeCondidatController extends GetxController
   void onClose() {
     super.onClose();
   }
-
-  /* getList() async {
-    try {
-      final condidats = await ServiceGetCondidats.getCondidats();
-      print(condidats);
-      return condidats;
-    } catch (e) {
-      return e.toString();
-    }
-  } */
 }
