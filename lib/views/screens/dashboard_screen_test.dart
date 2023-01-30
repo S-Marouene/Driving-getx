@@ -41,7 +41,7 @@ class _MWTabBarScreen4State extends State<MWTabBarScreen4> {
               height: 60,
               child: Padding(
                 padding: EdgeInsets.fromLTRB(16, 16, 8, 0),
-                child: Text("Hello,Maro",
+                child: Text("Hello,Maro 2",
                     style: boldTextStyle(
                         color: db6_white, size: 24, fontFamily: fontBold)),
               ),

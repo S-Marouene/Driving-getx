@@ -50,8 +50,20 @@ class CondidatInfoScreen extends StatelessWidget {
               backgroundColor: (thisCondidat.id! > 70)
                   ? sdSecondaryColorGreen.withOpacity(0.7)
                   : sdSecondaryColorYellow.withOpacity(0.7),
-              child: Text(thisCondidat.id!.toInt().toString(),
-                  style: boldTextStyle(color: Colors.white, size: 16)),
+              child: FadeInImage(
+                fit: BoxFit.cover,
+                placeholder: AssetImage('images/app/loading.gif'),
+                image: Image.network(
+                        URLpic +
+                            (thisCondidat.photo! == ''
+                                ? 'unknown_profile.png'
+                                : thisCondidat.photo!),
+                        height: 35,
+                        width: 10)
+                    .image,
+              ),
+              /* child: Text(thisCondidat.id!.toInt().toString(),
+                  style: boldTextStyle(color: Colors.white, size: 16)), */
             )
           ],
         ),
@@ -88,13 +100,23 @@ class CondidatInfoScreen extends StatelessWidget {
                     Row(
                       children: [
                         Container(
-                          decoration: boxDecorations(
-                              bgColor:
-                                  Colors.deepOrangeAccent.withOpacity(0.8)),
-                          padding: EdgeInsets.all(16),
-                          child: Text(thisCondidat.id.toString(),
-                              style: primaryTextStyle(
-                                  size: 18, color: Colors.white)),
+                          decoration: boxDecorations(bgColor: Colors.white),
+                          height: 50,
+                          width: 50,
+                          //padding: EdgeInsets.all(0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(2),
+                            child: FadeInImage(
+                              fit: BoxFit.cover,
+                              placeholder: AssetImage('images/app/loading.gif'),
+                              image: Image.network(
+                                URLpic +
+                                    (thisCondidat.photo! == ''
+                                        ? 'unknown_profile.png'
+                                        : thisCondidat.photo!),
+                              ).image,
+                            ),
+                          ),
                         ),
                         SizedBox(width: 16),
                         Column(
@@ -103,14 +125,17 @@ class CondidatInfoScreen extends StatelessWidget {
                             Text(thisCondidat.nom! + ' ' + thisCondidat.prenom!,
                                 style: primaryTextStyle(
                                     size: 16, color: Colors.white)),
-                            Text("Your progress",
+                            Text(
+                                thisCondidat.num_tel == null
+                                    ? ''
+                                    : "+ 216 " + thisCondidat.num_tel!,
                                 style: primaryTextStyle(
-                                    size: 16, color: Colors.white)),
+                                    size: 14, color: Colors.white)),
                           ],
                         )
                       ],
                     ),
-                    SizedBox(height: 16),
+                    SizedBox(height: 30),
                     Container(
                       decoration: boxDecoration(
                           radius: 8,
@@ -121,11 +146,13 @@ class CondidatInfoScreen extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          mOption("Exam", "75"),
+                          mOption("Nb hr total :",
+                              thisCondidat.nbr_heur_total?.nb_heur_total!),
                           Container(height: 22, color: sdViewColor, width: 1),
-                          mOption("Lessons", "80"),
+                          mOption("Nb hr affecter :",
+                              thisCondidat.nb_heur_affecter?.nb_heur_affecter!),
                           Container(height: 22, color: sdViewColor, width: 1),
-                          mOption("Pass", "75"),
+                          mOption("Examen", thisCondidat.examen!),
                         ],
                       ),
                     ),
