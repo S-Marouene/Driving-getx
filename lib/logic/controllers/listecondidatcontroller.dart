@@ -4,19 +4,19 @@ import 'package:get/get.dart';
 
 class ListeCondidatController extends GetxController
     with StateMixin<List<Condidat>> {
+  Rx<List<Condidat>> listeAll = Rx<List<Condidat>>([]);
+
   @override
   void onInit() {
     super.onInit();
-    ServiceGetCondidats.getCondidats().then((value) {
-      change(value, status: RxStatus.success());
+    ServiceGetCondidats.getCondidats().then((data) {
+      change(data, status: RxStatus.success());
+      listeAll.value = data;
     }, onError: (error) {
       change(null, status: RxStatus.error(error.toString()));
     });
   }
 
   @override
-  // ignore: unnecessary_overrides
-  void onClose() {
-    super.onClose();
-  }
+  void onClose() {}
 }

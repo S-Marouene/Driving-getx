@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final tab = [
       MWTabBarScreen4(),
       DashboardScreen(),
-      ListeAllCondidat(size),
+      ListeAllCondidat(),
       ProfileScreen()
     ];
 

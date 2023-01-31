@@ -1,4 +1,5 @@
 // ignore_for_file: depend_on_referenced_packages
+import 'package:driving_getx/database/models/condidats.dart';
 import 'package:driving_getx/logic/controllers/auth_controller.dart';
 import 'package:driving_getx/logic/controllers/listecondidatcontroller.dart';
 import 'package:driving_getx/main/utils/AppConstant.dart';
@@ -9,111 +10,46 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-// ignore: must_be_immutable
-class ListeAllCondidat extends GetView<ListeCondidatController> {
-  ListeAllCondidat(this.size, {Key? key}) : super(key: key);
+class ListeAllCondidat extends StatefulWidget {
+  const ListeAllCondidat({super.key});
+
+  @override
+  State<ListeAllCondidat> createState() => _ListeAllCondidatState();
+}
+
+class _ListeAllCondidatState extends State<ListeAllCondidat> {
   final AuthController authController = Get.find();
-  final size;
+  final ListeCondidatController controller = Get.put(ListeCondidatController());
   static const URLpic = 'https://smdev.tn/storage/condidat_pic/';
   double expandHeight = 200;
+
+  late List<Condidat> Allcondidats;
+  late List<Condidat> searchedForCharacters;
+
+  final _searchTextController = TextEditingController();
+
+  @override
+  void initState() {
+    Allcondidats = controller.listeAll.value;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: NestedScrollView(
-      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-        return <Widget>[
-          SliverAppBar(
-            expandedHeight: expandHeight,
-            floating: true,
-            automaticallyImplyLeading: false,
-            forceElevated: innerBoxIsScrolled,
-            pinned: true,
-            titleSpacing: 0,
-            backgroundColor:
-                innerBoxIsScrolled ? db6_colorPrimary : sdPrimaryColor,
-            actionsIconTheme: IconThemeData(opacity: 0.0),
-            title: SizedBox(
-              height: 60,
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(16, 16, 8, 0),
-                child: Text("Sm-Dev",
-                    style: boldTextStyle(
-                        color: db6_white, size: 24, fontFamily: fontBold)),
-              ),
-            ),
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                height: 200,
-                margin: EdgeInsets.only(top: 70),
-                color: sdPrimaryColor,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.fromLTRB(16, 2, 16, 0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          RichText(
-                            text: TextSpan(
-                              children: [
-                                WidgetSpan(
-                                  child: Padding(
-                                    padding: EdgeInsets.only(right: 4),
-                                    child: Icon(Icons.article_outlined,
-                                        color: db6_white, size: 16),
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: 'Liste des condidats',
-                                  style: boldTextStyle(
-                                      size: 17,
-                                      color: Colors.white,
-                                      letterSpacing: 0.5),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(16)),
-                            color: white),
-                        alignment: Alignment.center,
-                        child: TextField(
-                            textAlignVertical: TextAlignVertical.center,
-                            decoration: InputDecoration(
-                              fillColor: db6_white,
-                              hintText: "Recherche",
-                              border: InputBorder.none,
-                              prefixIcon: Icon(Icons.search),
-                              contentPadding: EdgeInsets.only(
-                                  left: 26.0,
-                                  bottom: 8.0,
-                                  top: 8.0,
-                                  right: 50.0),
-                            )),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          )
-        ];
-      },
-      body: controller.obx((condidat) => Column(
+      body: NestedScrollView(
+          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+            return _flexibleWidget(innerBoxIsScrolled);
+          },
+          body: Column(
             children: [
               Expanded(
                 child: ListView.builder(
                   padding: EdgeInsets.only(bottom: 16),
                   scrollDirection: Axis.vertical,
-                  itemCount: condidat == null ? 0 : condidat.length,
+                  itemCount: _searchTextController.text.isEmpty
+                      ? Allcondidats.length
+                      : searchedForCharacters.length,
                   shrinkWrap: true,
                   itemBuilder: (BuildContext context, int index) {
                     return GestureDetector(
@@ -122,7 +58,9 @@ class ListeAllCondidat extends GetView<ListeCondidatController> {
                           context,
                           MaterialPageRoute(
                             builder: (context) => CondidatInfoScreen(
-                              thisCondidat: condidat[index],
+                              thisCondidat: _searchTextController.text.isEmpty
+                                  ? Allcondidats[index]
+                                  : searchedForCharacters[index],
                             ),
                           ),
                         );
@@ -131,7 +69,7 @@ class ListeAllCondidat extends GetView<ListeCondidatController> {
                         margin: EdgeInsets.only(left: 16, right: 16, top: 16),
                         padding: EdgeInsets.only(
                             left: 8, right: 8, top: 16, bottom: 16),
-                        width: size.width,
+                        //width: size.width,
                         decoration: boxDecorations(),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -180,9 +118,9 @@ class ListeAllCondidat extends GetView<ListeCondidatController> {
                                       AssetImage('images/app/loading.gif'),
                                   image: Image.network(
                                           URLpic +
-                                              (condidat![index].photo! == ''
+                                              (Allcondidats[index].photo! == ''
                                                   ? 'unknown_profile.png'
-                                                  : condidat[index].photo!),
+                                                  : Allcondidats[index].photo!),
                                           height: 35,
                                           width: 10)
                                       .image,
@@ -196,13 +134,15 @@ class ListeAllCondidat extends GetView<ListeCondidatController> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
                                   Text(
-                                      condidat[index].nom! +
+                                      Allcondidats[index].nom! +
                                           ' ' +
-                                          condidat[index].prenom!,
+                                          controller
+                                              .listeAll.value[index].prenom!,
                                       style: boldTextStyle(size: 16)),
                                   Container(
                                     margin: EdgeInsets.only(top: 5),
-                                    child: Text(condidat[index].num_tel ?? "",
+                                    child: Text(
+                                        Allcondidats[index].num_tel ?? "",
                                         style: secondaryTextStyle(size: 12)),
                                   ),
                                 ],
@@ -218,7 +158,7 @@ class ListeAllCondidat extends GetView<ListeCondidatController> {
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Text(
-                                condidat[index].examen!,
+                                Allcondidats[index].examen!,
                                 style: secondaryTextStyle(
                                     size: 12, color: Colors.white),
                               ),
@@ -232,6 +172,140 @@ class ListeAllCondidat extends GetView<ListeCondidatController> {
               ),
             ],
           )),
-    ));
+    );
+  }
+
+  List<Widget> _flexibleWidget(innerBoxIsScrolled) {
+    return <Widget>[
+      SliverAppBar(
+        expandedHeight: expandHeight,
+        floating: true,
+        automaticallyImplyLeading: false,
+        forceElevated: innerBoxIsScrolled,
+        pinned: true,
+        titleSpacing: 0,
+        backgroundColor: innerBoxIsScrolled ? db6_colorPrimary : sdPrimaryColor,
+        actionsIconTheme: IconThemeData(opacity: 0.0),
+        title: SizedBox(
+          height: 60,
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(16, 16, 8, 0),
+            child: Text("Sm-Dev",
+                style: boldTextStyle(
+                    color: db6_white, size: 24, fontFamily: fontBold)),
+          ),
+        ),
+        flexibleSpace: FlexibleSpaceBar(
+          background: Container(
+            height: 200,
+            margin: EdgeInsets.only(top: 70),
+            color: sdPrimaryColor,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.fromLTRB(16, 2, 16, 0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            WidgetSpan(
+                              child: Padding(
+                                padding: EdgeInsets.only(right: 4),
+                                child: Icon(Icons.article_outlined,
+                                    color: db6_white, size: 16),
+                              ),
+                            ),
+                            TextSpan(
+                              text: 'Liste des condidats',
+                              style: boldTextStyle(
+                                  size: 17,
+                                  color: Colors.white,
+                                  letterSpacing: 0.5),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                _buildSearchField()
+              ],
+            ),
+          ),
+        ),
+      )
+    ];
+  }
+
+  Widget _buildSearchField() {
+    return Padding(
+      padding: EdgeInsets.all(16),
+      child: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(16)), color: white),
+        alignment: Alignment.center,
+        child: TextField(
+          controller: _searchTextController,
+          textAlignVertical: TextAlignVertical.center,
+          decoration: InputDecoration(
+            fillColor: db6_white,
+            hintText: "Recherche",
+            border: InputBorder.none,
+            prefixIcon: Icon(Icons.search),
+            contentPadding:
+                EdgeInsets.only(left: 26.0, bottom: 8.0, top: 8.0, right: 50.0),
+          ),
+          onChanged: (searchedCondidat) {
+            addSearchedFOrItemsToSearchedList(searchedCondidat);
+          },
+        ),
+      ),
+    );
+  }
+
+  void addSearchedFOrItemsToSearchedList(String searchedCharacter) {
+    searchedForCharacters = Allcondidats.where((condidat) =>
+        condidat.nom!.toLowerCase().startsWith(searchedCharacter)).toList();
+
+    Allcondidats = _searchTextController.text.isEmpty
+        ? controller.listeAll.value
+        : searchedForCharacters;
+    setState(() {});
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* // ignore: must_be_immutable
+class ListeAllCondidat extends GetView<ListeCondidatController> {
+ 
+}
+ */
