@@ -1,3 +1,4 @@
+import 'package:double_back_to_close/double_back_to_close.dart';
 import 'package:driving_getx/logic/controllers/auth_controller.dart';
 import 'package:driving_getx/logic/controllers/currentuser_controller.dart';
 import 'package:driving_getx/main/utils/AppWidget.dart';
@@ -20,6 +21,40 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  bool allowClose = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: DoubleBack(
+        condition: allowClose,
+        onConditionFail: () {
+          setState(() {
+            allowClose = true;
+          });
+        },
+        waitForSecondBackPress: 3, // default 2
+        textStyle: TextStyle(
+          fontSize: 14,
+          color: Colors.white,
+        ),
+        background: Colors.blue,
+        backgroundRadius: 10,
+        message: "Appuyez sur retour pour quitter !",
+        child: HomePage(),
+      ),
+    );
+  }
+}
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   AuthController authController = Get.find();
   int _currentIndex = 0;
   static const URLpic = 'https://smdev.tn/storage/profile_pic/';

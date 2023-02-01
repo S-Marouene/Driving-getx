@@ -1,5 +1,6 @@
 import 'package:driving_getx/database/models/condidats.dart';
 import 'package:driving_getx/database/models/examens.dart';
+import 'package:driving_getx/database/models/payements.dart';
 import 'package:driving_getx/database/services/Condidat_service.dart';
 import 'package:get/get.dart';
 
@@ -49,7 +50,21 @@ class ExamenController extends GetxController with StateMixin<List<Examen>> {
     });
     return listeExamen.value;
   }
+}
 
-  @override
-  void onClose() {}
+class PayementController extends GetxController
+    with StateMixin<List<Payement>> {
+  Rx<List<Payement>> listePayement = Rx<List<Payement>>([]);
+
+  getListPayementByID(id) async {
+    change(null, status: RxStatus.loading());
+    await ServiceCondidats.getPayementByid(id).then((data) {
+      change(data, status: RxStatus.success());
+      listePayement.value = data;
+      //print(data);
+    }, onError: (error) {
+      change(null, status: RxStatus.error(error.toString()));
+    });
+    return listePayement.value;
+  }
 }
