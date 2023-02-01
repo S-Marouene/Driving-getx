@@ -1,7 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages
 import 'package:driving_getx/database/models/condidats.dart';
 import 'package:driving_getx/logic/controllers/auth_controller.dart';
-import 'package:driving_getx/logic/controllers/listecondidatcontroller.dart';
+import 'package:driving_getx/logic/controllers/condidatcontroller.dart';
 import 'package:driving_getx/main/utils/AppConstant.dart';
 import 'package:driving_getx/main/utils/SDColors.dart';
 import 'package:driving_getx/main/utils/SDStyle.dart';
@@ -19,160 +19,38 @@ class ListeAllCondidat extends StatefulWidget {
 
 class _ListeAllCondidatState extends State<ListeAllCondidat> {
   final AuthController authController = Get.find();
-  final ListeCondidatController controller = Get.put(ListeCondidatController());
+  final CondidatController controller = Get.put(CondidatController());
   static const URLpic = 'https://smdev.tn/storage/condidat_pic/';
   double expandHeight = 200;
 
-  late List<Condidat> Allcondidats;
+  late List<Condidat> Allcondidats = [];
   late List<Condidat> searchedForCharacters;
-
   final _searchTextController = TextEditingController();
 
   @override
   void initState() {
-    Allcondidats = controller.listeAll.value;
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await controller.getListCondidat();
+      Allcondidats = controller.listeAll.value;
+      setState(() {});
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: NestedScrollView(
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return _flexibleWidget(innerBoxIsScrolled);
-          },
-          body: Column(
-            children: [
-              Expanded(
-                child: ListView.builder(
-                  padding: EdgeInsets.only(bottom: 16),
-                  scrollDirection: Axis.vertical,
-                  itemCount: _searchTextController.text.isEmpty
-                      ? Allcondidats.length
-                      : searchedForCharacters.length,
-                  shrinkWrap: true,
-                  itemBuilder: (BuildContext context, int index) {
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CondidatInfoScreen(
-                              thisCondidat: _searchTextController.text.isEmpty
-                                  ? Allcondidats[index]
-                                  : searchedForCharacters[index],
-                            ),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        margin: EdgeInsets.only(left: 16, right: 16, top: 16),
-                        padding: EdgeInsets.only(
-                            left: 8, right: 8, top: 16, bottom: 16),
-                        //width: size.width,
-                        decoration: boxDecorations(),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            CircleAvatar(
-                              radius: 12,
-                              backgroundColor: (index + 1) == 1
-                                  ? Color(0xFFFFD700)
-                                  : (index + 1) == 2
-                                      ? Colors.grey.withOpacity(0.5)
-                                      : (index + 1) == 3
-                                          ? Colors.red.withOpacity(0.5)
-                                          : Colors.transparent,
-                              child: CircleAvatar(
-                                radius: 10,
-                                backgroundColor: (index + 1) == 1
-                                    ? Color(0xFFD4AF37)
-                                    : (index + 1) == 2
-                                        ? Colors.grey.withOpacity(0.5)
-                                        : (index + 1) == 3
-                                            ? Colors.red.withOpacity(0.5)
-                                            : Colors.transparent,
-                                child: Text(
-                                  (index + 1).toString(),
-                                  style: secondaryTextStyle(
-                                      size: 14,
-                                      color: (index + 1) == 1 ||
-                                              (index + 1) == 2 ||
-                                              (index + 1) == 3
-                                          ? Colors.white
-                                          : Colors.grey),
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 10),
-                            Container(
-                              decoration: BoxDecoration(shape: BoxShape.circle),
-                              height: 45,
-                              width: 45,
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(40),
-                                child: FadeInImage(
-                                  fit: BoxFit.cover,
-                                  placeholder:
-                                      AssetImage('images/app/loading.gif'),
-                                  image: Image.network(
-                                          URLpic +
-                                              (Allcondidats[index].photo! == ''
-                                                  ? 'unknown_profile.png'
-                                                  : Allcondidats[index].photo!),
-                                          height: 35,
-                                          width: 10)
-                                      .image,
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 10),
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                      Allcondidats[index].nom! +
-                                          ' ' +
-                                          controller
-                                              .listeAll.value[index].prenom!,
-                                      style: boldTextStyle(size: 16)),
-                                  Container(
-                                    margin: EdgeInsets.only(top: 5),
-                                    child: Text(
-                                        Allcondidats[index].num_tel ?? "",
-                                        style: secondaryTextStyle(size: 12)),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 5 * 1.5, // 30 px padding
-                                vertical: 5 / 5, // 5 px padding
-                              ),
-                              decoration: BoxDecoration(
-                                color: Color.fromARGB(255, 233, 108, 108),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Text(
-                                Allcondidats[index].examen!,
-                                style: secondaryTextStyle(
-                                    size: 12, color: Colors.white),
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          )),
-    );
+        body: NestedScrollView(
+            headerSliverBuilder:
+                (BuildContext context, bool innerBoxIsScrolled) {
+              return _flexibleWidget(innerBoxIsScrolled);
+            },
+            body: controller.obx(
+              (state) {
+                return build_List_condidat();
+              },
+              onLoading: showLoadingIndicator(),
+            )));
   }
 
   List<Widget> _flexibleWidget(innerBoxIsScrolled) {
@@ -269,11 +147,149 @@ class _ListeAllCondidatState extends State<ListeAllCondidat> {
   void addSearchedFOrItemsToSearchedList(String searchedCharacter) {
     searchedForCharacters = Allcondidats.where((condidat) =>
         condidat.nom!.toLowerCase().startsWith(searchedCharacter)).toList();
-
     Allcondidats = _searchTextController.text.isEmpty
         ? controller.listeAll.value
         : searchedForCharacters;
     setState(() {});
+  }
+
+  Widget showLoadingIndicator() {
+    return const Center(
+      child: CircularProgressIndicator(
+        color: sdPrimaryColor,
+      ),
+    );
+  }
+
+  Widget build_List_condidat() {
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            padding: EdgeInsets.only(bottom: 16),
+            scrollDirection: Axis.vertical,
+            itemCount: _searchTextController.text.isEmpty
+                ? Allcondidats.length
+                : searchedForCharacters.length,
+            shrinkWrap: true,
+            itemBuilder: (BuildContext context, int index) {
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CondidatInfoScreen(
+                        thisCondidat: _searchTextController.text.isEmpty
+                            ? Allcondidats[index]
+                            : searchedForCharacters[index],
+                      ),
+                    ),
+                  );
+                },
+                child: Container(
+                  margin: EdgeInsets.only(left: 16, right: 16, top: 16),
+                  padding:
+                      EdgeInsets.only(left: 8, right: 8, top: 16, bottom: 16),
+                  //width: size.width,
+                  decoration: boxDecorations(),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      CircleAvatar(
+                        radius: 12,
+                        backgroundColor: (index + 1) == 1
+                            ? Color(0xFFFFD700)
+                            : (index + 1) == 2
+                                ? Colors.grey.withOpacity(0.5)
+                                : (index + 1) == 3
+                                    ? Colors.red.withOpacity(0.5)
+                                    : Colors.transparent,
+                        child: CircleAvatar(
+                          radius: 10,
+                          backgroundColor: (index + 1) == 1
+                              ? Color(0xFFD4AF37)
+                              : (index + 1) == 2
+                                  ? Colors.grey.withOpacity(0.5)
+                                  : (index + 1) == 3
+                                      ? Colors.red.withOpacity(0.5)
+                                      : Colors.transparent,
+                          child: Text(
+                            (index + 1).toString(),
+                            style: secondaryTextStyle(
+                                size: 14,
+                                color: (index + 1) == 1 ||
+                                        (index + 1) == 2 ||
+                                        (index + 1) == 3
+                                    ? Colors.white
+                                    : Colors.grey),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Container(
+                        decoration: BoxDecoration(shape: BoxShape.circle),
+                        height: 45,
+                        width: 45,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(40),
+                          child: FadeInImage(
+                            fit: BoxFit.cover,
+                            placeholder: AssetImage('images/app/loading.gif'),
+                            image: Image.network(
+                                    URLpic +
+                                        (Allcondidats[index].photo! == ''
+                                            ? 'unknown_profile.png'
+                                            : Allcondidats[index].photo!),
+                                    height: 35,
+                                    width: 10)
+                                .image,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                                Allcondidats[index].nom! +
+                                    ' ' +
+                                    Allcondidats[index].prenom!,
+                                style: boldTextStyle(size: 16)),
+                            Container(
+                              margin: EdgeInsets.only(top: 5),
+                              child: Text(Allcondidats[index].num_tel ?? "",
+                                  style: secondaryTextStyle(size: 12)),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 5 * 1.5, // 30 px padding
+                          vertical: 5 / 5, // 5 px padding
+                        ),
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 233, 108, 108),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Text(
+                          Allcondidats[index].examen!,
+                          style:
+                              secondaryTextStyle(size: 12, color: Colors.white),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
   }
 }
 

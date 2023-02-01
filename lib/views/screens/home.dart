@@ -1,5 +1,4 @@
 import 'package:driving_getx/logic/controllers/currentuser_controller.dart';
-import 'package:driving_getx/logic/controllers/listecondidatcontroller.dart';
 import 'package:driving_getx/main/utils/AppWidget.dart';
 import 'package:driving_getx/main/utils/SDColors.dart';
 import 'package:driving_getx/views/screens/dashboard_screen_test.dart';
@@ -24,11 +23,12 @@ class _HomeScreenState extends State<HomeScreen> {
   static const URLpic = 'https://smdev.tn/storage/profile_pic/';
   final _currentuserController = Get.put(CurrentUserController());
 
-  final ListeCondidatController listeCondidatController =
-      Get.put(ListeCondidatController());
+/*   final CondidatController listeCondidatController =
+      Get.put(CondidatController()); */
 
   @override
   Widget build(BuildContext context) {
+    // ignore: unused_local_variable
     var size = MediaQuery.of(context).size;
     changeStatusColor(sdAppBackground);
     final tab = [
@@ -65,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: 28, width: 28, color: sdIconColor),
                     activeIcon: Image.asset('images/appbar/sdhome.png',
                         height: 28, width: 28, color: sdPrimaryColor),
-                    label: "test"),
+                    label: "Home"),
                 BottomNavigationBarItem(
                     icon: Image.asset('images/appbar/calendar.png',
                         height: 28, width: 28, color: kTextLightColor),
@@ -78,35 +78,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     activeIcon: Image.asset('images/appbar/users3.png',
                         height: 28, width: 28, color: sdPrimaryColor),
                     label: "Condidats"),
-
-                /*BottomNavigationBarItem(
-                    icon: Stack(
-                      children: <Widget>[
-                        Image.asset('images/appbar/sdchats.png',
-                            height: 28, width: 28, color: sdIconColor),
-                        const Positioned(
-                          top: -2,
-                          right: -6,
-                          child: CircleAvatar(
-                              radius: 3, backgroundColor: sdSecondaryColorRed),
-                        )
-                      ],
-                    ),
-                    activeIcon: Stack(
-                      children: <Widget>[
-                        Image.asset('images/appbar/sdchats.png',
-                            height: 28, width: 28, color: sdPrimaryColor),
-                        const Positioned(
-                          top: -2,
-                          right: -6,
-                          child: CircleAvatar(
-                              radius: 3, backgroundColor: sdSecondaryColorRed),
-                        )
-                      ],
-                    ),
-                    label: "test2"
-                    //title: Text('a'),
-                    ),*/
                 BottomNavigationBarItem(
                   icon: Container(
                     decoration: const BoxDecoration(shape: BoxShape.circle),

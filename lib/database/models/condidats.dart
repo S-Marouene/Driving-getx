@@ -32,10 +32,10 @@ class Condidat {
       photo: json['photo'],
       nbr_heur_total: NbrHeurTotale(
           condidat_id: nht.isNotEmpty ? nht[0]['condidat_id'] : "",
-          nb_heur_total: nht.isNotEmpty ? nht[0]['nb_heur_total'] : ""),
+          nb_heur_total: nht.isNotEmpty ? nht[0]['nb_heur_total'] : "0"),
       nb_heur_affecter: NbrHeurAffecter(
           condidat_id: nht.isNotEmpty ? nht[0]['condidat_id'] : "",
-          nb_heur_affecter: nht.isNotEmpty ? nht[0]['nb_heur_total'] : ""),
+          nb_heur_affecter: nht.isNotEmpty ? nht[0]['nb_heur_total'] : "0"),
     );
   }
 }
