@@ -1,3 +1,4 @@
+import 'package:driving_getx/logic/controllers/auth_controller.dart';
 import 'package:driving_getx/logic/controllers/currentuser_controller.dart';
 import 'package:driving_getx/main/utils/AppWidget.dart';
 import 'package:driving_getx/main/utils/SDColors.dart';
@@ -19,12 +20,19 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  AuthController authController = Get.find();
   int _currentIndex = 0;
   static const URLpic = 'https://smdev.tn/storage/profile_pic/';
   final _currentuserController = Get.put(CurrentUserController());
 
-/*   final CondidatController listeCondidatController =
-      Get.put(CondidatController()); */
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await _currentuserController.gtuserInfo();
+      setState(() {});
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

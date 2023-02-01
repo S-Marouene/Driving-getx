@@ -27,66 +27,12 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
   @override
   void initState() {
     condi_info_controller.getListExamenByID(thisCondidat.id);
-    //AllExam = condi_info_controller.listeExamen.value;
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
-    Widget mOption(var mHeading, var mSubHeading) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(mHeading,
-              style: primaryTextStyle(size: 16, color: sdTextPrimaryColor)),
-          SizedBox(height: 4),
-          Text(mSubHeading,
-              style: primaryTextStyle(size: 14, color: sdTextSecondaryColor))
-        ],
-      );
-    }
-
-    Widget ListExamen(Examen examen) {
-      return Container(
-        decoration: boxDecorations(showShadow: true),
-        padding: EdgeInsets.all(10),
-        margin: EdgeInsets.only(top: 16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(examen.typeExamen!, style: boldTextStyle(size: 16)),
-                Text(examen.centreExamen!, style: secondaryTextStyle(size: 10)),
-              ],
-            ),
-            /*  CircleAvatar(
-              radius: 15,
-              backgroundColor: (thisCondidat.id! > 70)
-                  ? sdSecondaryColorGreen.withOpacity(0.7)
-                  : sdSecondaryColorYellow.withOpacity(0.7),
-              child: FadeInImage(
-                fit: BoxFit.cover,
-                placeholder: AssetImage('images/app/loading.gif'),
-                image: Image.network(
-                        URLpic +
-                            (thisCondidat.photo! == ''
-                                ? 'unknown_profile.png'
-                                : thisCondidat.photo!),
-                        height: 36,
-                        width: 10)
-                    .image,
-              ),
-              /* child: Text(thisCondidat.id!.toInt().toString(),
-                  style: boldTextStyle(color: Colors.white, size: 16)), */
-            ) */
-          ],
-        ),
-      );
-    }
-
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -175,26 +121,27 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 16),
-                    Text("List of exams",
+                    SizedBox(height: 18),
+                    Text("Liste des examens programmée :",
                         style: secondaryTextStyle(
                             size: 14, color: sdTextSecondaryColor)),
                     condi_info_controller.obx(
                       (state) {
-                        /*  condi_info_controller
-                            .getListExamenByID(thisCondidat.id);
-                        */
                         AllExam = condi_info_controller.listeExamen.value;
-
-                        return ListView.builder(
-                          itemCount: AllExam.isEmpty ? 0 : AllExam.length,
-                          shrinkWrap: true,
-                          padding: EdgeInsets.only(bottom: 16),
-                          physics: NeverScrollableScrollPhysics(),
-                          itemBuilder: (BuildContext context, int index) {
-                            return ListExamen(AllExam[index]);
-                          },
-                        );
+                        return AllExam.isEmpty
+                            ? Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Text("Liste vide"),
+                              )
+                            : ListView.builder(
+                                itemCount: AllExam.isEmpty ? 0 : AllExam.length,
+                                shrinkWrap: true,
+                                padding: EdgeInsets.only(bottom: 16),
+                                physics: NeverScrollableScrollPhysics(),
+                                itemBuilder: (BuildContext context, int index) {
+                                  return ListExamen(AllExam[index]);
+                                },
+                              );
                       },
                       onLoading: showLoadingIndicator(),
                     )
@@ -204,6 +151,64 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget mOption(var mHeading, var mSubHeading) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(mHeading,
+            style: primaryTextStyle(size: 16, color: sdTextPrimaryColor)),
+        SizedBox(height: 4),
+        Text(mSubHeading,
+            style: primaryTextStyle(size: 14, color: sdTextSecondaryColor))
+      ],
+    );
+  }
+
+  Widget ListExamen(Examen examen) {
+    return Container(
+      decoration: boxDecorations(showShadow: true),
+      padding: EdgeInsets.all(10),
+      margin: EdgeInsets.only(top: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(examen.typeExamen!, style: boldTextStyle(size: 16)),
+              Text(examen.dateExamen!, style: secondaryTextStyle(size: 12)),
+              Padding(
+                padding: const EdgeInsets.only(top: 5),
+                child: Container(
+                  //children: Text("Num Conv : "),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 5 * 1.5, // 30 px padding
+                    vertical: 10 / 5, // 5 px padding
+                  ),
+                  decoration: BoxDecoration(
+                    color: Color.fromARGB(255, 233, 108, 108),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Text(
+                    "N° Conv : " + examen.numConvocation!,
+                    style: secondaryTextStyle(size: 10, color: Colors.white),
+                  ),
+                ),
+              )
+            ],
+          ),
+          CircleAvatar(
+            radius: 20,
+            backgroundColor: sdSecondaryColorYellow.withOpacity(0.7),
+            // : sdSecondaryColorYellow.withOpacity(0.7),
+            child: Text(examen.resultat!,
+                style: boldTextStyle(color: Colors.blueAccent, size: 10)),
+          )
+        ],
       ),
     );
   }

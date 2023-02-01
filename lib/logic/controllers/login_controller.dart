@@ -55,7 +55,8 @@ class LoginController extends GetxController {
           await storage.write(key: 'user', value: User.serialize(user));
 
           loginformKey.currentState!.save();
-          Get.toNamed(AppRoutes.dashboard);
+          Get.offNamed(AppRoutes.dashboard);
+          //Get.toNamed(AppRoutes.dashboard);
         } else {
           Get.snackbar("login", "problemaaaaaaaaaa");
         }

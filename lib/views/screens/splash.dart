@@ -22,9 +22,12 @@ class _SplashscreenState extends State<Splashscreen> {
   void initState() {
     Future.delayed(const Duration(seconds: 2), () {
       if (authController.isAuth()) {
-        Get.toNamed(AppRoutes.dashboard);
+        Get.offNamed(AppRoutes.dashboard);
+
+        //Get.toNamed(AppRoutes.dashboard);
       } else {
-        Get.toNamed(AppRoutes.login);
+        Get.offNamed(AppRoutes.login);
+        //Get.toNamed(AppRoutes.login);
       }
     });
     super.initState();

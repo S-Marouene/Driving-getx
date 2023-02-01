@@ -18,8 +18,9 @@ class ListeAllCondidat extends StatefulWidget {
 }
 
 class _ListeAllCondidatState extends State<ListeAllCondidat> {
-  final AuthController authController = Get.find();
+  final AuthController authController = Get.put(AuthController());
   final CondidatController controller = Get.put(CondidatController());
+
   static const URLpic = 'https://smdev.tn/storage/condidat_pic/';
   double expandHeight = 200;
 
