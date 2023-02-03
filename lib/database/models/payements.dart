@@ -34,4 +34,17 @@ class Payement {
       date_paiement: json['date_paiement'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['school_id'] = schoolId;
+    data['school_name'] = schoolName;
+    data['condidat_id'] = condidatId;
+    data['caisse'] = caisse;
+    data['type'] = type;
+    data['montant'] = montant;
+    data['mode_paiement'] = mode_paiement;
+    data['date_paiement'] = date_paiement;
+    return data;
+  }
 }

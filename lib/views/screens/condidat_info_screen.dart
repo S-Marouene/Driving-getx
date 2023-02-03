@@ -1,12 +1,15 @@
-// ignore_for_file: depend_on_referenced_packages
 import 'package:driving_getx/database/models/condidats.dart';
 import 'package:driving_getx/database/models/examens.dart';
 import 'package:driving_getx/database/models/payements.dart';
 import 'package:driving_getx/logic/controllers/condidatcontroller.dart';
+import 'package:driving_getx/main/utils/AppConstant.dart';
+import 'package:driving_getx/main/utils/AppWidget.dart';
 import 'package:driving_getx/main/utils/SDColors.dart';
 import 'package:driving_getx/main/utils/SDStyle.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+// ignore: depend_on_referenced_packages
 import 'package:nb_utils/nb_utils.dart';
 
 class CondidatInfoScreen extends StatefulWidget {
@@ -23,13 +26,49 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
   _CondidatInfoScreenState(this.thisCondidat);
   static const URLpic = 'https://smdev.tn/storage/condidat_pic/';
   final ExamenController condi_info_controller = Get.put(ExamenController());
+
+  final AddpayementController addpayementController =
+      Get.put(AddpayementController());
+
   final PayementController cond_payement_controller =
       Get.put(PayementController());
   late List<Examen> AllExam = [];
   late List<Payement> AllPayement = [];
+  late String result = "test_";
+
+  TextEditingController datePayementAdd = TextEditingController();
+
+  DateTime selectedDate = DateTime.now();
+  Future<void> selectDate(
+      BuildContext context, StateSetter setModalState) async {
+    final DateTime? picked = await showDatePicker(
+        helpText: 'Selectionner la date',
+        cancelText: 'Annuler',
+        confirmText: "Ok",
+        fieldLabelText: 'Booking Date',
+        fieldHintText: 'Month/Date/Year',
+        errorFormatText: 'Enter valid date',
+        errorInvalidText: 'Enter date in valid range',
+        context: context,
+        builder: (BuildContext context, Widget? child) {
+          return CustomTheme(
+            child: child,
+          );
+        },
+        initialDate: selectedDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate) {
+      setModalState(() {
+        selectedDate = picked;
+        datePayementAdd.text = DateFormat('yyyy-MM-dd').format(selectedDate);
+      });
+    }
+  }
 
   @override
   void initState() {
+    datePayementAdd.text = DateFormat('yyyy-MM-dd').format(selectedDate);
     condi_info_controller.getListExamenByID(thisCondidat.id);
     cond_payement_controller.getListPayementByID(thisCondidat.id);
     super.initState();
@@ -103,11 +142,11 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                     ),
                     SizedBox(height: 30),
                     Container(
-                      decoration: boxDecoration(
-                          radius: 8,
-                          backGroundColor: Colors.white,
-                          spreadRadius: 2,
-                          blurRadius: 10),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(20),
+                              topRight: Radius.circular(20)),
+                          color: Colors.white),
                       padding: EdgeInsets.fromLTRB(16, 10, 16, 10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -139,7 +178,23 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                             margin: const EdgeInsets.only(left: 7.0),
                             child: Text("Examens programmée :",
                                 style: secondaryTextStyle(
-                                    size: 14, color: kTextColor)))
+                                    size: 14, color: kTextColor))),
+                        Expanded(
+                          child: Align(
+                            alignment: Alignment.topRight,
+                            child: FloatingActionButton.small(
+                              heroTag: '2',
+                              elevation: 5,
+                              onPressed: () {
+                                toast('Add exam');
+                              },
+                              child: Icon(
+                                Icons.add,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                     condi_info_controller.obx(
@@ -175,7 +230,25 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                             margin: const EdgeInsets.only(left: 2.0),
                             child: Text("Payements :",
                                 style: secondaryTextStyle(
-                                    size: 14, color: kTextColor)))
+                                    size: 14, color: kTextColor))),
+                        Expanded(
+                          child: Align(
+                            alignment: Alignment.topRight,
+                            child: FloatingActionButton.small(
+                              //heroTag: '1',
+                              elevation: 5,
+                              onPressed: () {
+                                mFormBottomSheet(context);
+
+                                //toast('Add payment');
+                              },
+                              child: Icon(
+                                Icons.add,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                     cond_payement_controller.obx(
@@ -317,6 +390,182 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
     return const Center(
       child: CircularProgressIndicator(
         color: sdPrimaryColor,
+      ),
+    );
+  }
+
+  mFormBottomSheet(BuildContext aContext) async {
+    showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        context: aContext,
+        isScrollControlled: true,
+        builder: (context) {
+          return StatefulBuilder(builder: (BuildContext context,
+              StateSetter setModalState /*You can rename this!*/) {
+            return SingleChildScrollView(
+              child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20)),
+                    color: Colors.white),
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      "Ajout paiement",
+                      style: boldTextStyle(color: appStore.textPrimaryColor),
+                    ),
+                    Divider().paddingOnly(top: 16, bottom: 16),
+                    Text(
+                      "Caisse",
+                      style: primaryTextStyle(color: appStore.textPrimaryColor),
+                    ),
+                    8.height,
+                    editTextStyle("Caisse",
+                        addpayementController.caisseTextEditingController),
+                    16.height,
+                    Text(
+                      "Mode paiement",
+                      style: primaryTextStyle(color: appStore.textPrimaryColor),
+                    ),
+                    8.height,
+                    editTextStyle("Mode paiement",
+                        addpayementController.mode_paiementtextController),
+                    16.height,
+                    Text(
+                      "Montant",
+                      style: primaryTextStyle(color: appStore.textPrimaryColor),
+                    ),
+                    8.height,
+                    editTextStyle(
+                        "Montant", addpayementController.montantTextController),
+                    16.height,
+                    Text(
+                      " Type",
+                      style: primaryTextStyle(color: appStore.textPrimaryColor),
+                    ),
+                    8.height,
+                    editTextStyle(" Type",
+                        addpayementController.typeTextEditingController),
+                    16.height,
+                    Text(
+                      "Date Payement",
+                      style: primaryTextStyle(color: appStore.textPrimaryColor),
+                    ),
+                    TextFormField(
+                      onTap: () {
+                        FocusScope.of(context).requestFocus(FocusNode());
+                        selectDate(context, setModalState);
+                      },
+                      controller: datePayementAdd,
+                      style: TextStyle(color: blackColor),
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: kBlueColor)),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: kDefaultIconDarkColor)),
+                        suffixIcon: GestureDetector(
+                          onTap: () {
+                            selectDate(context, setModalState);
+                          },
+                          child: Icon(Icons.calendar_today,
+                              color: kPrimaryColor, size: 16),
+                        ),
+                        labelStyle: TextStyle(color: gray, fontSize: 14),
+                      ),
+                    ),
+                    16.height,
+                    40.height,
+                    GestureDetector(
+                      onTap: () {
+                        addPay().then((value) {
+                          // print("bbbbbbb" + value);
+                          if (value == "true") {
+                            finish(context);
+                            cond_payement_controller
+                                .getListPayementByID(thisCondidat.id);
+
+                            // print("success");
+                          } else {
+                            Get.snackbar(
+                              "opération echouée",
+                              value,
+                              colorText: Colors.black,
+                              snackPosition: SnackPosition.BOTTOM,
+                              icon: Icon(Icons.error, color: Colors.white),
+                              backgroundColor: Colors.blue,
+                              margin: EdgeInsets.all(15),
+                              isDismissible: true,
+                              forwardAnimationCurve: Curves.easeOutBack,
+                            );
+                            //print("errrooooooor");
+                          }
+                        });
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                //topLeft: Radius.circular(20),
+                                topRight: Radius.circular(20),
+                                bottomLeft: Radius.circular(20)),
+                            color: kPrimaryColor),
+                        padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
+                        child: Center(
+                          child: Text(
+                            "Enregistrer",
+                            style: primaryTextStyle(color: white),
+                          ),
+                        ),
+                      ),
+                    ),
+                    40.height,
+                  ],
+                ),
+              ),
+            );
+          });
+        });
+  }
+
+  Future<String> addPay() async {
+    await addpayementController.addEmployee(
+        thisCondidat.school_id!,
+        thisCondidat.school_name!,
+        thisCondidat.id!.toString(),
+        addpayementController.caisseTextEditingController.text,
+        addpayementController.typeTextEditingController.text,
+        addpayementController.montantTextController.text,
+        addpayementController.mode_paiementtextController.text,
+        datePayementAdd.text);
+    result = addpayementController.res.value;
+    return result;
+  }
+
+  Padding editTextStyle(var hintText, var namefield) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+      child: TextFormField(
+        controller: namefield,
+        style: TextStyle(fontSize: 16, fontFamily: fontRegular),
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.fromLTRB(24, 16, 24, 16),
+          hintText: hintText,
+          hintStyle: primaryTextStyle(
+              color: appStore.isDarkModeOn ? white.withOpacity(0.5) : grey),
+          filled: true,
+          fillColor: appStore.appBarColor,
+          enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+              borderSide: BorderSide(color: kPrimaryColor, width: 1.0)),
+          focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16),
+              borderSide: BorderSide(color: kSecondaryColor, width: 1.0)),
+        ),
       ),
     );
   }

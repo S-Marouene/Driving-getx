@@ -45,4 +45,24 @@ class ServiceCondidats {
       throw Exception();
     }
   }
+
+  static Future sendPostRequest(Payement paymentModel) async {
+    Dio.Response response = await dio().post(
+      '/paiement',
+      options: Dio.Options(
+        headers: {'auth': true},
+        followRedirects: false,
+        validateStatus: (status) {
+          return status! < 500;
+        },
+      ),
+      data: paymentModel,
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.data.toString());
+    } else {
+      return jsonDecode(response.data.toString());
+    }
+  }
 }

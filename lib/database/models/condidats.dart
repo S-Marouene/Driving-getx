@@ -4,6 +4,7 @@ class Condidat {
   String? prenom;
   String? num_tel;
   String? school_name;
+  String? school_id;
   String? examen;
   String? photo;
   NbrHeurTotale? nbr_heur_total;
@@ -15,6 +16,7 @@ class Condidat {
       this.prenom,
       this.num_tel,
       this.school_name,
+      this.school_id,
       this.examen,
       this.photo,
       this.nbr_heur_total,
@@ -28,6 +30,7 @@ class Condidat {
       prenom: json['prenom'],
       num_tel: json['num_tel'],
       school_name: json['school_name'],
+      school_id: json['school_id'],
       examen: json['examen'],
       photo: json['photo'],
       nbr_heur_total: NbrHeurTotale(
