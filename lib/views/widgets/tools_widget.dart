@@ -1,6 +1,7 @@
 import 'package:driving_getx/main/utils/AppWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+// ignore: depend_on_referenced_packages
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../main/utils/AppConstant.dart';

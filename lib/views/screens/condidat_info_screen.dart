@@ -1,3 +1,4 @@
+import 'package:driving_getx/database/models/caisses.dart';
 import 'package:driving_getx/database/models/condidats.dart';
 import 'package:driving_getx/database/models/examens.dart';
 import 'package:driving_getx/database/models/payements.dart';
@@ -31,16 +32,25 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
       Get.put(AddpayementController());
   final PayementController cond_payement_controller =
       Get.put(PayementController());
+
+  final CaisseController caisse_controller = Get.put(CaisseController());
+
   late List<Examen> AllExam = [];
   late List<Payement> AllPayement = [];
+  late List<Caisse> AllCaisse = [];
+
   late String result = "";
   TextEditingController datePayementAdd = TextEditingController();
   TextEditingController modePayementAdd = TextEditingController();
   TextEditingController TypePayementAdd = TextEditingController();
-
   DateTime selectedDate = DateTime.now();
   var ModeRadio;
   var TypeRadio;
+
+  List<String> listOfCategory = [];
+  String? selectedCaisse;
+  String? ChangedCaisse;
+  bool selected_caisse = false;
 
   @override
   void initState() {
@@ -52,6 +62,8 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
         DateFormat('yyyy-MM-dd').format(selectedDate);
     condi_info_controller.getListExamenByID(thisCondidat.id);
     cond_payement_controller.getListPayementByID(thisCondidat.id);
+    caisse_controller.getListCaisse();
+
     super.initState();
   }
 
@@ -394,8 +406,48 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                       style: primaryTextStyle(color: appStore.textPrimaryColor),
                     ),
                     8.height,
-                    editTextStyle("Caisse",
-                        addpayementController.caisseTextEditingController),
+                    caisse_controller.obx(
+                      (state) {
+                        AllCaisse = caisse_controller.listeCaisse.value;
+                        listOfCategory =
+                            AllCaisse.map((e) => e.caisse.toString()).toList();
+                        selectedCaisse = listOfCategory[0];
+                        (!selected_caisse)
+                            ? addpayementController.caisseTextEditingController
+                                .text = selectedCaisse!
+                            : addpayementController.caisseTextEditingController
+                                .text = ChangedCaisse!;
+                        return Card(
+                            elevation: 4,
+                            child: DropdownButton(
+                              isExpanded: true,
+                              dropdownColor: appStore.appBarColor,
+                              value: ((!selected_caisse)
+                                  ? selectedCaisse
+                                  : ChangedCaisse),
+                              style: boldTextStyle(),
+                              icon: Icon(
+                                Icons.keyboard_arrow_down,
+                                color: appStore.iconColor,
+                              ),
+                              underline: 0.height,
+                              onChanged: (dynamic newValue) {
+                                setModalState(() {
+                                  selected_caisse = true;
+                                  ChangedCaisse = newValue;
+                                });
+                              },
+                              items: listOfCategory.map((caisse) {
+                                return DropdownMenuItem(
+                                  value: caisse,
+                                  child: Text(caisse, style: primaryTextStyle())
+                                      .paddingLeft(8),
+                                );
+                              }).toList(),
+                            ));
+                      },
+                      onLoading: showLoadingIndicator(),
+                    ),
                     16.height,
                     Text(
                       "Mode paiement",
@@ -551,7 +603,6 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                     GestureDetector(
                       onTap: () {
                         addPayementModal().then((value) {
-                          // print("bbbbbbb" + value);
                           if (value == "true") {
                             finish(context);
                             cond_payement_controller
