@@ -63,7 +63,7 @@ class AddpayementController extends GetxController with StateMixin<String> {
   TextEditingController typeTextEditingController = TextEditingController();
   TextEditingController montantTextController = TextEditingController();
   TextEditingController mode_paiementtextController = TextEditingController();
-  TextEditingController date_paiementTextController = TextEditingController();
+  TextEditingController datePayementAdd = TextEditingController();
 
   Rx<String> result = Rx<String>("");
   var res = "".obs;
@@ -74,8 +74,10 @@ class AddpayementController extends GetxController with StateMixin<String> {
   @override
   void onClose() {
     super.onClose();
-    caisseTextEditingController.dispose();
+    caisseTextEditingController.clear();
     typeTextEditingController.dispose();
+    montantTextController.dispose();
+    datePayementAdd.dispose();
   }
 
   addEmployee(
@@ -102,6 +104,11 @@ class AddpayementController extends GetxController with StateMixin<String> {
       if (data != null) {
         if (data["success"] != null) {
           res.value = data["success"].toString();
+
+          caisseTextEditingController.clear();
+          typeTextEditingController.clear();
+          montantTextController.clear();
+
           return res.value;
         } else {
           res.value = data.toString();
@@ -112,36 +119,4 @@ class AddpayementController extends GetxController with StateMixin<String> {
 
     return res.value;
   }
-
-  /*  addEmployee(
-      /* String caisse, String type, String montant, String mode_paiement,
-      String date_paiement */
-      ) async {
-    change(null, status: RxStatus.loading());
-    //late String res = "error";
-    /*  paymentModel = Payement(
-        caisse: caisse,
-        type: type,
-        montant: montant,
-        mode_paiement: mode_paiement,
-        date_paiement: date_paiement); */
-    //print(paymentModel);
-    await ServiceCondidats.sendPostRequest().then((data) {
-      change(data, status: RxStatus.success());
-      result.value = data;
-    });
-    return result.value;
-
-    //print(paymentModel);
-    /*  employees.value.add(paymentModel);
-    itemCount.value = employees.value.length;
- */
-    /* caisseTextEditingController.clear();
-    typeTextEditingController.clear(); */
-  }
-
-  removeEmployee(int index) {
-    employees.value.removeAt(index);
-    itemCount.value = employees.value.length;
-  } */
 }

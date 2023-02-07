@@ -6,6 +6,7 @@ import 'package:driving_getx/main/utils/AppConstant.dart';
 import 'package:driving_getx/main/utils/AppWidget.dart';
 import 'package:driving_getx/main/utils/SDColors.dart';
 import 'package:driving_getx/main/utils/SDStyle.dart';
+import 'package:driving_getx/views/widgets/tools_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -26,49 +27,29 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
   _CondidatInfoScreenState(this.thisCondidat);
   static const URLpic = 'https://smdev.tn/storage/condidat_pic/';
   final ExamenController condi_info_controller = Get.put(ExamenController());
-
   final AddpayementController addpayementController =
       Get.put(AddpayementController());
-
   final PayementController cond_payement_controller =
       Get.put(PayementController());
   late List<Examen> AllExam = [];
   late List<Payement> AllPayement = [];
-  late String result = "test_";
-
+  late String result = "";
   TextEditingController datePayementAdd = TextEditingController();
+  TextEditingController modePayementAdd = TextEditingController();
+  TextEditingController TypePayementAdd = TextEditingController();
 
   DateTime selectedDate = DateTime.now();
-  Future<void> selectDate(
-      BuildContext context, StateSetter setModalState) async {
-    final DateTime? picked = await showDatePicker(
-        helpText: 'Selectionner la date',
-        cancelText: 'Annuler',
-        confirmText: "Ok",
-        fieldLabelText: 'Booking Date',
-        fieldHintText: 'Month/Date/Year',
-        errorFormatText: 'Enter valid date',
-        errorInvalidText: 'Enter date in valid range',
-        context: context,
-        builder: (BuildContext context, Widget? child) {
-          return CustomTheme(
-            child: child,
-          );
-        },
-        initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate) {
-      setModalState(() {
-        selectedDate = picked;
-        datePayementAdd.text = DateFormat('yyyy-MM-dd').format(selectedDate);
-      });
-    }
-  }
+  var ModeRadio;
+  var TypeRadio;
 
   @override
   void initState() {
-    datePayementAdd.text = DateFormat('yyyy-MM-dd').format(selectedDate);
+    ModeRadio = "Espece";
+    TypeRadio = "Paiement";
+    TypePayementAdd.text = "Paiement";
+    modePayementAdd.text = "Espece";
+    addpayementController.datePayementAdd.text =
+        DateFormat('yyyy-MM-dd').format(selectedDate);
     condi_info_controller.getListExamenByID(thisCondidat.id);
     cond_payement_controller.getListPayementByID(thisCondidat.id);
     super.initState();
@@ -151,17 +132,17 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          mOption(
+                          CondOption(
                               "N° Total",
                               thisCondidat.nbr_heur_total!.nb_heur_total! +
                                   " Hr(s)"),
                           Container(height: 22, color: sdViewColor, width: 1),
-                          mOption(
+                          CondOption(
                               "N° Affecter",
                               thisCondidat.nb_heur_affecter!.nb_heur_affecter! +
                                   " Hr(s)"),
                           Container(height: 22, color: sdViewColor, width: 1),
-                          mOption("Examen", thisCondidat.examen!),
+                          CondOption("Examen", thisCondidat.examen!),
                         ],
                       ),
                     ),
@@ -235,12 +216,9 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                           child: Align(
                             alignment: Alignment.topRight,
                             child: FloatingActionButton.small(
-                              //heroTag: '1',
                               elevation: 5,
                               onPressed: () {
-                                mFormBottomSheet(context);
-
-                                //toast('Add payment');
+                                FormAddpayment(context);
                               },
                               child: Icon(
                                 Icons.add,
@@ -284,7 +262,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
     );
   }
 
-  Widget mOption(var mHeading, var mSubHeading) {
+  Widget CondOption(var mHeading, var mSubHeading) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -386,15 +364,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
     );
   }
 
-  Widget showLoadingIndicator() {
-    return const Center(
-      child: CircularProgressIndicator(
-        color: sdPrimaryColor,
-      ),
-    );
-  }
-
-  mFormBottomSheet(BuildContext aContext) async {
+  FormAddpayment(BuildContext aContext) async {
     showModalBottomSheet(
         backgroundColor: Colors.transparent,
         context: aContext,
@@ -432,24 +402,120 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                       style: primaryTextStyle(color: appStore.textPrimaryColor),
                     ),
                     8.height,
-                    editTextStyle("Mode paiement",
-                        addpayementController.mode_paiementtextController),
+                    Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      alignment: WrapAlignment.start,
+                      direction: Axis.horizontal,
+                      children: [
+                        Theme(
+                          data: Theme.of(context).copyWith(
+                              unselectedWidgetColor: appStore.textPrimaryColor),
+                          child: Radio(
+                            value: 'Espece',
+                            groupValue: ModeRadio,
+                            onChanged: (dynamic value) {
+                              setModalState(() {
+                                ModeRadio = value;
+                                modePayementAdd.text = ModeRadio;
+                              });
+                            },
+                          ),
+                        ),
+                        Text('Espece', style: primaryTextStyle()),
+                        Theme(
+                          data: Theme.of(context).copyWith(
+                            unselectedWidgetColor: appStore.textPrimaryColor,
+                          ),
+                          child: Radio(
+                            value: 'Chèque',
+                            groupValue: ModeRadio,
+                            onChanged: (dynamic value) {
+                              setModalState(() {
+                                ModeRadio = value;
+                                modePayementAdd.text = ModeRadio;
+                              });
+                            },
+                          ),
+                        ),
+                        Text('Chèque', style: primaryTextStyle()),
+                      ],
+                    ),
                     16.height,
                     Text(
                       "Montant",
                       style: primaryTextStyle(color: appStore.textPrimaryColor),
                     ),
                     8.height,
-                    editTextStyle(
-                        "Montant", addpayementController.montantTextController),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                      child: TextFormField(
+                        controller: addpayementController.montantTextController,
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(fontSize: 16, fontFamily: fontRegular),
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.fromLTRB(24, 16, 24, 16),
+                          hintText: "Montant",
+                          hintStyle: primaryTextStyle(
+                              color: appStore.isDarkModeOn
+                                  ? white.withOpacity(0.5)
+                                  : grey),
+                          filled: true,
+                          fillColor: appStore.appBarColor,
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide:
+                                  BorderSide(color: kPrimaryColor, width: 1.0)),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: BorderSide(
+                                  color: kSecondaryColor, width: 1.0)),
+                        ),
+                      ),
+                    ),
                     16.height,
                     Text(
                       " Type",
                       style: primaryTextStyle(color: appStore.textPrimaryColor),
                     ),
                     8.height,
-                    editTextStyle(" Type",
-                        addpayementController.typeTextEditingController),
+                    Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      alignment: WrapAlignment.start,
+                      direction: Axis.horizontal,
+                      children: [
+                        Theme(
+                          data: Theme.of(context).copyWith(
+                              unselectedWidgetColor: appStore.textPrimaryColor),
+                          child: Radio(
+                            value: 'Paiement',
+                            groupValue: TypeRadio,
+                            onChanged: (dynamic value) {
+                              setModalState(() {
+                                TypeRadio = value;
+                                TypePayementAdd.text = TypeRadio;
+                              });
+                            },
+                          ),
+                        ),
+                        Text('Paiement', style: primaryTextStyle()),
+                        Theme(
+                          data: Theme.of(context).copyWith(
+                            unselectedWidgetColor: appStore.textPrimaryColor,
+                          ),
+                          child: Radio(
+                            value: 'Remise',
+                            groupValue: TypeRadio,
+                            onChanged: (dynamic value) {
+                              setModalState(() {
+                                TypeRadio = value;
+                                TypePayementAdd.text = TypeRadio;
+                              });
+                            },
+                          ),
+                        ),
+                        Text('Remise', style: primaryTextStyle()),
+                      ],
+                    ),
                     16.height,
                     Text(
                       "Date Payement",
@@ -458,9 +524,10 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                     TextFormField(
                       onTap: () {
                         FocusScope.of(context).requestFocus(FocusNode());
-                        selectDate(context, setModalState);
+                        selectDate(
+                            context, setModalState, addpayementController);
                       },
-                      controller: datePayementAdd,
+                      controller: addpayementController.datePayementAdd,
                       style: TextStyle(color: blackColor),
                       decoration: InputDecoration(
                         enabledBorder: UnderlineInputBorder(
@@ -470,7 +537,8 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                                 BorderSide(color: kDefaultIconDarkColor)),
                         suffixIcon: GestureDetector(
                           onTap: () {
-                            selectDate(context, setModalState);
+                            selectDate(
+                                context, setModalState, addpayementController);
                           },
                           child: Icon(Icons.calendar_today,
                               color: kPrimaryColor, size: 16),
@@ -482,14 +550,14 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                     40.height,
                     GestureDetector(
                       onTap: () {
-                        addPay().then((value) {
+                        addPayementModal().then((value) {
                           // print("bbbbbbb" + value);
                           if (value == "true") {
                             finish(context);
                             cond_payement_controller
                                 .getListPayementByID(thisCondidat.id);
 
-                            // print("success");
+                            toast("Payement ajouter avec succée");
                           } else {
                             Get.snackbar(
                               "opération echouée",
@@ -497,12 +565,11 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                               colorText: Colors.black,
                               snackPosition: SnackPosition.BOTTOM,
                               icon: Icon(Icons.error, color: Colors.white),
-                              backgroundColor: Colors.blue,
+                              backgroundColor: Color.fromARGB(255, 216, 46, 24),
                               margin: EdgeInsets.all(15),
                               isDismissible: true,
                               forwardAnimationCurve: Curves.easeOutBack,
                             );
-                            //print("errrooooooor");
                           }
                         });
                       },
@@ -532,41 +599,18 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
         });
   }
 
-  Future<String> addPay() async {
+  Future<String> addPayementModal() async {
     await addpayementController.addEmployee(
         thisCondidat.school_id!,
         thisCondidat.school_name!,
         thisCondidat.id!.toString(),
         addpayementController.caisseTextEditingController.text,
-        addpayementController.typeTextEditingController.text,
+        TypePayementAdd.text,
         addpayementController.montantTextController.text,
-        addpayementController.mode_paiementtextController.text,
-        datePayementAdd.text);
+        modePayementAdd.text,
+        addpayementController.datePayementAdd.text);
+
     result = addpayementController.res.value;
     return result;
-  }
-
-  Padding editTextStyle(var hintText, var namefield) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-      child: TextFormField(
-        controller: namefield,
-        style: TextStyle(fontSize: 16, fontFamily: fontRegular),
-        decoration: InputDecoration(
-          contentPadding: EdgeInsets.fromLTRB(24, 16, 24, 16),
-          hintText: hintText,
-          hintStyle: primaryTextStyle(
-              color: appStore.isDarkModeOn ? white.withOpacity(0.5) : grey),
-          filled: true,
-          fillColor: appStore.appBarColor,
-          enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: kPrimaryColor, width: 1.0)),
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: kSecondaryColor, width: 1.0)),
-        ),
-      ),
-    );
   }
 }
