@@ -45,7 +45,23 @@ class ExamenController extends GetxController with StateMixin<List<Examen>> {
 class PayementController extends GetxController
     with StateMixin<List<Payement>> {
   Rx<List<Payement>> listePayement = Rx<List<Payement>>([]);
+
+  TextEditingController caisseTextController = TextEditingController();
+  TextEditingController typeTextController = TextEditingController();
+  TextEditingController montantTextController = TextEditingController();
+  TextEditingController mode_paiementtextController = TextEditingController();
+  TextEditingController datePayementAdd = TextEditingController();
+  var res = "".obs;
   var resDelete = "".obs;
+
+  @override
+  void onClose() {
+    super.onClose();
+    caisseTextController.dispose();
+    typeTextController.dispose();
+    montantTextController.dispose();
+    datePayementAdd.dispose();
+  }
 
   getListPayementByID(id) async {
     change(null, status: RxStatus.loading());
@@ -73,27 +89,6 @@ class PayementController extends GetxController
     });
     return resDelete.value;
   }
-}
-
-class AddpayementController extends GetxController with StateMixin<String> {
-  TextEditingController caisseTextEditingController = TextEditingController();
-  TextEditingController typeTextEditingController = TextEditingController();
-  TextEditingController montantTextController = TextEditingController();
-  TextEditingController mode_paiementtextController = TextEditingController();
-  TextEditingController datePayementAdd = TextEditingController();
-
-  var res = "".obs;
-  //late Payement paymentModel;
-  //var itemCount = 0.obs;
-
-  @override
-  void onClose() {
-    super.onClose();
-    caisseTextEditingController.dispose();
-    typeTextEditingController.dispose();
-    montantTextController.dispose();
-    datePayementAdd.dispose();
-  }
 
   addPayement(
       String schoolId,
@@ -119,8 +114,8 @@ class AddpayementController extends GetxController with StateMixin<String> {
       if (data != null) {
         if (data["success"] != null) {
           res.value = data["success"].toString();
-          caisseTextEditingController.clear();
-          typeTextEditingController.clear();
+          caisseTextController.clear();
+          typeTextController.clear();
           montantTextController.clear();
           return res.value;
         } else {

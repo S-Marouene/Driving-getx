@@ -31,8 +31,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
   _CondidatInfoScreenState(this.thisCondidat);
   static const URLpic = 'https://smdev.tn/storage/condidat_pic/';
   final ExamenController condi_info_controller = Get.put(ExamenController());
-  final AddpayementController addpayementController =
-      Get.put(AddpayementController());
+
   final PayementController cond_payement_controller =
       Get.put(PayementController());
 
@@ -61,7 +60,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
     TypeRadio = "Paiement";
     TypePayementAdd.text = "Paiement";
     modePayementAdd.text = "Espece";
-    addpayementController.datePayementAdd.text =
+    cond_payement_controller.datePayementAdd.text =
         DateFormat('yyyy-MM-dd').format(selectedDate);
     condi_info_controller.getListExamenByID(thisCondidat.id);
     cond_payement_controller.getListPayementByID(thisCondidat.id);
@@ -436,10 +435,10 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                             AllCaisse.map((e) => e.caisse.toString()).toList();
                         selectedCaisse = listOfCategory[0];
                         (!selected_caisse)
-                            ? addpayementController.caisseTextEditingController
-                                .text = selectedCaisse!
-                            : addpayementController.caisseTextEditingController
-                                .text = ChangedCaisse!;
+                            ? cond_payement_controller
+                                .caisseTextController.text = selectedCaisse!
+                            : cond_payement_controller
+                                .caisseTextController.text = ChangedCaisse!;
                         return Card(
                             elevation: 4,
                             child: Padding(
@@ -528,7 +527,8 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                       child: TextFormField(
-                        controller: addpayementController.montantTextController,
+                        controller:
+                            cond_payement_controller.montantTextController,
                         keyboardType: TextInputType.number,
                         style: TextStyle(fontSize: 16, fontFamily: fontRegular),
                         decoration: InputDecoration(
@@ -604,9 +604,9 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                       onTap: () {
                         FocusScope.of(context).requestFocus(FocusNode());
                         selectDate(
-                            context, setModalState, addpayementController);
+                            context, setModalState, cond_payement_controller);
                       },
-                      controller: addpayementController.datePayementAdd,
+                      controller: cond_payement_controller.datePayementAdd,
                       style: TextStyle(color: blackColor),
                       decoration: InputDecoration(
                         enabledBorder: UnderlineInputBorder(
@@ -616,8 +616,8 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                                 BorderSide(color: kDefaultIconDarkColor)),
                         suffixIcon: GestureDetector(
                           onTap: () {
-                            selectDate(
-                                context, setModalState, addpayementController);
+                            selectDate(context, setModalState,
+                                cond_payement_controller);
                           },
                           child: Icon(Icons.calendar_today,
                               color: kPrimaryColor, size: 16),
@@ -678,17 +678,17 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
   }
 
   Future<String> addPayementModal() async {
-    await addpayementController.addPayement(
+    await cond_payement_controller.addPayement(
         thisCondidat.school_id!,
         thisCondidat.school_name!,
         thisCondidat.id!.toString(),
-        addpayementController.caisseTextEditingController.text,
+        cond_payement_controller.caisseTextController.text,
         TypePayementAdd.text,
-        addpayementController.montantTextController.text,
+        cond_payement_controller.montantTextController.text,
         modePayementAdd.text,
-        addpayementController.datePayementAdd.text);
+        cond_payement_controller.datePayementAdd.text);
 
-    result = addpayementController.res.value;
+    result = cond_payement_controller.res.value;
     return result;
   }
 
