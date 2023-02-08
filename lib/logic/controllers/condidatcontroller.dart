@@ -45,6 +45,7 @@ class ExamenController extends GetxController with StateMixin<List<Examen>> {
 class PayementController extends GetxController
     with StateMixin<List<Payement>> {
   Rx<List<Payement>> listePayement = Rx<List<Payement>>([]);
+  var resDelete = "".obs;
 
   getListPayementByID(id) async {
     change(null, status: RxStatus.loading());
@@ -57,47 +58,44 @@ class PayementController extends GetxController
     });
     return listePayement.value;
   }
-}
 
-class CaisseController extends GetxController with StateMixin<List<Caisse>> {
-  Rx<List<Caisse>> listeCaisse = Rx<List<Caisse>>([]);
-
-  getListCaisse() async {
-    change(null, status: RxStatus.loading());
-    await ServiceCondidats.getCaisse().then((data) {
-      change(data, status: RxStatus.success());
-      listeCaisse.value = data;
-    }, onError: (error) {
-      change(null, status: RxStatus.error(error.toString()));
+  DeletePayementByID(id) async {
+    await ServiceCondidats.DeletePayementServ(id).then((data) {
+      if (data != null) {
+        if (data["success"] != null) {
+          resDelete.value = data["success"].toString();
+          return resDelete.value;
+        } else {
+          resDelete.value = data.toString();
+          return resDelete.value;
+        }
+      }
     });
-    return listeCaisse.value;
+    return resDelete.value;
   }
 }
 
 class AddpayementController extends GetxController with StateMixin<String> {
-  Rx<List<Payement>> employees = Rx<List<Payement>>([]);
   TextEditingController caisseTextEditingController = TextEditingController();
   TextEditingController typeTextEditingController = TextEditingController();
   TextEditingController montantTextController = TextEditingController();
   TextEditingController mode_paiementtextController = TextEditingController();
   TextEditingController datePayementAdd = TextEditingController();
 
-  Rx<String> result = Rx<String>("");
   var res = "".obs;
-
-  late Payement paymentModel;
-  var itemCount = 0.obs;
+  //late Payement paymentModel;
+  //var itemCount = 0.obs;
 
   @override
   void onClose() {
     super.onClose();
-    caisseTextEditingController.clear();
+    caisseTextEditingController.dispose();
     typeTextEditingController.dispose();
     montantTextController.dispose();
     datePayementAdd.dispose();
   }
 
-  addEmployee(
+  addPayement(
       String schoolId,
       String schoolName,
       String condidatId,
@@ -117,15 +115,13 @@ class AddpayementController extends GetxController with StateMixin<String> {
       "date_paiement": date_paiement
     });
 
-    await ServiceCondidats.sendPostRequest(paymentModel).then((data) {
+    await ServiceCondidats.AddPayementServ(paymentModel).then((data) {
       if (data != null) {
         if (data["success"] != null) {
           res.value = data["success"].toString();
-
           caisseTextEditingController.clear();
           typeTextEditingController.clear();
           montantTextController.clear();
-
           return res.value;
         } else {
           res.value = data.toString();
@@ -133,7 +129,21 @@ class AddpayementController extends GetxController with StateMixin<String> {
         }
       }
     });
-
     return res.value;
+  }
+}
+
+class CaisseController extends GetxController with StateMixin<List<Caisse>> {
+  Rx<List<Caisse>> listeCaisse = Rx<List<Caisse>>([]);
+
+  getListCaisse() async {
+    change(null, status: RxStatus.loading());
+    await ServiceCondidats.getCaisse().then((data) {
+      change(data, status: RxStatus.success());
+      listeCaisse.value = data;
+    }, onError: (error) {
+      change(null, status: RxStatus.error(error.toString()));
+    });
+    return listeCaisse.value;
   }
 }

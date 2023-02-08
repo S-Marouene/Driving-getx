@@ -1,3 +1,4 @@
+import 'package:double_back_to_close/toast.dart';
 import 'package:driving_getx/database/models/caisses.dart';
 import 'package:driving_getx/database/models/condidats.dart';
 import 'package:driving_getx/database/models/examens.dart';
@@ -13,6 +14,8 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 // ignore: depend_on_referenced_packages
 import 'package:nb_utils/nb_utils.dart';
+
+import '../../main/utils/AppColors.dart';
 
 class CondidatInfoScreen extends StatefulWidget {
   final Condidat thisCondidat;
@@ -70,14 +73,19 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
+
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          leading: InkWell(
-            onTap: () {
-              finish(context);
-            },
-            child: Icon(Icons.arrow_back, color: Colors.white),
+          automaticallyImplyLeading: false,
+          title: SizedBox(
+            height: 55,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(0, 22, 0, 0),
+              child: Text("Fiche Condidat",
+                  style: boldTextStyle(
+                      color: db6_white, size: 15, fontFamily: fontBold)),
+            ),
           ),
           actions: <Widget>[
             Padding(
@@ -86,14 +94,13 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
           ],
           backgroundColor: sdPrimaryColor,
           elevation: 0.0,
-          automaticallyImplyLeading: false,
         ),
         body: SingleChildScrollView(
           child: Stack(
             children: [
-              Container(height: width * 0.3, color: sdPrimaryColor),
+              Container(height: width * 0.33, color: sdPrimaryColor),
               Container(
-                margin: EdgeInsets.only(left: 16, right: 16),
+                margin: EdgeInsets.only(left: 16, right: 16, top: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -334,11 +341,17 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
   Widget ListPayement(Payement payement) {
     return Container(
       decoration: boxDecorations(showShadow: true),
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 10),
       margin: EdgeInsets.only(top: 16),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          CircleAvatar(
+            radius: 25,
+            backgroundColor: sdSecondaryColorGreen.withOpacity(0.3),
+            child: Text(payement.montant! + " DT",
+                style: boldTextStyle(color: db6_colorPrimaryDark, size: 11)),
+          ),
+          SizedBox(width: 20),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -364,13 +377,23 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
               )
             ],
           ),
-          CircleAvatar(
-            radius: 25,
-            backgroundColor: sdSecondaryColorGreen.withOpacity(0.3),
-            // : sdSecondaryColorYellow.withOpacity(0.7),
-            child: Text(payement.montant! + " DT",
-                style: boldTextStyle(color: db6_colorPrimaryDark, size: 11)),
-          )
+          Expanded(child: SizedBox.shrink()),
+          Column(
+            children: [
+              IconButton(
+                color: Colors.red,
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return confirmationAlert(context, payement.id);
+                    },
+                  );
+                },
+                icon: Icon(Icons.delete_forever_sharp),
+              )
+            ],
+          ),
         ],
       ),
     );
@@ -419,31 +442,35 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                                 .text = ChangedCaisse!;
                         return Card(
                             elevation: 4,
-                            child: DropdownButton(
-                              isExpanded: true,
-                              dropdownColor: appStore.appBarColor,
-                              value: ((!selected_caisse)
-                                  ? selectedCaisse
-                                  : ChangedCaisse),
-                              style: boldTextStyle(),
-                              icon: Icon(
-                                Icons.keyboard_arrow_down,
-                                color: appStore.iconColor,
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(20, 0, 30, 0),
+                              child: DropdownButton(
+                                isExpanded: true,
+                                dropdownColor: appStore.appBarColor,
+                                value: ((!selected_caisse)
+                                    ? selectedCaisse
+                                    : ChangedCaisse),
+                                style: boldTextStyle(),
+                                icon: Icon(
+                                  Icons.keyboard_arrow_down,
+                                  color: appStore.iconColor,
+                                ),
+                                underline: 0.height,
+                                onChanged: (dynamic newValue) {
+                                  setModalState(() {
+                                    selected_caisse = true;
+                                    ChangedCaisse = newValue;
+                                  });
+                                },
+                                items: listOfCategory.map((caisse) {
+                                  return DropdownMenuItem(
+                                    value: caisse,
+                                    child:
+                                        Text(caisse, style: primaryTextStyle())
+                                            .paddingLeft(8),
+                                  );
+                                }).toList(),
                               ),
-                              underline: 0.height,
-                              onChanged: (dynamic newValue) {
-                                setModalState(() {
-                                  selected_caisse = true;
-                                  ChangedCaisse = newValue;
-                                });
-                              },
-                              items: listOfCategory.map((caisse) {
-                                return DropdownMenuItem(
-                                  value: caisse,
-                                  child: Text(caisse, style: primaryTextStyle())
-                                      .paddingLeft(8),
-                                );
-                              }).toList(),
                             ));
                       },
                       onLoading: showLoadingIndicator(),
@@ -651,7 +678,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
   }
 
   Future<String> addPayementModal() async {
-    await addpayementController.addEmployee(
+    await addpayementController.addPayement(
         thisCondidat.school_id!,
         thisCondidat.school_name!,
         thisCondidat.id!.toString(),
@@ -663,5 +690,60 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
 
     result = addpayementController.res.value;
     return result;
+  }
+
+  Future<String> Deletepayement(id) async {
+    await cond_payement_controller.DeletePayementByID(id);
+    result = cond_payement_controller.resDelete.value;
+    return result;
+  }
+
+  Widget confirmationAlert(context, id) {
+    AlertDialog mAlertItem2 = AlertDialog(
+      backgroundColor: appStore.scaffoldBackground,
+      title: Text("Confirmation",
+          style: boldTextStyle(color: appStore.textPrimaryColor)),
+      content: Text(
+        "Voulez-vous vraiment supprimer ce paiement ?",
+        style: secondaryTextStyle(color: appStore.textSecondaryColor),
+      ),
+      actions: [
+        TextButton(
+          child: Text(
+            "Annuler",
+            style: primaryTextStyle(color: appColorPrimary),
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+            //Navigator.of(context).pop();
+          },
+        ),
+        TextButton(
+          child: Text("ok", style: primaryTextStyle(color: Colors.red)),
+          onPressed: () {
+            Deletepayement(id).then((value) {
+              if (value == "true") {
+                finish(context);
+                cond_payement_controller.getListPayementByID(thisCondidat.id);
+                toast("Payement supprimer avec succée");
+              } else {
+                Get.snackbar(
+                  "opération echouée",
+                  value,
+                  colorText: Colors.black,
+                  snackPosition: SnackPosition.BOTTOM,
+                  icon: Icon(Icons.error, color: Colors.white),
+                  backgroundColor: Color.fromARGB(255, 216, 46, 24),
+                  margin: EdgeInsets.all(15),
+                  isDismissible: true,
+                  forwardAnimationCurve: Curves.easeOutBack,
+                );
+              }
+            });
+          },
+        ),
+      ],
+    );
+    return mAlertItem2;
   }
 }

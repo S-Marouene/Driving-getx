@@ -47,20 +47,7 @@ class ServiceCondidats {
     }
   }
 
-  static Future<List<Caisse>> getCaisse() async {
-    Dio.Response response = await dio()
-        .get('/caisse', options: Dio.Options(headers: {'auth': true}));
-
-    if (response.statusCode == 200) {
-      final List examens = jsonDecode((response.data.toString()))["data"];
-
-      return examens.map((json) => Caisse.fromJson(json)).toList();
-    } else {
-      throw Exception();
-    }
-  }
-
-  static Future sendPostRequest(Payement paymentModel) async {
+  static Future AddPayementServ(Payement paymentModel) async {
     Dio.Response response = await dio().post(
       '/paiement',
       options: Dio.Options(
@@ -77,6 +64,38 @@ class ServiceCondidats {
       return jsonDecode(response.data.toString());
     } else {
       return jsonDecode(response.data.toString());
+    }
+  }
+
+  static Future DeletePayementServ(id) async {
+    Dio.Response response = await dio().delete(
+      '/paiement/$id',
+      options: Dio.Options(
+        headers: {'auth': true},
+        followRedirects: false,
+        validateStatus: (status) {
+          return status! < 500;
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.data.toString());
+    } else {
+      return jsonDecode(response.data.toString());
+    }
+  }
+
+  static Future<List<Caisse>> getCaisse() async {
+    Dio.Response response = await dio()
+        .get('/caisse', options: Dio.Options(headers: {'auth': true}));
+
+    if (response.statusCode == 200) {
+      final List examens = jsonDecode((response.data.toString()))["data"];
+
+      return examens.map((json) => Caisse.fromJson(json)).toList();
+    } else {
+      throw Exception();
     }
   }
 }
