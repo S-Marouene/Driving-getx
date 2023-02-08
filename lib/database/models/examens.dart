@@ -44,4 +44,19 @@ class Examen {
         resultat: json['resultat'],
         examinateur: json['examinateur']);
   }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['school_id'] = schoolId;
+    data['school_name'] = schoolName;
+    data['condidat_id'] = condidatId;
+    data['num_liste'] = numListe;
+    data['num_convocation'] = numConvocation;
+    data['date_examen'] = dateExamen;
+    data['centre_examen'] = centreExamen;
+    data['type_examen'] = typeExamen;
+    data['prestation'] = prestation;
+    data['bureau'] = bureau;
+    return data;
+  }
 }

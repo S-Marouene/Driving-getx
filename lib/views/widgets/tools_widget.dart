@@ -31,8 +31,7 @@ Future<void> selectDate(
   if (picked != null && picked != selectedDate) {
     setModalState(() {
       selectedDate = picked;
-      controller.datePayementAdd.text =
-          DateFormat('yyyy-MM-dd').format(selectedDate);
+      controller.text = DateFormat('yyyy-MM-dd').format(selectedDate);
     });
   }
 }
@@ -61,10 +60,48 @@ Padding editTextStyle(var hintText, var namefield) {
   );
 }
 
+Padding editNumericStyle(var hintText, var namefield) {
+  return Padding(
+    padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+    child: TextFormField(
+      controller: namefield,
+      keyboardType: TextInputType.number,
+      style: TextStyle(fontSize: 16, fontFamily: fontRegular),
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.fromLTRB(24, 16, 24, 16),
+        hintText: hintText,
+        hintStyle: primaryTextStyle(
+            color: appStore.isDarkModeOn ? white.withOpacity(0.5) : grey),
+        filled: true,
+        fillColor: appStore.appBarColor,
+        enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide(color: kPrimaryColor, width: 1.0)),
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide(color: kSecondaryColor, width: 1.0)),
+      ),
+    ),
+  );
+}
+
 Widget showLoadingIndicator() {
   return const Center(
     child: CircularProgressIndicator(
       color: sdPrimaryColor,
     ),
+  );
+}
+
+Widget CondOption(var mHeading, var mSubHeading) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: [
+      Text(mHeading,
+          style: primaryTextStyle(size: 16, color: sdTextPrimaryColor)),
+      SizedBox(height: 4),
+      Text(mSubHeading,
+          style: primaryTextStyle(size: 14, color: sdTextSecondaryColor))
+    ],
   );
 }

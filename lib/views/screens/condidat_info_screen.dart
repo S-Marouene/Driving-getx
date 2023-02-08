@@ -1,8 +1,11 @@
-import 'package:double_back_to_close/toast.dart';
+import 'package:driving_getx/database/models/bureaux.dart';
 import 'package:driving_getx/database/models/caisses.dart';
+import 'package:driving_getx/database/models/centreexams.dart';
 import 'package:driving_getx/database/models/condidats.dart';
 import 'package:driving_getx/database/models/examens.dart';
 import 'package:driving_getx/database/models/payements.dart';
+import 'package:driving_getx/logic/controllers/bureau_controller.dart';
+import 'package:driving_getx/logic/controllers/centre_exam_controller.dart';
 import 'package:driving_getx/logic/controllers/condidatcontroller.dart';
 import 'package:driving_getx/main/utils/AppConstant.dart';
 import 'package:driving_getx/main/utils/AppWidget.dart';
@@ -12,10 +15,10 @@ import 'package:driving_getx/views/widgets/tools_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import '../../logic/controllers/caisse_controller.dart';
+import '../../main/utils/AppColors.dart';
 // ignore: depend_on_referenced_packages
 import 'package:nb_utils/nb_utils.dart';
-
-import '../../main/utils/AppColors.dart';
 
 class CondidatInfoScreen extends StatefulWidget {
   final Condidat thisCondidat;
@@ -30,266 +33,278 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
   Condidat thisCondidat;
   _CondidatInfoScreenState(this.thisCondidat);
   static const URLpic = 'https://smdev.tn/storage/condidat_pic/';
-  final ExamenController condi_info_controller = Get.put(ExamenController());
+  final ExamenController cond_exam_controller = Get.put(ExamenController());
 
   final PayementController cond_payement_controller =
       Get.put(PayementController());
 
   final CaisseController caisse_controller = Get.put(CaisseController());
+  final BureauController bureau_controller = Get.put(BureauController());
+  final CentreExamController centr_exam_controller =
+      Get.put(CentreExamController());
 
   late List<Examen> AllExam = [];
   late List<Payement> AllPayement = [];
   late List<Caisse> AllCaisse = [];
+  late List<Bureau> AllBureau = [];
+  late List<CentreExam> AllCentrExam = [];
 
   late String result = "";
   TextEditingController datePayementAdd = TextEditingController();
   TextEditingController modePayementAdd = TextEditingController();
   TextEditingController TypePayementAdd = TextEditingController();
+  TextEditingController TypeExamAdd = TextEditingController();
+  TextEditingController dateExamAdd = TextEditingController();
   DateTime selectedDate = DateTime.now();
   var ModeRadio;
   var TypeRadio;
+  var TypeExamRadio;
 
   List<String> listOfCategory = [];
   String? selectedCaisse;
   String? ChangedCaisse;
   bool selected_caisse = false;
 
+  String? selectedCentrExam;
+  String? ChangedCentrExam;
+  bool selected_centrExam = false;
+
+  String? selectedBureau;
+  String? ChangedBureau;
+  bool selected_bureau = false;
+
   @override
   void initState() {
     ModeRadio = "Espece";
     TypeRadio = "Paiement";
+    TypeExamRadio = "Conduite";
+
     TypePayementAdd.text = "Paiement";
     modePayementAdd.text = "Espece";
+    TypeExamAdd.text = "Conduite";
+
     cond_payement_controller.datePayementAdd.text =
         DateFormat('yyyy-MM-dd').format(selectedDate);
-    condi_info_controller.getListExamenByID(thisCondidat.id);
+
+    cond_exam_controller.date_examenController.text =
+        DateFormat('yyyy-MM-dd').format(selectedDate);
+    cond_exam_controller.getListExamenByID(thisCondidat.id);
     cond_payement_controller.getListPayementByID(thisCondidat.id);
     caisse_controller.getListCaisse();
+    centr_exam_controller.getList();
+    bureau_controller.getList();
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width;
-
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          title: SizedBox(
-            height: 55,
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(0, 22, 0, 0),
-              child: Text("Fiche Condidat",
-                  style: boldTextStyle(
-                      color: db6_white, size: 15, fontFamily: fontBold)),
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            title: SizedBox(
+              height: 55,
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(0, 22, 0, 0),
+                child: Text("Fiche Condidat",
+                    style: boldTextStyle(
+                        color: db6_white, size: 15, fontFamily: fontBold)),
+              ),
             ),
-          ),
-          actions: <Widget>[
-            Padding(
-                padding: const EdgeInsets.only(right: 16),
-                child: Icon(Icons.favorite_border, color: Colors.white)),
-          ],
-          backgroundColor: sdPrimaryColor,
-          elevation: 0.0,
-        ),
-        body: SingleChildScrollView(
-          child: Stack(
-            children: [
-              Container(height: width * 0.33, color: sdPrimaryColor),
-              Container(
-                margin: EdgeInsets.only(left: 16, right: 16, top: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        SizedBox(
-                          height: 50,
-                          width: 50,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10),
-                            child: FadeInImage(
-                              fit: BoxFit.cover,
-                              placeholder: AssetImage('images/app/loading.gif'),
-                              image: Image.network(
-                                URLpic +
-                                    (thisCondidat.photo! == ''
-                                        ? 'unknown_profile.png'
-                                        : thisCondidat.photo!),
-                              ).image,
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 16),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(thisCondidat.nom! + ' ' + thisCondidat.prenom!,
-                                style: primaryTextStyle(
-                                    size: 16, color: Colors.white)),
-                            Text(
-                                thisCondidat.num_tel == null
-                                    ? ''
-                                    : "+ 216 " + thisCondidat.num_tel!,
-                                style: primaryTextStyle(
-                                    size: 14, color: Colors.white)),
-                          ],
-                        )
-                      ],
-                    ),
-                    SizedBox(height: 30),
-                    Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(20),
-                              topRight: Radius.circular(20)),
-                          color: Colors.white),
-                      padding: EdgeInsets.fromLTRB(16, 10, 16, 10),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          CondOption(
-                              "N° Total",
-                              thisCondidat.nbr_heur_total!.nb_heur_total! +
-                                  " Hr(s)"),
-                          Container(height: 22, color: sdViewColor, width: 1),
-                          CondOption(
-                              "N° Affecter",
-                              thisCondidat.nb_heur_affecter!.nb_heur_affecter! +
-                                  " Hr(s)"),
-                          Container(height: 22, color: sdViewColor, width: 1),
-                          CondOption("Examen", thisCondidat.examen!),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 18),
-                    Row(
-                      children: [
-                        Align(
-                            alignment: Alignment.centerLeft,
-                            child: Icon(
-                              Icons.work_history_outlined,
-                              size: 18,
-                            )),
-                        Container(
-                            margin: const EdgeInsets.only(left: 7.0),
-                            child: Text("Examens programmée :",
-                                style: secondaryTextStyle(
-                                    size: 14, color: kTextColor))),
-                        Expanded(
-                          child: Align(
-                            alignment: Alignment.topRight,
-                            child: FloatingActionButton.small(
-                              heroTag: '2',
-                              elevation: 5,
-                              onPressed: () {
-                                toast('Add exam');
-                              },
-                              child: Icon(
-                                Icons.add,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    condi_info_controller.obx(
-                      (state) {
-                        AllExam = condi_info_controller.listeExamen.value;
-                        return AllExam.isEmpty
-                            ? Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Text("Liste vide"),
-                              )
-                            : ListView.builder(
-                                itemCount: AllExam.isEmpty ? 0 : AllExam.length,
-                                shrinkWrap: true,
-                                padding: EdgeInsets.only(bottom: 16),
-                                physics: NeverScrollableScrollPhysics(),
-                                itemBuilder: (BuildContext context, int index) {
-                                  return ListExamen(AllExam[index]);
-                                },
-                              );
-                      },
-                      onLoading: showLoadingIndicator(),
-                    ),
-                    SizedBox(height: 18),
-                    Row(
-                      children: [
-                        Align(
-                            alignment: Alignment.centerLeft,
-                            child: Icon(
-                              Icons.attach_money,
-                              size: 18,
-                            )),
-                        Container(
-                            margin: const EdgeInsets.only(left: 2.0),
-                            child: Text("Payements :",
-                                style: secondaryTextStyle(
-                                    size: 14, color: kTextColor))),
-                        Expanded(
-                          child: Align(
-                            alignment: Alignment.topRight,
-                            child: FloatingActionButton.small(
-                              elevation: 5,
-                              onPressed: () {
-                                FormAddpayment(context);
-                              },
-                              child: Icon(
-                                Icons.add,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    cond_payement_controller.obx(
-                      (state) {
-                        AllPayement =
-                            cond_payement_controller.listePayement.value;
-                        return AllPayement.isEmpty
-                            ? Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Text("Liste vide"),
-                              )
-                            : ListView.builder(
-                                itemCount: AllPayement.isEmpty
-                                    ? 0
-                                    : AllPayement.length,
-                                shrinkWrap: true,
-                                padding: EdgeInsets.only(bottom: 16),
-                                physics: NeverScrollableScrollPhysics(),
-                                itemBuilder: (BuildContext context, int index) {
-                                  return ListPayement(AllPayement[index]);
-                                },
-                              );
-                      },
-                      onLoading: showLoadingIndicator(),
-                    ),
-                  ],
-                ),
-              )
+            actions: <Widget>[
+              Padding(
+                  padding: const EdgeInsets.only(right: 16),
+                  child: Icon(Icons.favorite_border, color: Colors.white)),
             ],
+            backgroundColor: sdPrimaryColor,
+            elevation: 0.0,
           ),
-        ),
-      ),
+          body: CondidatInfoScreen()),
     );
   }
 
-  Widget CondOption(var mHeading, var mSubHeading) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text(mHeading,
-            style: primaryTextStyle(size: 16, color: sdTextPrimaryColor)),
-        SizedBox(height: 4),
-        Text(mSubHeading,
-            style: primaryTextStyle(size: 14, color: sdTextSecondaryColor))
-      ],
+  Widget CondidatInfoScreen() {
+    var width = MediaQuery.of(context).size.width;
+    return SingleChildScrollView(
+      child: Stack(
+        children: [
+          Container(height: width * 0.33, color: sdPrimaryColor),
+          Container(
+            margin: EdgeInsets.only(left: 16, right: 16, top: 20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    SizedBox(
+                      height: 50,
+                      width: 50,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: FadeInImage(
+                          fit: BoxFit.cover,
+                          placeholder: AssetImage('images/app/loading.gif'),
+                          image: Image.network(
+                            URLpic +
+                                (thisCondidat.photo! == ''
+                                    ? 'unknown_profile.png'
+                                    : thisCondidat.photo!),
+                          ).image,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 16),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(thisCondidat.nom! + ' ' + thisCondidat.prenom!,
+                            style: primaryTextStyle(
+                                size: 16, color: Colors.white)),
+                        Text(
+                            thisCondidat.num_tel == null
+                                ? ''
+                                : "+ 216 " + thisCondidat.num_tel!,
+                            style: primaryTextStyle(
+                                size: 14, color: Colors.white)),
+                      ],
+                    )
+                  ],
+                ),
+                SizedBox(height: 30),
+                Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(20),
+                          topRight: Radius.circular(20)),
+                      color: Colors.white),
+                  padding: EdgeInsets.fromLTRB(16, 10, 16, 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CondOption(
+                          "N° Total",
+                          thisCondidat.nbr_heur_total!.nb_heur_total! +
+                              " Hr(s)"),
+                      Container(height: 22, color: sdViewColor, width: 1),
+                      CondOption(
+                          "N° Affecter",
+                          thisCondidat.nb_heur_affecter!.nb_heur_affecter! +
+                              " Hr(s)"),
+                      Container(height: 22, color: sdViewColor, width: 1),
+                      CondOption("Examen", thisCondidat.examen!),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 18),
+                Row(
+                  children: [
+                    Align(
+                        alignment: Alignment.centerLeft,
+                        child: Icon(
+                          Icons.work_history_outlined,
+                          size: 18,
+                        )),
+                    Container(
+                        margin: const EdgeInsets.only(left: 7.0),
+                        child: Text("Examens programmée :",
+                            style: secondaryTextStyle(
+                                size: 14, color: kTextColor))),
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: FloatingActionButton.small(
+                          heroTag: '2',
+                          elevation: 5,
+                          onPressed: () {
+                            FormAddExamen(context);
+                          },
+                          child: Icon(
+                            Icons.add,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                cond_exam_controller.obx(
+                  (state) {
+                    AllExam = cond_exam_controller.listeExamen.value;
+                    return AllExam.isEmpty
+                        ? Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text("Liste vide"),
+                          )
+                        : ListView.builder(
+                            itemCount: AllExam.isEmpty ? 0 : AllExam.length,
+                            shrinkWrap: true,
+                            padding: EdgeInsets.only(bottom: 16),
+                            physics: NeverScrollableScrollPhysics(),
+                            itemBuilder: (BuildContext context, int index) {
+                              return ListExamen(AllExam[index]);
+                            },
+                          );
+                  },
+                  onLoading: showLoadingIndicator(),
+                ),
+                SizedBox(height: 18),
+                Row(
+                  children: [
+                    Align(
+                        alignment: Alignment.centerLeft,
+                        child: Icon(
+                          Icons.attach_money,
+                          size: 18,
+                        )),
+                    Container(
+                        margin: const EdgeInsets.only(left: 2.0),
+                        child: Text("Payements :",
+                            style: secondaryTextStyle(
+                                size: 14, color: kTextColor))),
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: FloatingActionButton.small(
+                          elevation: 5,
+                          onPressed: () {
+                            FormAddpayment(context);
+                          },
+                          child: Icon(
+                            Icons.add,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                cond_payement_controller.obx(
+                  (state) {
+                    AllPayement = cond_payement_controller.listePayement.value;
+                    return AllPayement.isEmpty
+                        ? Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Text("Liste vide"),
+                          )
+                        : ListView.builder(
+                            itemCount:
+                                AllPayement.isEmpty ? 0 : AllPayement.length,
+                            shrinkWrap: true,
+                            padding: EdgeInsets.only(bottom: 16),
+                            physics: NeverScrollableScrollPhysics(),
+                            itemBuilder: (BuildContext context, int index) {
+                              return ListPayement(AllPayement[index]);
+                            },
+                          );
+                  },
+                  onLoading: showLoadingIndicator(),
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 
@@ -337,6 +352,302 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
     );
   }
 
+  Future FormAddExamen(BuildContext aContext) async {
+    showModalBottomSheet(
+        backgroundColor: Colors.transparent,
+        context: aContext,
+        isScrollControlled: true,
+        builder: (context) {
+          return StatefulBuilder(builder: (BuildContext context,
+              StateSetter setModalState /*You can rename this!*/) {
+            return SingleChildScrollView(
+              child: Container(
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20)),
+                    color: Colors.white),
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      "Ajout examen",
+                      style: boldTextStyle(color: appStore.textPrimaryColor),
+                    ),
+                    Divider().paddingOnly(top: 16, bottom: 16),
+                    Text(
+                      "N° liste",
+                      style: primaryTextStyle(color: appStore.textPrimaryColor),
+                    ),
+                    8.height,
+                    editNumericStyle("Numéro liste",
+                        cond_exam_controller.num_listeController),
+                    16.height,
+                    Text(
+                      "N° Convocation",
+                      style: primaryTextStyle(color: appStore.textPrimaryColor),
+                    ),
+                    8.height,
+                    editNumericStyle("Numéro convocation",
+                        cond_exam_controller.num_convocationController),
+                    16.height,
+                    Text(
+                      "Date Examen",
+                      style: primaryTextStyle(color: appStore.textPrimaryColor),
+                    ),
+                    TextFormField(
+                      onTap: () {
+                        FocusScope.of(context).requestFocus(FocusNode());
+                        selectDate(
+                          context,
+                          setModalState,
+                          cond_exam_controller.date_examenController,
+                        );
+                      },
+                      controller: cond_exam_controller.date_examenController,
+                      style: TextStyle(color: blackColor),
+                      decoration: InputDecoration(
+                        enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(color: kBlueColor)),
+                        focusedBorder: UnderlineInputBorder(
+                            borderSide:
+                                BorderSide(color: kDefaultIconDarkColor)),
+                        suffixIcon: GestureDetector(
+                          onTap: () {
+                            selectDate(
+                              context,
+                              setModalState,
+                              cond_exam_controller.date_examenController,
+                            );
+                          },
+                          child: Icon(Icons.calendar_today,
+                              color: kPrimaryColor, size: 16),
+                        ),
+                        labelStyle: TextStyle(color: gray, fontSize: 14),
+                      ),
+                    ),
+                    16.height,
+                    Text(
+                      "Type Examen",
+                      style: primaryTextStyle(color: appStore.textPrimaryColor),
+                    ),
+                    8.height,
+                    Wrap(
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      alignment: WrapAlignment.start,
+                      direction: Axis.horizontal,
+                      children: [
+                        Theme(
+                          data: Theme.of(context).copyWith(
+                              unselectedWidgetColor: appStore.textPrimaryColor),
+                          child: Radio(
+                            value: 'Code',
+                            groupValue: TypeExamRadio,
+                            onChanged: (dynamic value) {
+                              setModalState(() {
+                                TypeExamRadio = value;
+                                TypeExamAdd.text = TypeExamRadio;
+                              });
+                            },
+                          ),
+                        ),
+                        Text('Code', style: primaryTextStyle()),
+                        Theme(
+                          data: Theme.of(context).copyWith(
+                            unselectedWidgetColor: appStore.textPrimaryColor,
+                          ),
+                          child: Radio(
+                            value: 'Conduite',
+                            groupValue: TypeExamRadio,
+                            onChanged: (dynamic value) {
+                              setModalState(() {
+                                TypeExamRadio = value;
+                                TypeExamAdd.text = TypeExamRadio;
+                              });
+                            },
+                          ),
+                        ),
+                        Text('Conduite', style: primaryTextStyle()),
+                      ],
+                    ),
+                    16.height,
+                    Text(
+                      "Centre d'examen",
+                      style: primaryTextStyle(color: appStore.textPrimaryColor),
+                    ),
+                    8.height,
+                    centr_exam_controller.obx(
+                      (state) {
+                        AllCentrExam = centr_exam_controller.liste.value;
+                        listOfCategory =
+                            AllCentrExam.map((e) => e.libelle.toString())
+                                .toList();
+                        selectedCentrExam = listOfCategory[0];
+                        (!selected_centrExam)
+                            ? cond_exam_controller.centre_examenController
+                                .text = selectedCentrExam!
+                            : cond_exam_controller.centre_examenController
+                                .text = ChangedCentrExam!;
+                        return Card(
+                            elevation: 4,
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(20, 0, 30, 0),
+                              child: DropdownButton(
+                                isExpanded: true,
+                                dropdownColor: appStore.appBarColor,
+                                value: ((!selected_centrExam)
+                                    ? selectedCentrExam
+                                    : ChangedCentrExam),
+                                style: boldTextStyle(),
+                                icon: Icon(
+                                  Icons.keyboard_arrow_down,
+                                  color: appStore.iconColor,
+                                ),
+                                underline: 0.height,
+                                onChanged: (dynamic newValue) {
+                                  setModalState(() {
+                                    selected_centrExam = true;
+                                    ChangedCentrExam = newValue;
+                                  });
+                                },
+                                items: listOfCategory.map((caisse) {
+                                  return DropdownMenuItem(
+                                    value: caisse,
+                                    child:
+                                        Text(caisse, style: primaryTextStyle())
+                                            .paddingLeft(8),
+                                  );
+                                }).toList(),
+                              ),
+                            ));
+                      },
+                      onLoading: showLoadingIndicator(),
+                    ),
+                    16.height,
+                    Text(
+                      "Bureau",
+                      style: primaryTextStyle(color: appStore.textPrimaryColor),
+                    ),
+                    8.height,
+                    caisse_controller.obx(
+                      (state) {
+                        AllBureau = bureau_controller.liste.value;
+                        listOfCategory =
+                            AllBureau.map((e) => e.nom.toString()).toList();
+                        selectedBureau = listOfCategory[0];
+                        (!selected_bureau)
+                            ? cond_exam_controller.bureauontroller.text =
+                                selectedBureau!
+                            : cond_exam_controller.bureauontroller.text =
+                                ChangedBureau!;
+                        return Card(
+                            elevation: 4,
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(20, 0, 30, 0),
+                              child: DropdownButton(
+                                isExpanded: true,
+                                dropdownColor: appStore.appBarColor,
+                                value: ((!selected_bureau)
+                                    ? selectedBureau
+                                    : ChangedBureau),
+                                style: boldTextStyle(),
+                                icon: Icon(
+                                  Icons.keyboard_arrow_down,
+                                  color: appStore.iconColor,
+                                ),
+                                underline: 0.height,
+                                onChanged: (dynamic newValue) {
+                                  setModalState(() {
+                                    selected_bureau = true;
+                                    ChangedBureau = newValue;
+                                  });
+                                },
+                                items: listOfCategory.map((value) {
+                                  return DropdownMenuItem(
+                                    value: value,
+                                    child:
+                                        Text(value, style: primaryTextStyle())
+                                            .paddingLeft(8),
+                                  );
+                                }).toList(),
+                              ),
+                            ));
+                      },
+                      onLoading: showLoadingIndicator(),
+                    ),
+                    16.height,
+                    40.height,
+                    GestureDetector(
+                      onTap: () {
+                        addExamModal().then((value) {
+                          print("screen" + value);
+                          if (value == "true") {
+                            finish(context);
+                            cond_exam_controller
+                                .getListExamenByID(thisCondidat.id);
+
+                            toast("Examen ajouter avec succée");
+                          } else {
+                            Get.snackbar(
+                              "opération echouée",
+                              value,
+                              colorText: Colors.black,
+                              snackPosition: SnackPosition.BOTTOM,
+                              icon: Icon(Icons.error, color: Colors.white),
+                              backgroundColor: Color.fromARGB(255, 216, 46, 24),
+                              margin: EdgeInsets.all(15),
+                              isDismissible: true,
+                              forwardAnimationCurve: Curves.easeOutBack,
+                            );
+                          }
+                        });
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.only(
+                                //topLeft: Radius.circular(20),
+                                topRight: Radius.circular(20),
+                                bottomLeft: Radius.circular(20)),
+                            color: kPrimaryColor),
+                        padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
+                        child: Center(
+                          child: Text(
+                            "Enregistrer",
+                            style: primaryTextStyle(color: white),
+                          ),
+                        ),
+                      ),
+                    ),
+                    40.height,
+                  ],
+                ),
+              ),
+            );
+          });
+        });
+  }
+
+  Future<String> addExamModal() async {
+    await cond_exam_controller.addExamen(
+        thisCondidat.school_id!,
+        thisCondidat.school_name!,
+        thisCondidat.id!.toString(),
+        cond_exam_controller.num_listeController.text,
+        cond_exam_controller.num_convocationController.text,
+        cond_exam_controller.date_examenController.text,
+        cond_exam_controller.centre_examenController.text,
+        TypeExamAdd.text,
+        cond_exam_controller.bureauontroller.text);
+
+    result = cond_exam_controller.res.value;
+
+    return result;
+  }
+
+  /// Payement
   Widget ListPayement(Payement payement) {
     return Container(
       decoration: boxDecorations(showShadow: true),
@@ -354,26 +665,51 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(payement.type!, style: boldTextStyle(size: 16)),
-              Text(payement.date_paiement!,
-                  style: secondaryTextStyle(size: 12)),
+              Text(payement.caisse!, style: boldTextStyle(size: 16)),
               Padding(
                 padding: const EdgeInsets.only(top: 5),
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 5 * 1.5, // 30 px padding
-                    vertical: 10 / 5, // 5 px padding
-                  ),
-                  decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 233, 108, 108),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Text(
-                    "Caisse : " + payement.caisse!,
-                    style: secondaryTextStyle(size: 10, color: Colors.white),
-                  ),
-                ),
-              )
+                child: Text(payement.date_paiement!,
+                    style: secondaryTextStyle(size: 12)),
+              ),
+              Padding(
+                  padding: const EdgeInsets.only(top: 5),
+                  child: Row(
+                    children: [
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 5 * 1.5, // 30 px padding
+                          vertical: 10 / 5, // 5 px padding
+                        ),
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 233, 108, 108),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Text(
+                          "Type : " + payement.type!,
+                          style:
+                              secondaryTextStyle(size: 10, color: Colors.white),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 5 * 1.5, // 30 px padding
+                          vertical: 10 / 5, // 5 px padding
+                        ),
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 206, 92, 92),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        child: Text(
+                          "Mode : " + payement.mode_paiement!,
+                          style:
+                              secondaryTextStyle(size: 10, color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ))
             ],
           ),
           Expanded(child: SizedBox.shrink()),
@@ -385,7 +721,11 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      return confirmationAlert(context, payement.id);
+                      return Alert(
+                          context,
+                          "Confirmation",
+                          "Voulez-vous vraiment supprimer ce paiement ?",
+                          payement.id);
                     },
                   );
                 },
@@ -398,7 +738,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
     );
   }
 
-  FormAddpayment(BuildContext aContext) async {
+  Future FormAddpayment(BuildContext aContext) async {
     showModalBottomSheet(
         backgroundColor: Colors.transparent,
         context: aContext,
@@ -603,8 +943,8 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                     TextFormField(
                       onTap: () {
                         FocusScope.of(context).requestFocus(FocusNode());
-                        selectDate(
-                            context, setModalState, cond_payement_controller);
+                        selectDate(context, setModalState,
+                            cond_payement_controller.datePayementAdd);
                       },
                       controller: cond_payement_controller.datePayementAdd,
                       style: TextStyle(color: blackColor),
@@ -617,7 +957,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                         suffixIcon: GestureDetector(
                           onTap: () {
                             selectDate(context, setModalState,
-                                cond_payement_controller);
+                                cond_payement_controller.datePayementAdd);
                           },
                           child: Icon(Icons.calendar_today,
                               color: kPrimaryColor, size: 16),
@@ -698,13 +1038,35 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
     return result;
   }
 
-  Widget confirmationAlert(context, id) {
-    AlertDialog mAlertItem2 = AlertDialog(
+  void ConfirmDeletepayement(id) {
+    Deletepayement(id).then((value) {
+      if (value == "true") {
+        finish(context);
+        cond_payement_controller.getListPayementByID(thisCondidat.id);
+        toast("Payement supprimer avec succée");
+      } else {
+        Get.snackbar(
+          "opération echouée",
+          value,
+          colorText: Colors.black,
+          snackPosition: SnackPosition.BOTTOM,
+          icon: Icon(Icons.error, color: Colors.white),
+          backgroundColor: Color.fromARGB(255, 216, 46, 24),
+          margin: EdgeInsets.all(15),
+          isDismissible: true,
+          forwardAnimationCurve: Curves.easeOutBack,
+        );
+      }
+    });
+  }
+
+  Widget Alert(context, String title, String msg, id) {
+    AlertDialog mAlertItem = AlertDialog(
       backgroundColor: appStore.scaffoldBackground,
-      title: Text("Confirmation",
-          style: boldTextStyle(color: appStore.textPrimaryColor)),
+      title:
+          Text(title, style: boldTextStyle(color: appStore.textPrimaryColor)),
       content: Text(
-        "Voulez-vous vraiment supprimer ce paiement ?",
+        msg,
         style: secondaryTextStyle(color: appStore.textSecondaryColor),
       ),
       actions: [
@@ -715,35 +1077,16 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
           ),
           onPressed: () {
             Navigator.of(context).pop();
-            //Navigator.of(context).pop();
           },
         ),
         TextButton(
-          child: Text("ok", style: primaryTextStyle(color: Colors.red)),
+          child: Text("ok", style: primaryTextStyle(color: Colors.redAccent)),
           onPressed: () {
-            Deletepayement(id).then((value) {
-              if (value == "true") {
-                finish(context);
-                cond_payement_controller.getListPayementByID(thisCondidat.id);
-                toast("Payement supprimer avec succée");
-              } else {
-                Get.snackbar(
-                  "opération echouée",
-                  value,
-                  colorText: Colors.black,
-                  snackPosition: SnackPosition.BOTTOM,
-                  icon: Icon(Icons.error, color: Colors.white),
-                  backgroundColor: Color.fromARGB(255, 216, 46, 24),
-                  margin: EdgeInsets.all(15),
-                  isDismissible: true,
-                  forwardAnimationCurve: Curves.easeOutBack,
-                );
-              }
-            });
+            ConfirmDeletepayement(id);
           },
         ),
       ],
     );
-    return mAlertItem2;
+    return mAlertItem;
   }
 }

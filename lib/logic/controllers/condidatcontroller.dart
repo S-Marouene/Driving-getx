@@ -5,8 +5,6 @@ import 'package:driving_getx/database/services/Condidat_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../database/models/caisses.dart';
-
 class CondidatController extends GetxController
     with StateMixin<List<Condidat>> {
   Rx<List<Condidat>> listeAll = Rx<List<Condidat>>([]);
@@ -29,6 +27,17 @@ class CondidatController extends GetxController
 class ExamenController extends GetxController with StateMixin<List<Examen>> {
   Rx<List<Examen>> listeExamen = Rx<List<Examen>>([]);
 
+  TextEditingController num_listeController = TextEditingController();
+  TextEditingController num_convocationController = TextEditingController();
+  TextEditingController date_examenController = TextEditingController();
+  TextEditingController centre_examenController = TextEditingController();
+  TextEditingController type_examenController = TextEditingController();
+  TextEditingController bureauontroller = TextEditingController();
+  TextEditingController resultatController = TextEditingController();
+  TextEditingController examinateurController = TextEditingController();
+
+  var res = "".obs;
+
   getListExamenByID(id) async {
     change(null, status: RxStatus.loading());
     await ServiceCondidats.getExamByid(id).then((data) {
@@ -39,6 +48,47 @@ class ExamenController extends GetxController with StateMixin<List<Examen>> {
       change(null, status: RxStatus.error(error.toString()));
     });
     return listeExamen.value;
+  }
+
+  addExamen(
+    String schoolId,
+    String schoolName,
+    String condidatId,
+    String numListe,
+    String numConvocation,
+    String dateExamen,
+    String centreExamen,
+    String typeExamen,
+    String bureau,
+  ) async {
+    Examen examenModel = Examen.fromJson({
+      "school_id": schoolId,
+      "school_name": schoolName,
+      "condidat_id": condidatId,
+      "num_liste": numListe,
+      "num_convocation": numConvocation,
+      "date_examen": dateExamen,
+      "centre_examen": centreExamen,
+      "type_examen": typeExamen,
+      "bureau": bureau
+    });
+
+    await ServiceCondidats.AddExamServ(examenModel).then((data) {
+      print(data);
+      if (data != null) {
+        if (data["success"] != null) {
+          res.value = data["success"].toString();
+          num_listeController.clear();
+          num_convocationController.clear();
+          return res.value;
+        } else {
+          res.value = data.toString();
+          print("ok" + res.value);
+          return res.value;
+        }
+      }
+    });
+    return res.value;
   }
 }
 
@@ -125,20 +175,5 @@ class PayementController extends GetxController
       }
     });
     return res.value;
-  }
-}
-
-class CaisseController extends GetxController with StateMixin<List<Caisse>> {
-  Rx<List<Caisse>> listeCaisse = Rx<List<Caisse>>([]);
-
-  getListCaisse() async {
-    change(null, status: RxStatus.loading());
-    await ServiceCondidats.getCaisse().then((data) {
-      change(data, status: RxStatus.success());
-      listeCaisse.value = data;
-    }, onError: (error) {
-      change(null, status: RxStatus.error(error.toString()));
-    });
-    return listeCaisse.value;
   }
 }
