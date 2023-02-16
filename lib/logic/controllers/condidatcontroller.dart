@@ -35,8 +35,10 @@ class ExamenController extends GetxController with StateMixin<List<Examen>> {
   TextEditingController bureauontroller = TextEditingController();
   TextEditingController resultatController = TextEditingController();
   TextEditingController examinateurController = TextEditingController();
+  TextEditingController timeExamController = TextEditingController();
 
   var res = "".obs;
+  var resDelete = "".obs;
 
   getListExamenByID(id) async {
     change(null, status: RxStatus.loading());
@@ -89,6 +91,21 @@ class ExamenController extends GetxController with StateMixin<List<Examen>> {
       }
     });
     return res.value;
+  }
+
+  DeleteExamenByID(id) async {
+    await ServiceCondidats.DeleteExamentServ(id).then((data) {
+      if (data != null) {
+        if (data["success"] != null) {
+          resDelete.value = data["success"].toString();
+          return resDelete.value;
+        } else {
+          resDelete.value = data.toString();
+          return resDelete.value;
+        }
+      }
+    });
+    return resDelete.value;
   }
 }
 

@@ -55,7 +55,9 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
   TextEditingController TypePayementAdd = TextEditingController();
   TextEditingController TypeExamAdd = TextEditingController();
   TextEditingController dateExamAdd = TextEditingController();
+
   DateTime selectedDate = DateTime.now();
+  TimeOfDay selectedTime = TimeOfDay.now();
   var ModeRadio;
   var TypeRadio;
   var TypeExamRadio;
@@ -73,6 +75,8 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
   String? ChangedBureau;
   bool selected_bureau = false;
 
+  String? time;
+
   @override
   void initState() {
     ModeRadio = "Espece";
@@ -88,11 +92,16 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
 
     cond_exam_controller.date_examenController.text =
         DateFormat('yyyy-MM-dd').format(selectedDate);
+
     cond_exam_controller.getListExamenByID(thisCondidat.id);
     cond_payement_controller.getListPayementByID(thisCondidat.id);
     caisse_controller.getListCaisse();
     centr_exam_controller.getList();
     bureau_controller.getList();
+
+    time =
+        "${selectedTime.hour < 10 ? "0${selectedTime.hour}" : "${selectedTime.hour}"}:${selectedTime.minute < 10 ? "0${selectedTime.minute}" : "${selectedTime.minute}"} ${selectedTime.period != DayPeriod.am ? 'PM' : 'AM'}   ";
+    cond_exam_controller.timeExamController.text = time!;
 
     super.initState();
   }
@@ -308,19 +317,58 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
     );
   }
 
+  Color getColorExam(Examen examen) {
+    switch (examen.resultat) {
+      case 'Réussi':
+        return sdSecondaryColorGreen.withOpacity(0.5);
+      case 'Ajourné':
+        return sdSecondaryColorYellow.withOpacity(0.5);
+      case 'Excusé':
+        return sdSecondaryColorRed.withOpacity(0.5);
+      default:
+        return sdPrimaryColor;
+    }
+  }
+
+  String convertDateTimeDisplay(String date) {
+    final DateFormat displayFormater = DateFormat('yyyy-MM-dd HH:mm:ss.SSS');
+    final DateFormat serverFormater = DateFormat('dd-MM-yyyy HH:mm');
+    final DateTime displayDate = displayFormater.parse(date);
+    final String formatted = serverFormater.format(displayDate);
+    return formatted;
+  }
+
+  dateformattt(mydate) {
+    DateTime tempDate = DateFormat("yyyy-MM-dd hh:mm").parse(mydate);
+    return convertDateTimeDisplay(tempDate.toString());
+  }
+
   Widget ListExamen(Examen examen) {
     return Container(
       decoration: boxDecorations(showShadow: true),
       padding: EdgeInsets.all(10),
       margin: EdgeInsets.only(top: 16),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          CircleAvatar(
+            radius: 25,
+            backgroundColor: getColorExam(examen),
+            child: Text(examen.resultat!,
+                style: boldTextStyle(color: Colors.black, size: 10)),
+          ),
+          SizedBox(
+            width: 20,
+          ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(examen.typeExamen!, style: boldTextStyle(size: 16)),
-              Text(examen.dateExamen!, style: secondaryTextStyle(size: 12)),
+              Text(
+                  dateformattt(examen.dateExamen!).toString() +
+                      " " +
+                      examen.centreExamen!,
+                  style: secondaryTextStyle(size: 12)),
               Padding(
                 padding: const EdgeInsets.only(top: 5),
                 child: Container(
@@ -333,20 +381,38 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Text(
-                    "N° Conv : " + examen.numConvocation!,
+                    "N° Conv : " +
+                        examen.numConvocation! +
+                        " -- N° Liste : " +
+                        examen.numListe!,
                     style: secondaryTextStyle(size: 10, color: Colors.white),
                   ),
                 ),
               )
             ],
           ),
-          CircleAvatar(
-            radius: 25,
-            backgroundColor: sdSecondaryColorYellow.withOpacity(0.7),
-            // : sdSecondaryColorYellow.withOpacity(0.7),
-            child: Text(examen.resultat!,
-                style: boldTextStyle(color: db6_colorPrimaryDark, size: 10)),
-          )
+          Expanded(child: SizedBox.shrink()),
+          Column(
+            children: [
+              IconButton(
+                color: Colors.red,
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return Alert(
+                          context,
+                          "Confirmation",
+                          "Voulez-vous vraiment supprimer ce paiement ?",
+                          examen.id,
+                          ConfirmDeleteExamen);
+                    },
+                  );
+                },
+                icon: Icon(Icons.delete_forever_sharp),
+              )
+            ],
+          ),
         ],
       ),
     );
@@ -377,56 +443,119 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                       style: boldTextStyle(color: appStore.textPrimaryColor),
                     ),
                     Divider().paddingOnly(top: 16, bottom: 16),
-                    Text(
-                      "N° liste",
-                      style: primaryTextStyle(color: appStore.textPrimaryColor),
-                    ),
-                    8.height,
-                    editNumericStyle("Numéro liste",
-                        cond_exam_controller.num_listeController),
-                    16.height,
-                    Text(
-                      "N° Convocation",
-                      style: primaryTextStyle(color: appStore.textPrimaryColor),
-                    ),
-                    8.height,
-                    editNumericStyle("Numéro convocation",
-                        cond_exam_controller.num_convocationController),
-                    16.height,
-                    Text(
-                      "Date Examen",
-                      style: primaryTextStyle(color: appStore.textPrimaryColor),
-                    ),
-                    TextFormField(
-                      onTap: () {
-                        FocusScope.of(context).requestFocus(FocusNode());
-                        selectDate(
-                          context,
-                          setModalState,
-                          cond_exam_controller.date_examenController,
-                        );
-                      },
-                      controller: cond_exam_controller.date_examenController,
-                      style: TextStyle(color: blackColor),
-                      decoration: InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: kBlueColor)),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: kDefaultIconDarkColor)),
-                        suffixIcon: GestureDetector(
-                          onTap: () {
-                            selectDate(
-                              context,
-                              setModalState,
-                              cond_exam_controller.date_examenController,
-                            );
-                          },
-                          child: Icon(Icons.calendar_today,
-                              color: kPrimaryColor, size: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Flexible(
+                          child: editNumericStyle("N° convocation",
+                              cond_exam_controller.num_convocationController),
                         ),
-                        labelStyle: TextStyle(color: gray, fontSize: 14),
-                      ),
+                        SizedBox(
+                          width: 20.0,
+                        ),
+                        Flexible(
+                          child: editNumericStyle("Numéro liste",
+                              cond_exam_controller.num_listeController),
+                        ),
+                      ],
+                    ),
+                    30.height,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Flexible(
+                          child: TextFormField(
+                            onTap: () {
+                              FocusScope.of(context).requestFocus(FocusNode());
+                              selectDate(
+                                context,
+                                setModalState,
+                                cond_exam_controller.date_examenController,
+                              );
+                            },
+                            controller:
+                                cond_exam_controller.date_examenController,
+                            style: TextStyle(color: blackColor),
+                            decoration: InputDecoration(
+                              contentPadding:
+                                  EdgeInsets.fromLTRB(24, 16, 24, 16),
+                              hintStyle: primaryTextStyle(
+                                  color: appStore.isDarkModeOn
+                                      ? white.withOpacity(0.5)
+                                      : grey),
+                              filled: true,
+                              labelText: "Date Examen",
+                              fillColor: appStore.appBarColor,
+                              enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                  borderSide: BorderSide(
+                                      color: kPrimaryColor, width: 1.0)),
+                              focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                  borderSide: BorderSide(
+                                      color: kSecondaryColor, width: 1.0)),
+                              suffixIcon: GestureDetector(
+                                onTap: () {
+                                  selectDate(
+                                    context,
+                                    setModalState,
+                                    cond_exam_controller.date_examenController,
+                                  );
+                                },
+                                child: Icon(Icons.calendar_today,
+                                    color: kPrimaryColor, size: 16),
+                              ),
+                              labelStyle: TextStyle(color: gray, fontSize: 14),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 20.0,
+                        ),
+                        Flexible(
+                          child: TextFormField(
+                            onTap: () {
+                              FocusScope.of(context).requestFocus(FocusNode());
+
+                              selectTime(context, setModalState,
+                                  cond_exam_controller.timeExamController);
+                            },
+                            controller: cond_exam_controller.timeExamController,
+                            style: TextStyle(color: blackColor),
+                            decoration: InputDecoration(
+                              contentPadding:
+                                  EdgeInsets.fromLTRB(24, 16, 24, 16),
+                              hintStyle: primaryTextStyle(
+                                  color: appStore.isDarkModeOn
+                                      ? white.withOpacity(0.5)
+                                      : grey),
+                              filled: true,
+                              labelText: "Heur Examen",
+                              fillColor: appStore.appBarColor,
+                              enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                  borderSide: BorderSide(
+                                      color: kPrimaryColor, width: 1.0)),
+                              focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                  borderSide: BorderSide(
+                                      color: kSecondaryColor, width: 1.0)),
+                              suffixIcon: GestureDetector(
+                                onTap: () {
+                                  selectDate(
+                                    context,
+                                    setModalState,
+                                    cond_exam_controller.timeExamController,
+                                  );
+                                },
+                                child: Icon(Icons.access_time,
+                                    color: kPrimaryColor, size: 16),
+                              ),
+                              labelStyle: TextStyle(color: gray, fontSize: 14),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                     16.height,
                     Text(
@@ -578,11 +707,9 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                       onLoading: showLoadingIndicator(),
                     ),
                     16.height,
-                    40.height,
                     GestureDetector(
                       onTap: () {
                         addExamModal().then((value) {
-                          print("screen" + value);
                           if (value == "true") {
                             finish(context);
                             cond_exam_controller
@@ -603,6 +730,10 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                             );
                           }
                         });
+
+                        print(cond_exam_controller.date_examenController.text +
+                            " " +
+                            cond_exam_controller.timeExamController.text);
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width,
@@ -621,7 +752,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                         ),
                       ),
                     ),
-                    40.height,
+                    15.height,
                   ],
                 ),
               ),
@@ -637,7 +768,10 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
         thisCondidat.id!.toString(),
         cond_exam_controller.num_listeController.text,
         cond_exam_controller.num_convocationController.text,
-        cond_exam_controller.date_examenController.text,
+        cond_exam_controller.date_examenController.text +
+            " " +
+            cond_exam_controller.timeExamController.text,
+        /* cond_exam_controller.date_examenController.text, */
         cond_exam_controller.centre_examenController.text,
         TypeExamAdd.text,
         cond_exam_controller.bureauontroller.text);
@@ -645,6 +779,34 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
     result = cond_exam_controller.res.value;
 
     return result;
+  }
+
+  Future<String> Deleteexamen(id) async {
+    await cond_exam_controller.DeleteExamenByID(id);
+    result = cond_exam_controller.resDelete.value;
+    return result;
+  }
+
+  void ConfirmDeleteExamen(id) {
+    Deleteexamen(id).then((value) {
+      if (value == "true") {
+        finish(context);
+        cond_exam_controller.getListExamenByID(thisCondidat.id);
+        toast("Examen supprimer avec succée");
+      } else {
+        Get.snackbar(
+          "opération echouée",
+          value,
+          colorText: Colors.black,
+          snackPosition: SnackPosition.BOTTOM,
+          icon: Icon(Icons.error, color: Colors.white),
+          backgroundColor: Color.fromARGB(255, 216, 46, 24),
+          margin: EdgeInsets.all(15),
+          isDismissible: true,
+          forwardAnimationCurve: Curves.easeOutBack,
+        );
+      }
+    });
   }
 
   /// Payement
@@ -725,7 +887,8 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                           context,
                           "Confirmation",
                           "Voulez-vous vraiment supprimer ce paiement ?",
-                          payement.id);
+                          payement.id,
+                          ConfirmDeletepayement);
                     },
                   );
                 },
@@ -859,11 +1022,6 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                       ],
                     ),
                     16.height,
-                    Text(
-                      "Montant",
-                      style: primaryTextStyle(color: appStore.textPrimaryColor),
-                    ),
-                    8.height,
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                       child: TextFormField(
@@ -879,6 +1037,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                                   ? white.withOpacity(0.5)
                                   : grey),
                           filled: true,
+                          labelText: "Montant",
                           fillColor: appStore.appBarColor,
                           enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(16),
@@ -1060,7 +1219,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
     });
   }
 
-  Widget Alert(context, String title, String msg, id) {
+  Widget Alert(context, String title, String msg, id, fnc) {
     AlertDialog mAlertItem = AlertDialog(
       backgroundColor: appStore.scaffoldBackground,
       title:
@@ -1082,7 +1241,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
         TextButton(
           child: Text("ok", style: primaryTextStyle(color: Colors.redAccent)),
           onPressed: () {
-            ConfirmDeletepayement(id);
+            fnc(id);
           },
         ),
       ],

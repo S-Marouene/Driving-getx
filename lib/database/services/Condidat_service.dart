@@ -56,6 +56,25 @@ class ServiceCondidats {
     }
   }
 
+  static Future DeleteExamentServ(id) async {
+    Dio.Response response = await dio().delete(
+      '/examen/$id',
+      options: Dio.Options(
+        headers: {'auth': true},
+        followRedirects: false,
+        validateStatus: (status) {
+          return status! < 500;
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.data.toString());
+    } else {
+      return jsonDecode(response.data.toString());
+    }
+  }
+
   static Future<List<Payement>> getPayementByid(id) async {
     Dio.Response response = await dio().get(
         '/paiement/getpaiementByCondidat/$id',

@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 // ignore: depend_on_referenced_packages
 import 'package:nb_utils/nb_utils.dart';
-
 import '../../main/utils/AppConstant.dart';
 import '../../main/utils/SDColors.dart';
 
 DateTime selectedDate = DateTime.now();
+TimeOfDay selectedTime = TimeOfDay.now();
 
 Future<void> selectDate(
     BuildContext context, StateSetter setModalState, controller) async {
@@ -36,6 +36,29 @@ Future<void> selectDate(
   }
 }
 
+Future<void> selectTime(
+    BuildContext context, StateSetter setModalState, controller) async {
+  final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+      builder: (BuildContext context, Widget? child) {
+        return CustomTheme(
+          child: MediaQuery(
+            data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+            child: child!,
+          ),
+        );
+      });
+
+  if (picked != null) {
+    setModalState(() {
+      selectedTime = picked;
+      controller.text =
+          "${selectedTime.hour < 10 ? "0${selectedTime.hour}" : "${selectedTime.hour}"}:${selectedTime.minute < 10 ? "0${selectedTime.minute}" : "${selectedTime.minute}"} ${selectedTime.period != DayPeriod.am ? 'PM' : 'AM'}   ";
+    });
+  }
+}
+
 Padding editTextStyle(var hintText, var namefield) {
   return Padding(
     padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -48,6 +71,7 @@ Padding editTextStyle(var hintText, var namefield) {
         hintStyle: primaryTextStyle(
             color: appStore.isDarkModeOn ? white.withOpacity(0.5) : grey),
         filled: true,
+        labelText: hintText,
         fillColor: appStore.appBarColor,
         enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
@@ -73,6 +97,7 @@ Padding editNumericStyle(var hintText, var namefield) {
         hintStyle: primaryTextStyle(
             color: appStore.isDarkModeOn ? white.withOpacity(0.5) : grey),
         filled: true,
+        labelText: hintText,
         fillColor: appStore.appBarColor,
         enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
