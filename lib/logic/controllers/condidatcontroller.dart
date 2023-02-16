@@ -76,7 +76,7 @@ class ExamenController extends GetxController with StateMixin<List<Examen>> {
     });
 
     await ServiceCondidats.AddExamServ(examenModel).then((data) {
-      print(data);
+      //print(data);
       if (data != null) {
         if (data["success"] != null) {
           res.value = data["success"].toString();
@@ -85,7 +85,7 @@ class ExamenController extends GetxController with StateMixin<List<Examen>> {
           return res.value;
         } else {
           res.value = data.toString();
-          print("ok" + res.value);
+          //print("ok" + res.value);
           return res.value;
         }
       }

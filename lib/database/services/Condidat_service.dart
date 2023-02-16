@@ -2,6 +2,7 @@ import 'dart:convert';
 // ignore: library_prefixes
 import 'package:dio/dio.dart' as Dio;
 import 'package:driving_getx/database/models/examens.dart';
+import 'package:driving_getx/database/models/examinateur.dart';
 import 'package:driving_getx/database/models/payements.dart';
 import '../models/bureaux.dart';
 import '../models/caisses.dart';
@@ -36,7 +37,6 @@ class ServiceCondidats {
   }
 
   static Future AddExamServ(Examen ExamModel) async {
-    print(ExamModel);
     Dio.Response response = await dio().post(
       '/examen',
       options: Dio.Options(
@@ -49,6 +49,23 @@ class ServiceCondidats {
       data: ExamModel,
     );
 
+    if (response.statusCode == 200) {
+      return jsonDecode(response.data.toString());
+    } else {
+      return jsonDecode(response.data.toString());
+    }
+  }
+
+  static Future UpdateExamRes(ExamUpdate, Examenid) async {
+    Dio.Response response = await dio().put('/examen/update_resulat/$Examenid',
+        options: Dio.Options(
+          headers: {'auth': true},
+          followRedirects: false,
+          validateStatus: (status) {
+            return status! < 500;
+          },
+        ),
+        data: ExamUpdate);
     if (response.statusCode == 200) {
       return jsonDecode(response.data.toString());
     } else {
@@ -136,6 +153,19 @@ class ServiceCondidats {
       final List examens = jsonDecode((response.data.toString()))["data"];
 
       return examens.map((json) => Caisse.fromJson(json)).toList();
+    } else {
+      throw Exception();
+    }
+  }
+
+  static Future<List<Examinateur>> getExaminateur() async {
+    Dio.Response response = await dio()
+        .get('/examinateur', options: Dio.Options(headers: {'auth': true}));
+
+    if (response.statusCode == 200) {
+      final List exam = jsonDecode((response.data.toString()))["data"];
+
+      return exam.map((json) => Examinateur.fromJson(json)).toList();
     } else {
       throw Exception();
     }

@@ -11,8 +11,10 @@ import 'package:driving_getx/main/utils/AppConstant.dart';
 import 'package:driving_getx/main/utils/AppWidget.dart';
 import 'package:driving_getx/main/utils/SDColors.dart';
 import 'package:driving_getx/main/utils/SDStyle.dart';
+import 'package:driving_getx/views/screens/resultat_examen.dart';
 import 'package:driving_getx/views/widgets/tools_widget.dart';
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import '../../logic/controllers/caisse_controller.dart';
@@ -61,6 +63,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
   var ModeRadio;
   var TypeRadio;
   var TypeExamRadio;
+  var ResultatExamRadio;
 
   List<String> listOfCategory = [];
   String? selectedCaisse;
@@ -82,6 +85,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
     ModeRadio = "Espece";
     TypeRadio = "Paiement";
     TypeExamRadio = "Conduite";
+    ResultatExamRadio = "Réussi";
 
     TypePayementAdd.text = "Paiement";
     modePayementAdd.text = "Espece";
@@ -346,11 +350,27 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
   Widget ListExamen(Examen examen) {
     return Container(
       decoration: boxDecorations(showShadow: true),
-      padding: EdgeInsets.all(10),
+      padding: EdgeInsets.fromLTRB(0, 10, 10, 10),
       margin: EdgeInsets.only(top: 16),
       child: Row(
-        //mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          Column(
+            children: [
+              IconButton(
+                color: kPrimaryColor,
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => ResultatExamen(
+                      IDExamen: examen.id.toString(),
+                      CondidatID: thisCondidat.id.toString(),
+                    ),
+                  );
+                },
+                icon: Icon(Icons.assignment_turned_in_outlined),
+              ),
+            ],
+          ),
           CircleAvatar(
             radius: 25,
             backgroundColor: getColorExam(examen),
@@ -368,7 +388,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                   dateformattt(examen.dateExamen!).toString() +
                       " " +
                       examen.centreExamen!,
-                  style: secondaryTextStyle(size: 12)),
+                  style: secondaryTextStyle(size: 8)),
               Padding(
                 padding: const EdgeInsets.only(top: 5),
                 child: Container(
@@ -395,7 +415,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
           Column(
             children: [
               IconButton(
-                color: Colors.red,
+                color: sdSecondaryColorRed,
                 onPressed: () {
                   showDialog(
                     context: context,
@@ -410,7 +430,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                   );
                 },
                 icon: Icon(Icons.delete_forever_sharp),
-              )
+              ),
             ],
           ),
         ],
@@ -730,10 +750,6 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                             );
                           }
                         });
-
-                        print(cond_exam_controller.date_examenController.text +
-                            " " +
-                            cond_exam_controller.timeExamController.text);
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width,
@@ -878,7 +894,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
           Column(
             children: [
               IconButton(
-                color: Colors.red,
+                color: sdSecondaryColorRed,
                 onPressed: () {
                   showDialog(
                     context: context,
