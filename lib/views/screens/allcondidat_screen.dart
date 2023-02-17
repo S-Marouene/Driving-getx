@@ -65,15 +65,27 @@ class _ListeAllCondidatState extends State<ListeAllCondidat> {
         titleSpacing: 0,
         backgroundColor: innerBoxIsScrolled ? db6_colorPrimary : sdPrimaryColor,
         actionsIconTheme: IconThemeData(opacity: 0.0),
-        title: SizedBox(
-          height: 60,
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(16, 16, 8, 0),
+        title: Row(children: [
+          Padding(
+            padding: EdgeInsets.fromLTRB(16, 0, 8, 0),
             child: Text("Sm-Dev",
                 style: boldTextStyle(
-                    color: db6_white, size: 24, fontFamily: fontBold)),
+                    color: db6_white, size: 15, fontFamily: fontBold)),
           ),
-        ),
+          Spacer(),
+          IconButton(
+            icon: Icon(Icons.refresh),
+            onPressed: () {
+              Get.toNamed('/all_condidat');
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+              Get.toNamed('/add_condidat');
+            },
+          )
+        ]),
         flexibleSpace: FlexibleSpaceBar(
           background: Container(
             height: 200,
@@ -110,7 +122,7 @@ class _ListeAllCondidatState extends State<ListeAllCondidat> {
                     ],
                   ),
                 ),
-                _buildSearchField()
+                _buildSearchField(),
               ],
             ),
           ),
@@ -123,25 +135,26 @@ class _ListeAllCondidatState extends State<ListeAllCondidat> {
     return Padding(
       padding: EdgeInsets.all(16),
       child: Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(16)), color: white),
-        alignment: Alignment.center,
-        child: TextField(
-          controller: _searchTextController,
-          textAlignVertical: TextAlignVertical.center,
-          decoration: InputDecoration(
-            fillColor: db6_white,
-            hintText: "Recherche",
-            border: InputBorder.none,
-            prefixIcon: Icon(Icons.search),
-            contentPadding:
-                EdgeInsets.only(left: 26.0, bottom: 8.0, top: 8.0, right: 50.0),
-          ),
-          onChanged: (searchedCondidat) {
-            addSearchedFOrItemsToSearchedList(searchedCondidat);
-          },
-        ),
-      ),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(16)),
+              color: white),
+          alignment: Alignment.center,
+          child: TextField(
+            controller: _searchTextController,
+            textAlignVertical: TextAlignVertical.center,
+            decoration: InputDecoration(
+              fillColor: db6_white,
+              hintText: "Recherche",
+              hintStyle: TextStyle(fontSize: 10),
+              border: InputBorder.none,
+              prefixIcon: Icon(Icons.search),
+              contentPadding: EdgeInsets.only(
+                  left: 20.0, bottom: 11.0, top: 8.0, right: 50.0),
+            ),
+            onChanged: (searchedCondidat) {
+              addSearchedFOrItemsToSearchedList(searchedCondidat);
+            },
+          )),
     );
   }
 
@@ -191,43 +204,11 @@ class _ListeAllCondidatState extends State<ListeAllCondidat> {
                   margin: EdgeInsets.only(left: 16, right: 16, top: 16),
                   padding:
                       EdgeInsets.only(left: 8, right: 8, top: 16, bottom: 16),
-                  //width: size.width,
                   decoration: boxDecorations(),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
-                      CircleAvatar(
-                        radius: 12,
-                        backgroundColor: (index + 1) == 1
-                            ? Color(0xFFFFD700)
-                            : (index + 1) == 2
-                                ? Colors.grey.withOpacity(0.5)
-                                : (index + 1) == 3
-                                    ? Colors.red.withOpacity(0.5)
-                                    : Colors.transparent,
-                        child: CircleAvatar(
-                          radius: 10,
-                          backgroundColor: (index + 1) == 1
-                              ? Color(0xFFD4AF37)
-                              : (index + 1) == 2
-                                  ? Colors.grey.withOpacity(0.5)
-                                  : (index + 1) == 3
-                                      ? Colors.red.withOpacity(0.5)
-                                      : Colors.transparent,
-                          child: Text(
-                            (index + 1).toString(),
-                            style: secondaryTextStyle(
-                                size: 14,
-                                color: (index + 1) == 1 ||
-                                        (index + 1) == 2 ||
-                                        (index + 1) == 3
-                                    ? Colors.white
-                                    : Colors.grey),
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: 10),
                       Container(
                         decoration: BoxDecoration(shape: BoxShape.circle),
                         height: 45,
@@ -258,28 +239,105 @@ class _ListeAllCondidatState extends State<ListeAllCondidat> {
                                 Allcondidats[index].nom! +
                                     ' ' +
                                     Allcondidats[index].prenom!,
-                                style: boldTextStyle(size: 16)),
+                                style: boldTextStyle(size: 13)),
                             Container(
                               margin: EdgeInsets.only(top: 5),
-                              child: Text(Allcondidats[index].num_tel ?? "",
-                                  style: secondaryTextStyle(size: 12)),
+                              child: Text(
+                                  'Tel : ' +
+                                      (Allcondidats[index].num_tel ?? " --"),
+                                  style: secondaryTextStyle(size: 10)),
                             ),
+                            Padding(
+                                padding: const EdgeInsets.only(top: 5),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 5 * 1.5, // 30 px padding
+                                        vertical: 10 / 5, // 5 px padding
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color:
+                                            Color.fromARGB(255, 233, 108, 108),
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: Text(
+                                        "N° ToT : " +
+                                            Allcondidats[index]
+                                                .nbr_heur_total!
+                                                .nb_heur_total! +
+                                            " Hrs",
+                                        style: secondaryTextStyle(
+                                            size: 6, color: Colors.white),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 5 * 1.5, // 30 px padding
+                                        vertical: 10 / 5, // 5 px padding
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: kPrimaryColor,
+                                        borderRadius: BorderRadius.circular(5),
+                                      ),
+                                      child: Text(
+                                        "N° Aff : " +
+                                            Allcondidats[index]
+                                                .nb_heur_affecter!
+                                                .nb_heur_affecter! +
+                                            " Hrs",
+                                        style: secondaryTextStyle(
+                                            size: 6, color: Colors.white),
+                                      ),
+                                    ),
+                                  ],
+                                ))
                           ],
                         ),
                       ),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 5 * 1.5, // 30 px padding
-                          vertical: 5 / 5, // 5 px padding
-                        ),
-                        decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 233, 108, 108),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Text(
-                          Allcondidats[index].examen!,
-                          style:
-                              secondaryTextStyle(size: 12, color: Colors.white),
+                      SizedBox(width: 5),
+                      Container(height: 40, color: sdViewColor, width: 1),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 5 * 1.5, // 30 px padding
+                                vertical: 10 / 5, // 5 px padding
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Text(
+                                "Examen : " +
+                                    Allcondidats[index]
+                                        .detail_examen!
+                                        .type_examen!,
+                                style: secondaryTextStyle(
+                                    size: 8, color: Colors.black),
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 5 * 1.5, // 30 px padding
+                                vertical: 10 / 5, // 5 px padding
+                              ),
+                              decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                              child: Text(
+                                Allcondidats[index].detail_examen!.date_examen!,
+                                style: secondaryTextStyle(
+                                    size: 8, color: Colors.black),
+                              ),
+                            ),
+                          ],
                         ),
                       )
                     ],

@@ -19,9 +19,6 @@ class CondidatController extends GetxController
     });
     return listeAll.value;
   }
-
-  @override
-  void onClose() {}
 }
 
 class ExamenController extends GetxController with StateMixin<List<Examen>> {
