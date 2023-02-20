@@ -123,10 +123,10 @@ Widget CondOption(var mHeading, var mSubHeading) {
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
       Text(mHeading,
-          style: primaryTextStyle(size: 16, color: sdTextPrimaryColor)),
+          style: primaryTextStyle(size: 15, color: sdTextPrimaryColor)),
       SizedBox(height: 4),
       Text(mSubHeading,
-          style: primaryTextStyle(size: 14, color: sdTextSecondaryColor))
+          style: primaryTextStyle(size: 11, color: sdTextSecondaryColor))
     ],
   );
 }

@@ -180,12 +180,11 @@ class _ListeAllCondidatState extends State<ListeAllCondidat> {
       children: [
         Expanded(
           child: ListView.builder(
-            padding: EdgeInsets.only(bottom: 16),
-            scrollDirection: Axis.vertical,
+            //padding: EdgeInsets.only(bottom: 16),
             itemCount: _searchTextController.text.isEmpty
                 ? Allcondidats.length
                 : searchedForCharacters.length,
-            shrinkWrap: true,
+            //shrinkWrap: true,
             itemBuilder: (BuildContext context, int index) {
               return GestureDetector(
                 onTap: () {
@@ -203,11 +202,10 @@ class _ListeAllCondidatState extends State<ListeAllCondidat> {
                 child: Container(
                   margin: EdgeInsets.only(left: 16, right: 16, top: 16),
                   padding:
-                      EdgeInsets.only(left: 8, right: 8, top: 16, bottom: 16),
+                      EdgeInsets.only(left: 8, right: 0, top: 16, bottom: 16),
                   decoration: boxDecorations(),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Container(
                         decoration: BoxDecoration(shape: BoxShape.circle),
@@ -339,7 +337,32 @@ class _ListeAllCondidatState extends State<ListeAllCondidat> {
                             ),
                           ],
                         ),
-                      )
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          IconButton(
+                            color: kPrimaryColor,
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => CondidatInfoScreen(
+                                    thisCondidat:
+                                        _searchTextController.text.isEmpty
+                                            ? Allcondidats[index]
+                                            : searchedForCharacters[index],
+                                  ),
+                                ),
+                              );
+                            },
+                            icon: Icon(
+                              Icons.navigate_next_outlined,
+                              size: 22,
+                            ),
+                          )
+                        ],
+                      ),
                     ],
                   ),
                 ),

@@ -3,6 +3,7 @@ import 'package:driving_getx/logic/bindings/settings_binding.dart';
 import 'package:driving_getx/views/screens/SDSettingScreen.dart';
 import 'package:driving_getx/views/screens/splash.dart';
 import 'package:get/get.dart';
+import '../logic/bindings/add_condidat_binding.dart';
 import '../views/screens/add_condidat_screen.dart';
 import '../views/screens/allcondidat_screen.dart';
 import '../views/screens/home.dart';
@@ -23,7 +24,10 @@ class AppRoutes {
         binding: LoginBuinding()),
     GetPage(name: Routes.dashboard, page: () => HomeScreen()),
     GetPage(name: Routes.all_condidat, page: () => ListeAllCondidat()),
-    GetPage(name: Routes.add_condidat, page: () => AddCondidat()),
+    GetPage(
+        name: Routes.add_condidat,
+        page: () => AddCondidat(),
+        binding: AddCondidatBuinding()),
     GetPage(
         name: Routes.settings,
         page: () => SDSettingScreen(),

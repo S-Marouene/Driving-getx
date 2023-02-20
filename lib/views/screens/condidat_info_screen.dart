@@ -119,17 +119,12 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
             title: SizedBox(
               height: 55,
               child: Padding(
-                padding: EdgeInsets.fromLTRB(0, 22, 0, 0),
+                padding: EdgeInsets.fromLTRB(0, 16, 0, 0),
                 child: Text("Fiche Condidat",
                     style: boldTextStyle(
-                        color: db6_white, size: 15, fontFamily: fontBold)),
+                        color: db6_white, size: 13, fontFamily: fontBold)),
               ),
             ),
-            actions: <Widget>[
-              Padding(
-                  padding: const EdgeInsets.only(right: 16),
-                  child: Icon(Icons.favorite_border, color: Colors.white)),
-            ],
             backgroundColor: sdPrimaryColor,
             elevation: 0.0,
           ),
@@ -174,12 +169,17 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                         Text(thisCondidat.nom! + ' ' + thisCondidat.prenom!,
                             style: primaryTextStyle(
                                 size: 16, color: Colors.white)),
-                        Text(
-                            thisCondidat.num_tel == null
-                                ? ''
-                                : "+ 216 " + thisCondidat.num_tel!,
-                            style: primaryTextStyle(
-                                size: 14, color: Colors.white)),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5),
+                          child: Text(
+                              thisCondidat.num_tel == null
+                                  ? ''
+                                  : "+ 216 " + thisCondidat.num_tel!,
+                              style: primaryTextStyle(
+                                size: 10,
+                                color: Colors.white,
+                              )),
+                        ),
                       ],
                     )
                   ],
@@ -199,12 +199,12 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                           "N° Total",
                           thisCondidat.nbr_heur_total!.nb_heur_total! +
                               " Hr(s)"),
-                      Container(height: 22, color: sdViewColor, width: 1),
+                      Container(height: 25, color: sdViewColor, width: 1),
                       CondOption(
                           "N° Affecter",
                           thisCondidat.nb_heur_affecter!.nb_heur_affecter! +
                               " Hr(s)"),
-                      Container(height: 22, color: sdViewColor, width: 1),
+                      Container(height: 25, color: sdViewColor, width: 1),
                       CondOption("Examen", thisCondidat.examen!),
                     ],
                   ),
@@ -222,19 +222,24 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                         margin: const EdgeInsets.only(left: 7.0),
                         child: Text("Examens programmée :",
                             style: secondaryTextStyle(
-                                size: 14, color: kTextColor))),
+                                size: 12, color: kTextColor))),
                     Expanded(
                       child: Align(
                         alignment: Alignment.topRight,
-                        child: FloatingActionButton.small(
-                          heroTag: '2',
-                          elevation: 5,
-                          onPressed: () {
-                            FormAddExamen(context);
-                          },
-                          child: Icon(
-                            Icons.add,
-                            color: Colors.white,
+                        child: SizedBox(
+                          width: 25.0,
+                          height: 25.0,
+                          child: FloatingActionButton.small(
+                            heroTag: '2',
+                            elevation: 5,
+                            onPressed: () {
+                              FormAddExamen(context);
+                            },
+                            child: Icon(
+                              Icons.add,
+                              color: Colors.white,
+                              size: 18,
+                            ),
                           ),
                         ),
                       ),
@@ -278,14 +283,19 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                     Expanded(
                       child: Align(
                         alignment: Alignment.topRight,
-                        child: FloatingActionButton.small(
-                          elevation: 5,
-                          onPressed: () {
-                            FormAddpayment(context);
-                          },
-                          child: Icon(
-                            Icons.add,
-                            color: Colors.white,
+                        child: SizedBox(
+                          width: 25,
+                          height: 25,
+                          child: FloatingActionButton.small(
+                            elevation: 5,
+                            onPressed: () {
+                              FormAddpayment(context);
+                            },
+                            child: Icon(
+                              Icons.add,
+                              color: Colors.white,
+                              size: 18,
+                            ),
                           ),
                         ),
                       ),
@@ -350,45 +360,31 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
   Widget ListExamen(Examen examen) {
     return Container(
       decoration: boxDecorations(showShadow: true),
-      padding: EdgeInsets.fromLTRB(0, 10, 10, 10),
-      margin: EdgeInsets.only(top: 16),
+      padding: EdgeInsets.fromLTRB(2, 8, 5, 8),
+      margin: EdgeInsets.only(top: 10),
       child: Row(
         children: [
-          Column(
-            children: [
-              IconButton(
-                color: kPrimaryColor,
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) => ResultatExamen(
-                      IDExamen: examen.id.toString(),
-                      CondidatID: thisCondidat.id.toString(),
-                    ),
-                  );
-                },
-                icon: Icon(Icons.assignment_turned_in_outlined),
-              ),
-            ],
-          ),
           CircleAvatar(
-            radius: 25,
+            radius: 20,
             backgroundColor: getColorExam(examen),
             child: Text(examen.resultat!,
-                style: boldTextStyle(color: Colors.black, size: 10)),
+                style: boldTextStyle(color: Colors.black, size: 8)),
           ),
           SizedBox(
-            width: 20,
+            width: 10,
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(examen.typeExamen!, style: boldTextStyle(size: 16)),
-              Text(
-                  dateformattt(examen.dateExamen!).toString() +
-                      " " +
-                      examen.centreExamen!,
-                  style: secondaryTextStyle(size: 8)),
+              Text(examen.typeExamen!, style: boldTextStyle(size: 13)),
+              Padding(
+                padding: const EdgeInsets.only(top: 5),
+                child: Text(
+                    dateformattt(examen.dateExamen!).toString() +
+                        " " +
+                        examen.centreExamen!,
+                    style: secondaryTextStyle(size: 8)),
+              ),
               Padding(
                 padding: const EdgeInsets.only(top: 5),
                 child: Container(
@@ -412,10 +408,30 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
             ],
           ),
           Expanded(child: SizedBox.shrink()),
-          Column(
+          Row(
             children: [
               IconButton(
+                color: kPrimaryColor,
+                constraints: BoxConstraints(),
+                padding: EdgeInsets.fromLTRB(0, 0, 7, 0),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => ResultatExamen(
+                      IDExamen: examen.id.toString(),
+                      CondidatID: thisCondidat.id.toString(),
+                    ),
+                  );
+                },
+                icon: Icon(
+                  Icons.update,
+                  size: 22,
+                ),
+              ),
+              IconButton(
                 color: sdSecondaryColorRed,
+                constraints: BoxConstraints(),
+                padding: EdgeInsets.zero,
                 onPressed: () {
                   showDialog(
                     context: context,
@@ -429,7 +445,10 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                     },
                   );
                 },
-                icon: Icon(Icons.delete_forever_sharp),
+                icon: Icon(
+                  Icons.remove_circle,
+                  size: 22,
+                ),
               ),
             ],
           ),
@@ -680,7 +699,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                       style: primaryTextStyle(color: appStore.textPrimaryColor),
                     ),
                     8.height,
-                    caisse_controller.obx(
+                    bureau_controller.obx(
                       (state) {
                         AllBureau = bureau_controller.liste.value;
                         listOfCategory =
@@ -829,25 +848,25 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
   Widget ListPayement(Payement payement) {
     return Container(
       decoration: boxDecorations(showShadow: true),
-      padding: EdgeInsets.only(top: 10, bottom: 10, right: 5, left: 10),
-      margin: EdgeInsets.only(top: 16),
+      padding: EdgeInsets.only(top: 10, bottom: 10, right: 0, left: 5),
+      margin: EdgeInsets.only(top: 10),
       child: Row(
         children: [
-          CircleAvatar(
-            radius: 25,
+          /* CircleAvatar(
+            radius: 20,
             backgroundColor: sdSecondaryColorGreen.withOpacity(0.3),
             child: Text(payement.montant! + " DT",
-                style: boldTextStyle(color: db6_colorPrimaryDark, size: 11)),
+                style: boldTextStyle(color: db6_colorPrimaryDark, size: 8)),
           ),
-          SizedBox(width: 20),
+          SizedBox(width: 10), */
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(payement.caisse!, style: boldTextStyle(size: 16)),
+              Text(payement.caisse!, style: boldTextStyle(size: 13)),
               Padding(
                 padding: const EdgeInsets.only(top: 5),
                 child: Text(payement.date_paiement!,
-                    style: secondaryTextStyle(size: 12)),
+                    style: secondaryTextStyle(size: 8)),
               ),
               Padding(
                   padding: const EdgeInsets.only(top: 5),
@@ -891,26 +910,33 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
             ],
           ),
           Expanded(child: SizedBox.shrink()),
-          Column(
-            children: [
-              IconButton(
-                color: sdSecondaryColorRed,
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Alert(
-                          context,
-                          "Confirmation",
-                          "Voulez-vous vraiment supprimer ce paiement ?",
-                          payement.id,
-                          ConfirmDeletepayement);
-                    },
-                  );
-                },
-                icon: Icon(Icons.delete_forever_sharp),
-              )
-            ],
+          Container(
+            constraints: BoxConstraints(),
+            padding: EdgeInsets.zero,
+            child: Row(
+              children: [
+                IconButton(
+                  color: sdSecondaryColorRed,
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Alert(
+                            context,
+                            "Confirmation",
+                            "Voulez-vous vraiment supprimer ce paiement ?",
+                            payement.id,
+                            ConfirmDeletepayement);
+                      },
+                    );
+                  },
+                  icon: Icon(
+                    Icons.remove_circle,
+                    size: 22,
+                  ),
+                )
+              ],
+            ),
           ),
         ],
       ),

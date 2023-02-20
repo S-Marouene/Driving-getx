@@ -1,7 +1,3 @@
-import 'dart:convert';
-
-import 'package:get/get.dart';
-
 class Condidat {
   int? id;
   String? nom;

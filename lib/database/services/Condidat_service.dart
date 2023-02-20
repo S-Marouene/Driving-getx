@@ -23,6 +23,26 @@ class ServiceCondidats {
     }
   }
 
+  static Future AddConidiatServ(condidat) async {
+    Dio.Response response = await dio().post(
+      '/CreateCondidat',
+      options: Dio.Options(
+        headers: {'auth': true},
+        followRedirects: false,
+        validateStatus: (status) {
+          return status! < 500;
+        },
+      ),
+      data: condidat,
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.data.toString());
+    } else {
+      return jsonDecode(response.data.toString());
+    }
+  }
+
   static Future<List<Examen>> getExamByid(id) async {
     Dio.Response response = await dio().get('/examen/getExamenByCondidat/$id',
         options: Dio.Options(headers: {'auth': true}));
