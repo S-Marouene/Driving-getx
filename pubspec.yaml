@@ -24,6 +24,7 @@ dependencies:
   intl: ^0.17.0
   syncfusion_flutter_calendar: ^20.4.44
   double_back_to_close: ^2.0.0
+  image_picker: ^0.8.6+3
 
 dev_dependencies:
   flutter_lints: ^2.0.0

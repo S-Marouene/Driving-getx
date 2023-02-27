@@ -1,7 +1,5 @@
-import 'package:driving_getx/database/models/condidats.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../database/services/Condidat_service.dart';
 
 class AddCondidatController extends GetxController {
@@ -13,7 +11,8 @@ class AddCondidatController extends GetxController {
       cin,
       adresse,
       bureau,
-      num_tel;
+      num_tel,
+      category;
   var res = "".obs;
   var resDelete = "".obs;
 
@@ -27,6 +26,7 @@ class AddCondidatController extends GetxController {
     adresse = TextEditingController();
     bureau = TextEditingController();
     num_tel = TextEditingController();
+    category = TextEditingController();
   }
 
   @override
@@ -37,6 +37,7 @@ class AddCondidatController extends GetxController {
     prenom.dispose();
     cin.dispose();
     adresse.dispose();
+    category.dispose();
   }
 
   String? validateNom(String value) {

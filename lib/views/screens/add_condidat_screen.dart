@@ -1,7 +1,12 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart' as dio;
 import 'package:driving_getx/main/utils/AppWidget.dart';
 import 'package:driving_getx/main/utils/SDColors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+// ignore: depend_on_referenced_packages
 import 'package:nb_utils/nb_utils.dart';
 
 import '../../database/models/bureaux.dart';
@@ -24,17 +29,32 @@ class _AddCondidatState extends State<AddCondidat> {
   final AddCondidatController addCondidatController = Get.find();
   final BureauController bureau_controller = Get.put(BureauController());
   late String result = "";
+  late bool isLoading;
 
   late List<Bureau> AllBureau = [];
   List<String> listOfCategory = [];
   String? selectedBureau;
   String? ChangedBureau;
   bool selected_bureau = false;
+  String dropdownValue = 'A1';
+
+  File? _image;
+  String? fileName;
+
+  Future<void> _pickImage(ImageSource source) async {
+    // ignore: deprecated_member_use
+    final pickedFile = await ImagePicker().getImage(source: source);
+    setState(() {
+      _image = File(pickedFile!.path);
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     bureau_controller.getList();
+    isLoading = false;
+    addCondidatController.category.text = dropdownValue;
   }
 
   @override
@@ -278,19 +298,109 @@ class _AddCondidatState extends State<AddCondidat> {
                   SizedBox(
                     width: 20.0,
                   ),
+                  Flexible(
+                    child: Card(
+                        elevation: 4,
+                        child: Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 0, 30, 0),
+                            child: DropdownButtonFormField(
+                              isExpanded: true,
+                              dropdownColor: appStore.appBarColor,
+                              value: dropdownValue,
+                              onChanged: (String? newValue) {
+                                setState(() {
+                                  dropdownValue = newValue!;
+                                  addCondidatController.category.text =
+                                      dropdownValue;
+                                });
+                              },
+                              items: <String>[
+                                'B',
+                                'A',
+                                'A1',
+                                'C',
+                                'D',
+                                'B+E',
+                                'C+E',
+                                'D+E',
+                                'H',
+                              ].map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(
+                                    value,
+                                    style: TextStyle(fontSize: 20),
+                                  ),
+                                );
+                              }).toList(),
+                            ))),
+                  ),
                 ],
               ),
-              SizedBox(height: 50),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Flexible(
+                    child: Row(children: [
+                      ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFFDFDFDF)),
+                        onPressed: () {
+                          _pickImage(ImageSource.gallery);
+                        },
+                        icon: Icon(
+                          Icons.file_download_outlined,
+                          color: black,
+                        ),
+                        label: Text(
+                          'Up Image',
+                          style: primaryTextStyle(color: black, size: 10),
+                        ),
+                      ),
+                      _image != null
+                          ? Center(
+                              child: CircleAvatar(
+                                radius: 28.0,
+                                backgroundColor: Colors.white,
+                                child: ClipOval(
+                                  child: (_image != null)
+                                      ? Image.file(_image!)
+                                      : Image.asset('images/newimage.png'),
+                                ),
+                              ),
+                            )
+                          : Container(),
+                    ]),
+                  ),
+                  SizedBox(
+                    width: 20.0,
+                  ),
+                ],
+              ),
+              SizedBox(height: 70),
               GestureDetector(
                 onTap: () {
+                  if (addCondidatController.addcondidatFormKey.currentState!
+                      .validate()) {
+                    setState(() {
+                      isLoading = true;
+                    });
+                  }
+
                   addCondidatController.checkValide();
+
                   AddFormCondidat().then((value) {
                     if (value == "Condidat successfully created") {
+                      setState(() {
+                        isLoading = false;
+                      });
                       finish(context);
                       Get.offNamed("/all_condidat");
-                      //Get.toNamed();
                       toast("Condidat ajouter avec succée");
                     } else {
+                      setState(() {
+                        isLoading = false;
+                      });
                       Get.snackbar(
                         "opération echouée",
                         value,
@@ -322,6 +432,17 @@ class _AddCondidatState extends State<AddCondidat> {
                   ),
                 ),
               ),
+              isLoading
+                  ? Align(
+                      alignment: Alignment.bottomCenter,
+                      child: SizedBox(
+                        height: 5,
+                        width: double.infinity,
+                        child: LinearProgressIndicator(
+                          semanticsLabel: 'Linear progress indicator',
+                        ),
+                      ))
+                  : Container(),
             ],
           ),
         ),
@@ -330,7 +451,7 @@ class _AddCondidatState extends State<AddCondidat> {
   }
 
   Future<String> AddFormCondidat() async {
-    var modleonc = {
+    dio.FormData modleonc = dio.FormData.fromMap({
       "nom": addCondidatController.nom.text,
       "prenom": addCondidatController.prenom.text,
       "num_tel": addCondidatController.num_tel.text,
@@ -338,12 +459,14 @@ class _AddCondidatState extends State<AddCondidat> {
       "adresse": addCondidatController.adresse.text,
       "date_naiss": addCondidatController.datenaissance.text,
       "bureau": addCondidatController.bureau.text,
-    };
+      "categorie": addCondidatController.category.text,
+      "fileSource": _image == null
+          ? null
+          : await dio.MultipartFile.fromFile(_image!.path, filename: fileName)
+    });
 
     await addCondidatController.submitRequest(modleonc);
-
     result = addCondidatController.res.value;
-
     return result;
   }
 }
