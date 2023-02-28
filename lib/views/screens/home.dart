@@ -3,12 +3,11 @@ import 'package:driving_getx/logic/controllers/auth_controller.dart';
 import 'package:driving_getx/logic/controllers/currentuser_controller.dart';
 import 'package:driving_getx/main/utils/AppWidget.dart';
 import 'package:driving_getx/main/utils/SDColors.dart';
-import 'package:driving_getx/views/screens/dashboard_screen_test.dart';
+import 'package:driving_getx/views/screens/dashboard_screen.dart';
 import 'package:driving_getx/views/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'allcondidat_screen.dart';
-import 'dashboard_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -47,18 +46,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
+// ignore: must_be_immutable
 class HomePage extends StatefulWidget {
   int selectedIndex;
-
   HomePage({super.key, this.selectedIndex = 0});
-
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
   AuthController authController = Get.find();
-  //int _currentIndex = 0;
   static const URLpic = 'https://smdev.tn/storage/profile_pic/';
   final _currentuserController = Get.put(CurrentUserController());
 
@@ -77,8 +74,8 @@ class _HomePageState extends State<HomePage> {
     var size = MediaQuery.of(context).size;
     changeStatusColor(sdAppBackground);
     final tab = [
-      MWTabBarScreen4(),
       DashboardScreen(),
+      /* DashboardScreen(), */
       ListeAllCondidat(),
       ProfileScreen()
     ];
@@ -111,12 +108,6 @@ class _HomePageState extends State<HomePage> {
                     activeIcon: Image.asset('images/appbar/sdhome.png',
                         height: 28, width: 28, color: sdPrimaryColor),
                     label: "Home"),
-                BottomNavigationBarItem(
-                    icon: Image.asset('images/appbar/calendar.png',
-                        height: 28, width: 28, color: kTextLightColor),
-                    activeIcon: Image.asset('images/appbar/calendar.png',
-                        height: 28, width: 28, color: sdPrimaryColor),
-                    label: "Calendar"),
                 BottomNavigationBarItem(
                     icon: Image.asset('images/appbar/users3.png',
                         height: 28, width: 28, color: kTextLightColor),
@@ -163,7 +154,6 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-                  //title: Text('a'),
                 ),
               ],
               onTap: (index) {

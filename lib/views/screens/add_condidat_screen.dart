@@ -8,11 +8,9 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 // ignore: depend_on_referenced_packages
 import 'package:nb_utils/nb_utils.dart';
-
 import '../../database/models/bureaux.dart';
 import '../../logic/controllers/add_condidat_controller.dart';
 import '../../logic/controllers/bureau_controller.dart';
-import '../../logic/controllers/condidatcontroller.dart';
 import '../../main/utils/AppConstant.dart';
 import '../widgets/tools_widget.dart';
 import 'allcondidat_screen.dart';
@@ -29,8 +27,6 @@ class AddCondidat extends StatefulWidget {
 }
 
 class _AddCondidatState extends State<AddCondidat> {
-  final _CondidatController = Get.put(CondidatController());
-
   final AddCondidatController addCondidatController = Get.find();
   final BureauController bureau_controller = Get.put(BureauController());
   late String result = "";
