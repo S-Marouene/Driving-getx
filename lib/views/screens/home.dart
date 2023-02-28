@@ -48,7 +48,9 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  int selectedIndex;
+
+  HomePage({super.key, this.selectedIndex = 0});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -56,7 +58,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   AuthController authController = Get.find();
-  int _currentIndex = 0;
+  //int _currentIndex = 0;
   static const URLpic = 'https://smdev.tn/storage/profile_pic/';
   final _currentuserController = Get.put(CurrentUserController());
 
@@ -84,7 +86,7 @@ class _HomePageState extends State<HomePage> {
     return SafeArea(
       child: Scaffold(
         backgroundColor: sdAppBackground,
-        body: tab[_currentIndex],
+        body: tab[widget.selectedIndex],
         bottomNavigationBar: Container(
           decoration: const BoxDecoration(
             borderRadius: BorderRadius.only(
@@ -101,7 +103,7 @@ class _HomePageState extends State<HomePage> {
               type: BottomNavigationBarType.fixed,
               showUnselectedLabels: false,
               showSelectedLabels: false,
-              currentIndex: _currentIndex,
+              currentIndex: widget.selectedIndex,
               items: [
                 BottomNavigationBarItem(
                     icon: Image.asset('images/appbar/sdhome.png',
@@ -166,7 +168,7 @@ class _HomePageState extends State<HomePage> {
               ],
               onTap: (index) {
                 setState(() {
-                  _currentIndex = index;
+                  widget.selectedIndex = index;
                 });
               },
             ),

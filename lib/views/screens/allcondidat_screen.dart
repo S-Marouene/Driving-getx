@@ -263,8 +263,7 @@ class _ListeAllCondidatState extends State<ListeAllCondidat> {
                                         "N° ToT : " +
                                             Allcondidats[index]
                                                 .nbr_heur_total!
-                                                .nb_heur_total! +
-                                            " Hrs",
+                                                .nb_heur_total!,
                                         style: secondaryTextStyle(
                                             size: 6, color: Colors.white),
                                       ),
@@ -285,8 +284,7 @@ class _ListeAllCondidatState extends State<ListeAllCondidat> {
                                         "N° Aff : " +
                                             Allcondidats[index]
                                                 .nb_heur_affecter!
-                                                .nb_heur_affecter! +
-                                            " Hrs",
+                                                .nb_heur_affecter!,
                                         style: secondaryTextStyle(
                                             size: 6, color: Colors.white),
                                       ),
@@ -296,7 +294,7 @@ class _ListeAllCondidatState extends State<ListeAllCondidat> {
                           ],
                         ),
                       ),
-                      SizedBox(width: 5),
+                      SizedBox(width: 20),
                       Container(height: 40, color: sdViewColor, width: 1),
                       Expanded(
                         child: Column(
@@ -358,7 +356,7 @@ class _ListeAllCondidatState extends State<ListeAllCondidat> {
                             },
                             icon: Icon(
                               Icons.navigate_next_outlined,
-                              size: 22,
+                              size: 20,
                             ),
                           )
                         ],

@@ -12,8 +12,11 @@ import 'package:nb_utils/nb_utils.dart';
 import '../../database/models/bureaux.dart';
 import '../../logic/controllers/add_condidat_controller.dart';
 import '../../logic/controllers/bureau_controller.dart';
+import '../../logic/controllers/condidatcontroller.dart';
 import '../../main/utils/AppConstant.dart';
 import '../widgets/tools_widget.dart';
+import 'allcondidat_screen.dart';
+import 'home.dart';
 
 class AddCondidat extends StatefulWidget {
   static String tag = "/AddCondidat";
@@ -26,6 +29,8 @@ class AddCondidat extends StatefulWidget {
 }
 
 class _AddCondidatState extends State<AddCondidat> {
+  final _CondidatController = Get.put(CondidatController());
+
   final AddCondidatController addCondidatController = Get.find();
   final BureauController bureau_controller = Get.put(BureauController());
   late String result = "";
@@ -357,16 +362,19 @@ class _AddCondidatState extends State<AddCondidat> {
                           style: primaryTextStyle(color: black, size: 10),
                         ),
                       ),
+                      SizedBox(
+                        width: 10,
+                      ),
                       _image != null
                           ? Center(
-                              child: CircleAvatar(
-                                radius: 28.0,
-                                backgroundColor: Colors.white,
-                                child: ClipOval(
-                                  child: (_image != null)
-                                      ? Image.file(_image!)
-                                      : Image.asset('images/newimage.png'),
-                                ),
+                              child: ClipOval(
+                                child: (_image != null)
+                                    ? Image.file(
+                                        _image!,
+                                        width: 50,
+                                        height: 50,
+                                      )
+                                    : Image.asset('images/newimage.png'),
                               ),
                             )
                           : Container(),
@@ -395,7 +403,8 @@ class _AddCondidatState extends State<AddCondidat> {
                         isLoading = false;
                       });
                       finish(context);
-                      Get.offNamed("/all_condidat");
+                      Get.to(() => ListeAllCondidat());
+                      Get.to(() => HomePage(selectedIndex: 2));
                       toast("Condidat ajouter avec succée");
                     } else {
                       setState(() {
