@@ -1,20 +1,12 @@
 /// Dart import
 import 'dart:convert';
 import 'dart:io' show Platform;
-
-/// Package imports
 import 'package:desktop_window/desktop_window.dart';
+import 'package:driving_getx/views/screens/dashboard_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'web_view.dart';
-
-/// Local import
-import 'sample_list.dart';
-import 'search_bar.dart';
-
-/// WidgetCategory of the each control as Data Visualization, Editors,etc.,
 class WidgetCategory {
   /// Constructor holds the name, id, control collection of the [WidgetCategory]
   WidgetCategory(
@@ -318,7 +310,7 @@ class SampleModel extends Listenable {
   late List<SubItem> searchResults;
 
   /// To handle the search bar
-  SearchBar? searchBar;
+  //SearchBar? searchBar;
 
   /// holds theme based current palette color
   Color backgroundColor = const Color.fromRGBO(0, 116, 227, 1);
@@ -428,7 +420,7 @@ class SampleModel extends Listenable {
   late dynamic outputContainerState;
 
   ///Storing state of web output container
-  late SampleOutputContainerState webOutputContainerState;
+  //late SampleOutputContainerState webOutputContainerState;
 
   ///check whether application is running on web/linuxOS/windowsOS/macOS
   bool isWebFullView = false;
@@ -809,4 +801,10 @@ class SampleRoute {
 
   ///Holds the current widget
   Widget? currentWidget;
+}
+
+Map<String, Function> getSampleWidget() {
+  return <String, Function>{
+    'recurrence_calendar': (Key key) => DashboardScreen(),
+  };
 }

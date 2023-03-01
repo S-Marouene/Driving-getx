@@ -71,21 +71,22 @@ class _DashboardScreenState extends SampleViewState {
             backgroundColor: sdPrimaryColor,
             automaticallyImplyLeading: false,
             titleSpacing: 0,
+            toolbarHeight: 60,
             actionsIconTheme: IconThemeData(opacity: 0.0),
             title: Row(children: [
               Padding(
-                padding: EdgeInsets.fromLTRB(16, 0, 8, 0),
+                  padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                  child: Icon(
+                    Icons.calendar_month,
+                    size: 18,
+                  )),
+              Padding(
+                padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
                 child: Text("Planning",
                     style: boldTextStyle(
                         color: db6_white, size: 13, fontFamily: fontBold)),
               ),
               Spacer(),
-              IconButton(
-                icon: Icon(Icons.refresh),
-                onPressed: () {
-                  //Get.toNamed('/all_condidat');
-                },
-              ),
               IconButton(
                 icon: Icon(Icons.add),
                 onPressed: () {
@@ -93,106 +94,28 @@ class _DashboardScreenState extends SampleViewState {
                 },
               )
             ]),
-            bottom: TabBar(
-              onTap: (index) {
-                //print(index);
-              },
-              isScrollable: true,
-              labelStyle: boldTextStyle(),
-              indicatorColor: Colors.blue,
-              tabs: [
-                Tab(
-                  child: TabList(title: 'Mois  '),
-                ),
-                Tab(
-                  child: TabList(title: 'Semaine  '),
-                ),
-                Tab(
-                  child: TabList(title: 'Jour '),
-                ),
-                Tab(
-                  child: TabList(title: 'Planning  '),
-                )
-              ],
+          ),
+          body: Row(children: <Widget>[
+            Expanded(
+              child: calendarController.view == CalendarView.month &&
+                      myModel.isWebFullView &&
+                      screenHeight < 800
+                  ? Scrollbar(
+                      thumbVisibility: true,
+                      controller: controller,
+                      child: ListView(
+                        controller: controller,
+                        children: <Widget>[
+                          Container(
+                            color: myModel.cardThemeColor,
+                            height: 600,
+                            child: calendar,
+                          )
+                        ],
+                      ))
+                  : Container(color: myModel.cardThemeColor, child: calendar),
             ),
-          ),
-          body: TabBarView(
-            children: [
-              Row(children: <Widget>[
-                Expanded(
-                  child: calendarController.view == CalendarView.month &&
-                          myModel.isWebFullView &&
-                          screenHeight < 800
-                      ? Scrollbar(
-                          thumbVisibility: true,
-                          controller: controller,
-                          child: ListView(
-                            controller: controller,
-                            children: <Widget>[
-                              Container(
-                                color: myModel.cardThemeColor,
-                                height: 600,
-                                child: calendar,
-                              )
-                            ],
-                          ))
-                      : Container(
-                          color: myModel.cardThemeColor, child: calendar),
-                ),
-              ]),
-              Container(
-                padding: EdgeInsets.all(16),
-                alignment: Alignment.center,
-                width: context.width(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Semaines',
-                      style: TextStyle(
-                          color: appStore.textPrimaryColor, fontSize: 24),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.all(16),
-                alignment: Alignment.center,
-                width: context.width(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Joursss',
-                      style: TextStyle(
-                          color: appStore.textPrimaryColor, fontSize: 24),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.all(16),
-                alignment: Alignment.center,
-                width: context.width(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Planing',
-                      style: TextStyle(
-                          color: appStore.textPrimaryColor, fontSize: 24),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
+          ]),
         ),
       ),
     );
@@ -405,109 +328,11 @@ class _DashboardScreenState extends SampleViewState {
     _colorNames.add('Gray');
 
     _timeZoneCollection.add('Default Time');
-    _timeZoneCollection.add('AUS Central Standard Time');
-    _timeZoneCollection.add('AUS Eastern Standard Time');
-    _timeZoneCollection.add('Afghanistan Standard Time');
-    _timeZoneCollection.add('Alaskan Standard Time');
     _timeZoneCollection.add('Arab Standard Time');
     _timeZoneCollection.add('Arabian Standard Time');
     _timeZoneCollection.add('Arabic Standard Time');
-    _timeZoneCollection.add('Argentina Standard Time');
-    _timeZoneCollection.add('Atlantic Standard Time');
-    _timeZoneCollection.add('Azerbaijan Standard Time');
-    _timeZoneCollection.add('Azores Standard Time');
-    _timeZoneCollection.add('Bahia Standard Time');
-    _timeZoneCollection.add('Bangladesh Standard Time');
-    _timeZoneCollection.add('Belarus Standard Time');
-    _timeZoneCollection.add('Canada Central Standard Time');
-    _timeZoneCollection.add('Cape Verde Standard Time');
-    _timeZoneCollection.add('Caucasus Standard Time');
-    _timeZoneCollection.add('Cen. Australia Standard Time');
-    _timeZoneCollection.add('Central America Standard Time');
-    _timeZoneCollection.add('Central Asia Standard Time');
-    _timeZoneCollection.add('Central Brazilian Standard Time');
-    _timeZoneCollection.add('Central Europe Standard Time');
-    _timeZoneCollection.add('Central European Standard Time');
-    _timeZoneCollection.add('Central Pacific Standard Time');
-    _timeZoneCollection.add('Central Standard Time');
-    _timeZoneCollection.add('China Standard Time');
-    _timeZoneCollection.add('Dateline Standard Time');
     _timeZoneCollection.add('E. Africa Standard Time');
-    _timeZoneCollection.add('E. Australia Standard Time');
-    _timeZoneCollection.add('E. South America Standard Time');
-    _timeZoneCollection.add('Eastern Standard Time');
-    _timeZoneCollection.add('Egypt Standard Time');
-    _timeZoneCollection.add('Ekaterinburg Standard Time');
-    _timeZoneCollection.add('FLE Standard Time');
-    _timeZoneCollection.add('Fiji Standard Time');
-    _timeZoneCollection.add('GMT Standard Time');
-    _timeZoneCollection.add('GTB Standard Time');
-    _timeZoneCollection.add('Georgian Standard Time');
-    _timeZoneCollection.add('Greenland Standard Time');
-    _timeZoneCollection.add('Greenwich Standard Time');
-    _timeZoneCollection.add('Hawaiian Standard Time');
-    _timeZoneCollection.add('India Standard Time');
-    _timeZoneCollection.add('Iran Standard Time');
-    _timeZoneCollection.add('Israel Standard Time');
-    _timeZoneCollection.add('Jordan Standard Time');
-    _timeZoneCollection.add('Kaliningrad Standard Time');
-    _timeZoneCollection.add('Korea Standard Time');
-    _timeZoneCollection.add('Libya Standard Time');
-    _timeZoneCollection.add('Line Islands Standard Time');
-    _timeZoneCollection.add('Magadan Standard Time');
-    _timeZoneCollection.add('Mauritius Standard Time');
-    _timeZoneCollection.add('Middle East Standard Time');
-    _timeZoneCollection.add('Montevideo Standard Time');
-    _timeZoneCollection.add('Morocco Standard Time');
-    _timeZoneCollection.add('Mountain Standard Time');
-    _timeZoneCollection.add('Mountain Standard Time (Mexico)');
-    _timeZoneCollection.add('Myanmar Standard Time');
-    _timeZoneCollection.add('N. Central Asia Standard Time');
-    _timeZoneCollection.add('Namibia Standard Time');
-    _timeZoneCollection.add('Nepal Standard Time');
-    _timeZoneCollection.add('New Zealand Standard Time');
-    _timeZoneCollection.add('Newfoundland Standard Time');
-    _timeZoneCollection.add('North Asia East Standard Time');
-    _timeZoneCollection.add('North Asia Standard Time');
-    _timeZoneCollection.add('Pacific SA Standard Time');
-    _timeZoneCollection.add('Pacific Standard Time');
-    _timeZoneCollection.add('Pacific Standard Time (Mexico)');
-    _timeZoneCollection.add('Pakistan Standard Time');
-    _timeZoneCollection.add('Paraguay Standard Time');
-    _timeZoneCollection.add('Romance Standard Time');
-    _timeZoneCollection.add('Russia Time Zone 10');
-    _timeZoneCollection.add('Russia Time Zone 11');
-    _timeZoneCollection.add('Russia Time Zone 3');
-    _timeZoneCollection.add('Russian Standard Time');
-    _timeZoneCollection.add('SA Eastern Standard Time');
-    _timeZoneCollection.add('SA Pacific Standard Time');
-    _timeZoneCollection.add('SA Western Standard Time');
-    _timeZoneCollection.add('SE Asia Standard Time');
-    _timeZoneCollection.add('Samoa Standard Time');
-    _timeZoneCollection.add('Singapore Standard Time');
-    _timeZoneCollection.add('South Africa Standard Time');
-    _timeZoneCollection.add('Sri Lanka Standard Time');
-    _timeZoneCollection.add('Syria Standard Time');
-    _timeZoneCollection.add('Taipei Standard Time');
-    _timeZoneCollection.add('Tasmania Standard Time');
-    _timeZoneCollection.add('Tokyo Standard Time');
-    _timeZoneCollection.add('Tonga Standard Time');
-    _timeZoneCollection.add('Turkey Standard Time');
-    _timeZoneCollection.add('US Eastern Standard Time');
-    _timeZoneCollection.add('US Mountain Standard Time');
-    _timeZoneCollection.add('UTC');
-    _timeZoneCollection.add('UTC+12');
-    _timeZoneCollection.add('UTC-02');
     _timeZoneCollection.add('UTC-11');
-    _timeZoneCollection.add('Ulaanbaatar Standard Time');
-    _timeZoneCollection.add('Venezuela Standard Time');
-    _timeZoneCollection.add('Vladivostok Standard Time');
-    _timeZoneCollection.add('W. Australia Standard Time');
-    _timeZoneCollection.add('W. Central Africa Standard Time');
-    _timeZoneCollection.add('W. Europe Standard Time');
-    _timeZoneCollection.add('West Asia Standard Time');
-    _timeZoneCollection.add('West Pacific Standard Time');
-    _timeZoneCollection.add('Yakutsk Standard Time');
 
     _colorCollection.add(const Color(0xFF0F8644));
     _colorCollection.add(const Color(0xFF8B1FA9));
@@ -521,8 +346,31 @@ class _DashboardScreenState extends SampleViewState {
 
     final List<Appointment> appointments = <Appointment>[];
     final Random random = Random();
+
+    //Recurrence Appointment by maro
+    final DateTime currentDate0 = DateTime.now();
+    final DateTime startTime0 =
+        DateTime(currentDate0.year, currentDate0.month, currentDate0.day, 9);
+    final DateTime endTime0 =
+        DateTime(currentDate0.year, currentDate0.month, currentDate0.day, 11);
+    final RecurrenceProperties recurrencePropertiesForAlternativeDay0 =
+        RecurrenceProperties(
+            startDate: startTime0,
+            interval: 1,
+            recurrenceRange: RecurrenceRange.count,
+            recurrenceCount: 1);
+    final Appointment alternativeDayAppointment0 = Appointment(
+        startTime: startTime0,
+        endTime: endTime0,
+        color: _colorCollection[random.nextInt(8)],
+        subject: 'testttt',
+        recurrenceRule: SfCalendar.generateRRule(
+            recurrencePropertiesForAlternativeDay0, startTime0, endTime0));
+
+    appointments.add(alternativeDayAppointment0);
+
     //Recurrence Appointment 1
-    final DateTime currentDate = DateTime.now();
+    /* final DateTime currentDate = DateTime.now();
     final DateTime startTime =
         DateTime(currentDate.year, currentDate.month, currentDate.day, 9);
     final DateTime endTime =
@@ -532,7 +380,7 @@ class _DashboardScreenState extends SampleViewState {
             startDate: startTime,
             interval: 2,
             recurrenceRange: RecurrenceRange.count,
-            recurrenceCount: 20);
+            recurrenceCount: 3);
     final Appointment alternativeDayAppointment = Appointment(
         startTime: startTime,
         endTime: endTime,
@@ -702,7 +550,7 @@ class _DashboardScreenState extends SampleViewState {
             startTime7,
             endTime7));
 
-    appointments.add(customYearlyAppointment);
+    appointments.add(customYearlyAppointment); */
     return appointments;
   }
 }
@@ -714,7 +562,6 @@ class _AppointmentDataSource extends CalendarDataSource {
   List<dynamic> get appointments => source;
 }
 
-/// Returns the builder for schedule view.
 Widget scheduleViewBuilder(
     BuildContext buildContext, ScheduleViewMonthHeaderDetails details) {
   final String monthName = _getMonthDate(details.date.month);

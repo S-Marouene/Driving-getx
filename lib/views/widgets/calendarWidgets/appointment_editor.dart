@@ -1414,6 +1414,8 @@ class _CalendarTimeZonePickerState extends State<_CalendarTimeZonePicker> {
   @override
   void initState() {
     _selectedTimeZoneIndex = widget.selectedTimeZoneIndex;
+
+    // print(widget.selectedTimeZoneIndex);
     super.initState();
   }
 
@@ -2068,6 +2070,7 @@ class _PopUpAppointmentEditorState extends State<PopUpAppointmentEditor> {
                     ),
                     fillColor: widget.model.backgroundColor,
                     onPressed: () {
+                      // ignore: unnecessary_null_comparison
                       if (widget.selectedAppointment != null ||
                           widget.newAppointment != null) {
                         if (widget.events.appointments!.isNotEmpty &&
@@ -5419,6 +5422,7 @@ class _AppointmentEditorWebState extends State<AppointmentEditorWeb> {
                               widget.events.notifyListeners(
                                   CalendarDataSourceAction.add,
                                   <Appointment>[parentAppointment]);
+                              // ignore: unnecessary_null_comparison
                               if (widget.selectedAppointment != null ||
                                   widget.newAppointment != null) {
                                 if (widget.events.appointments!.isNotEmpty &&
@@ -5482,6 +5486,7 @@ class _AppointmentEditorWebState extends State<AppointmentEditorWeb> {
                                   widget.appointment);
                               Navigator.pop(context);
                             } else {
+                              // ignore: unnecessary_null_comparison
                               if (widget.selectedAppointment != null ||
                                   widget.newAppointment != null) {
                                 if (widget.events.appointments!.isNotEmpty &&

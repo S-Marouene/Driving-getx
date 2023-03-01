@@ -1,25 +1,15 @@
-/// Package import
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:syncfusion_localizations/syncfusion_localizations.dart';
-
-/// Local import
 import 'model.dart';
 
-/// Base class of the sample's stateful widget class
 abstract class SampleView extends StatefulWidget {
-  /// base class constructor of sample's stateful widget class
   const SampleView({Key? key}) : super(key: key);
 }
 
-/// Base class of the sample's state class
 abstract class SampleViewState<T extends SampleView> extends State<T> {
-  /// Holds the SampleModel information
   late SampleModel myModel;
-
-  /// Holds the information of current page is card view or not
   late bool isCardView;
-
   @override
   void initState() {
     myModel = SampleModel.instance;
@@ -27,24 +17,19 @@ abstract class SampleViewState<T extends SampleView> extends State<T> {
     super.initState();
   }
 
-  /// Must call super.
   @override
   void dispose() {
     myModel.isCardView = true;
     super.dispose();
   }
 
-  /// Get the settings panel content.
   Widget? buildSettings(BuildContext context) {
     return null;
   }
 }
 
-/// Base class of the localization sample's stateful widget class
 class LocalizationSampleView extends SampleView {
-  /// base class constructor of sample's stateful widget class
   const LocalizationSampleView({Key? key}) : super(key: key);
-
   @override
   State<StatefulWidget> createState() => LocalizationSampleViewState();
 }
