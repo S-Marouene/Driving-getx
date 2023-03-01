@@ -3,13 +3,13 @@ import 'dart:math';
 import 'package:driving_getx/main/utils/AppConstant.dart';
 import 'package:driving_getx/main/utils/AppWidget.dart';
 import 'package:driving_getx/main/utils/SDColors.dart';
-import 'package:driving_getx/views/widgets/appointment_editor.dart';
+import 'package:driving_getx/views/widgets/calendarWidgets/appointment_editor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 // ignore: depend_on_referenced_packages
 import 'package:nb_utils/nb_utils.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
-import '../widgets/sample_view.dart';
+import '../widgets/calendarWidgets/sample_view.dart';
 
 class DashboardScreen extends SampleView {
   const DashboardScreen({super.key});
@@ -50,11 +50,152 @@ class _DashboardScreenState extends SampleViewState {
     super.initState();
   }
 
-  init() async {}
-
   @override
-  void setState(fn) {
-    if (mounted) super.setState(fn);
+  Widget build(BuildContext context) {
+    final Widget calendar = Theme(
+        key: _globalKey,
+        data: Theme.of(context).copyWith(
+            colorScheme: Theme.of(context)
+                .colorScheme
+                .copyWith(secondary: myModel.backgroundColor)),
+        child: _getRecurrenceCalendar(calendarController, _dataSource,
+            _onViewChanged, scheduleViewBuilder, _onCalendarTapped));
+
+    final double screenHeight = MediaQuery.of(context).size.height;
+
+    return SafeArea(
+      child: DefaultTabController(
+        length: 4,
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: sdPrimaryColor,
+            automaticallyImplyLeading: false,
+            titleSpacing: 0,
+            actionsIconTheme: IconThemeData(opacity: 0.0),
+            title: Row(children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(16, 0, 8, 0),
+                child: Text("Planning",
+                    style: boldTextStyle(
+                        color: db6_white, size: 13, fontFamily: fontBold)),
+              ),
+              Spacer(),
+              IconButton(
+                icon: Icon(Icons.refresh),
+                onPressed: () {
+                  //Get.toNamed('/all_condidat');
+                },
+              ),
+              IconButton(
+                icon: Icon(Icons.add),
+                onPressed: () {
+                  //Get.toNamed('/add_condidat');
+                },
+              )
+            ]),
+            bottom: TabBar(
+              onTap: (index) {
+                //print(index);
+              },
+              isScrollable: true,
+              labelStyle: boldTextStyle(),
+              indicatorColor: Colors.blue,
+              tabs: [
+                Tab(
+                  child: TabList(title: 'Mois  '),
+                ),
+                Tab(
+                  child: TabList(title: 'Semaine  '),
+                ),
+                Tab(
+                  child: TabList(title: 'Jour '),
+                ),
+                Tab(
+                  child: TabList(title: 'Planning  '),
+                )
+              ],
+            ),
+          ),
+          body: TabBarView(
+            children: [
+              Row(children: <Widget>[
+                Expanded(
+                  child: calendarController.view == CalendarView.month &&
+                          myModel.isWebFullView &&
+                          screenHeight < 800
+                      ? Scrollbar(
+                          thumbVisibility: true,
+                          controller: controller,
+                          child: ListView(
+                            controller: controller,
+                            children: <Widget>[
+                              Container(
+                                color: myModel.cardThemeColor,
+                                height: 600,
+                                child: calendar,
+                              )
+                            ],
+                          ))
+                      : Container(
+                          color: myModel.cardThemeColor, child: calendar),
+                ),
+              ]),
+              Container(
+                padding: EdgeInsets.all(16),
+                alignment: Alignment.center,
+                width: context.width(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Semaines',
+                      style: TextStyle(
+                          color: appStore.textPrimaryColor, fontSize: 24),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.all(16),
+                alignment: Alignment.center,
+                width: context.width(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Joursss',
+                      style: TextStyle(
+                          color: appStore.textPrimaryColor, fontSize: 24),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.all(16),
+                alignment: Alignment.center,
+                width: context.width(),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Planing',
+                      style: TextStyle(
+                          color: appStore.textPrimaryColor, fontSize: 24),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   void _onCalendarTapped(CalendarTapDetails calendarTapDetails) {
@@ -195,167 +336,6 @@ class _DashboardScreenState extends SampleViewState {
         );
       }
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    /* final Widget calendar = Theme(
-
-        /// The key set here to maintain the state, when we change
-        /// the parent of the widget
-        key: _globalKey,
-        data: myModel.themeData.copyWith(
-            colorScheme: myModel.themeData.colorScheme
-                .copyWith(secondary: myModel.backgroundColor)),
-        child: _getRecurrenceCalendar(calendarController, _dataSource,
-            _onViewChanged, scheduleViewBuilder, _onCalendarTapped)); */
-
-    final double screenHeight = MediaQuery.of(context).size.height;
-
-    return SafeArea(
-      child: DefaultTabController(
-        length: 4,
-        child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: sdPrimaryColor,
-            automaticallyImplyLeading: false,
-            titleSpacing: 0,
-            actionsIconTheme: IconThemeData(opacity: 0.0),
-            title: Row(children: [
-              Padding(
-                padding: EdgeInsets.fromLTRB(16, 0, 8, 0),
-                child: Text("Planning",
-                    style: boldTextStyle(
-                        color: db6_white, size: 13, fontFamily: fontBold)),
-              ),
-              Spacer(),
-              IconButton(
-                icon: Icon(Icons.refresh),
-                onPressed: () {
-                  //Get.toNamed('/all_condidat');
-                },
-              ),
-              IconButton(
-                icon: Icon(Icons.add),
-                onPressed: () {
-                  //Get.toNamed('/add_condidat');
-                },
-              )
-            ]),
-            bottom: TabBar(
-              onTap: (index) {
-                //print(index);
-              },
-              isScrollable: true,
-              labelStyle: boldTextStyle(),
-              indicatorColor: Colors.blue,
-              tabs: [
-                Tab(
-                  child: TabList(title: 'Mois  '),
-                ),
-                Tab(
-                  child: TabList(title: 'Semaine  '),
-                ),
-                Tab(
-                  child: TabList(title: 'Jour '),
-                ),
-                Tab(
-                  child: TabList(title: 'Planning  '),
-                )
-              ],
-            ),
-          ),
-          body: TabBarView(
-            children: [
-              Row(children: <Widget>[
-                Expanded(
-                  child: calendarController.view == CalendarView.month &&
-                          myModel.isWebFullView &&
-                          screenHeight < 800
-                      ? Scrollbar(
-                          thumbVisibility: true,
-                          controller: controller,
-                          child: ListView(
-                            controller: controller,
-                            children: <Widget>[
-                              Container(
-                                color: myModel.cardThemeColor,
-                                height: 600,
-                                child: _getRecurrenceCalendar(
-                                    calendarController,
-                                    _dataSource,
-                                    _onViewChanged,
-                                    scheduleViewBuilder,
-                                    _onCalendarTapped),
-                              )
-                            ],
-                          ))
-                      : Container(
-                          color: myModel.cardThemeColor,
-                          child: _getRecurrenceCalendar(
-                              calendarController,
-                              _dataSource,
-                              _onViewChanged,
-                              scheduleViewBuilder,
-                              _onCalendarTapped)),
-                ),
-              ]),
-              Container(
-                padding: EdgeInsets.all(16),
-                alignment: Alignment.center,
-                width: context.width(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Semaines',
-                      style: TextStyle(
-                          color: appStore.textPrimaryColor, fontSize: 24),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.all(16),
-                alignment: Alignment.center,
-                width: context.width(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Joursss',
-                      style: TextStyle(
-                          color: appStore.textPrimaryColor, fontSize: 24),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.all(16),
-                alignment: Alignment.center,
-                width: context.width(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Planing',
-                      style: TextStyle(
-                          color: appStore.textPrimaryColor, fontSize: 24),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 
   Widget TabList({Widget? icon, required String title}) {
@@ -557,7 +537,7 @@ class _DashboardScreenState extends SampleViewState {
         startTime: startTime,
         endTime: endTime,
         color: _colorCollection[random.nextInt(8)],
-        subject: 'Scrum meeting',
+        subject: 'maro maro',
         recurrenceRule: SfCalendar.generateRRule(
             recurrencePropertiesForAlternativeDay, startTime, endTime));
 
@@ -602,7 +582,7 @@ class _DashboardScreenState extends SampleViewState {
         startTime: startTime2,
         endTime: endTime2,
         color: _colorCollection[random.nextInt(8)],
-        subject: 'Sprint planning meeting',
+        subject: 'Test maro',
         recurrenceRule: SfCalendar.generateRRule(
             recurrencePropertiesForMonthlyAppointment, startTime2, endTime2));
 
