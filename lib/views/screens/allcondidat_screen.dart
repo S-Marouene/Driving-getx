@@ -33,6 +33,7 @@ class _ListeAllCondidatState extends State<ListeAllCondidat> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await controller.getListCondidat();
       Allcondidats = controller.listeAll.value;
+
       /*  setState(() {}); */
     });
     super.initState();

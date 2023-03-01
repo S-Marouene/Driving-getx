@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 // ignore: depend_on_referenced_packages
 import 'package:nb_utils/nb_utils.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 import '../../main/utils/AppConstant.dart';
 import '../../main/utils/SDColors.dart';
 
@@ -129,4 +130,56 @@ Widget CondOption(var mHeading, var mSubHeading) {
           style: primaryTextStyle(size: 11, color: sdTextSecondaryColor))
     ],
   );
+}
+
+Widget scheduleViewBuilder(
+    BuildContext buildContext, ScheduleViewMonthHeaderDetails details) {
+  final String monthName = _getMonthDate(details.date.month);
+  return Stack(
+    children: <Widget>[
+      Image(
+          image: ExactAssetImage('images/' + monthName + '.png'),
+          fit: BoxFit.cover,
+          width: details.bounds.width,
+          height: details.bounds.height),
+      Positioned(
+        left: 55,
+        right: 0,
+        top: 20,
+        bottom: 0,
+        child: Text(
+          monthName + ' ' + details.date.year.toString(),
+          style: const TextStyle(fontSize: 18),
+        ),
+      )
+    ],
+  );
+}
+
+String _getMonthDate(int month) {
+  if (month == 01) {
+    return 'January';
+  } else if (month == 02) {
+    return 'February';
+  } else if (month == 03) {
+    return 'March';
+  } else if (month == 04) {
+    return 'April';
+  } else if (month == 05) {
+    return 'May';
+  } else if (month == 06) {
+    return 'June';
+  } else if (month == 07) {
+    return 'July';
+  } else if (month == 08) {
+    return 'August';
+  } else if (month == 09) {
+    return 'September';
+  } else if (month == 10) {
+    return 'October';
+  } else if (month == 11) {
+    return 'November';
+  } else {
+    return 'December';
+  }
 }

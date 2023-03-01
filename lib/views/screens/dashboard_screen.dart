@@ -1,11 +1,13 @@
 import 'dart:math';
-
+import 'package:driving_getx/database/models/conduite.dart';
+import 'package:driving_getx/logic/controllers/conduite_controller.dart';
 import 'package:driving_getx/main/utils/AppConstant.dart';
-import 'package:driving_getx/main/utils/AppWidget.dart';
 import 'package:driving_getx/main/utils/SDColors.dart';
 import 'package:driving_getx/views/widgets/calendarWidgets/appointment_editor.dart';
+import 'package:driving_getx/views/widgets/tools_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:get/get.dart';
 // ignore: depend_on_referenced_packages
 import 'package:nb_utils/nb_utils.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
@@ -43,26 +45,21 @@ class _DashboardScreenState extends SampleViewState {
   int _selectedColorIndex = 0;
   final GlobalKey _globalKey = GlobalKey();
 
+  //final AuthController authController = Get.put(AuthController());
+  final ConduiteController conduite_controller = Get.put(ConduiteController());
+  late List<Conduite> Allconduite = [];
+  List<String> listOfCategory = [];
+
   @override
   void initState() {
+    conduite_controller.getAllConduite();
     calendarController.view = _view;
-    _dataSource = _AppointmentDataSource(_getRecursiveAppointments());
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final Widget calendar = Theme(
-        key: _globalKey,
-        data: Theme.of(context).copyWith(
-            colorScheme: Theme.of(context)
-                .colorScheme
-                .copyWith(secondary: myModel.backgroundColor)),
-        child: _getRecurrenceCalendar(calendarController, _dataSource,
-            _onViewChanged, scheduleViewBuilder, _onCalendarTapped));
-
-    final double screenHeight = MediaQuery.of(context).size.height;
-
     return SafeArea(
       child: DefaultTabController(
         length: 4,
@@ -82,7 +79,7 @@ class _DashboardScreenState extends SampleViewState {
                   )),
               Padding(
                 padding: EdgeInsets.fromLTRB(8, 0, 8, 0),
-                child: Text("Planning",
+                child: Text("Planification",
                     style: boldTextStyle(
                         color: db6_white, size: 13, fontFamily: fontBold)),
               ),
@@ -97,28 +94,50 @@ class _DashboardScreenState extends SampleViewState {
           ),
           body: Row(children: <Widget>[
             Expanded(
-              child: calendarController.view == CalendarView.month &&
-                      myModel.isWebFullView &&
-                      screenHeight < 800
-                  ? Scrollbar(
-                      thumbVisibility: true,
-                      controller: controller,
-                      child: ListView(
-                        controller: controller,
-                        children: <Widget>[
-                          Container(
-                            color: myModel.cardThemeColor,
-                            height: 600,
-                            child: calendar,
-                          )
-                        ],
-                      ))
-                  : Container(color: myModel.cardThemeColor, child: calendar),
-            ),
+                child: conduite_controller.obx(
+              (state) {
+                Allconduite = conduite_controller.listeConduite.value;
+
+                _dataSource = _AppointmentDataSource(
+                    _getRecursiveAppointments(Allconduite));
+
+                return BuildCalendar(Allconduite);
+              },
+              onLoading: showLoadingIndicator(),
+            )),
           ]),
         ),
       ),
     );
+  }
+
+  Widget BuildCalendar(Allconduite) {
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final Widget calendar = Theme(
+        key: _globalKey,
+        data: Theme.of(context).copyWith(
+            colorScheme: Theme.of(context)
+                .colorScheme
+                .copyWith(secondary: myModel.backgroundColor)),
+        child: _getRecurrenceCalendar(calendarController, _dataSource,
+            _onViewChanged, scheduleViewBuilder, _onCalendarTapped));
+    return calendarController.view == CalendarView.month &&
+            myModel.isWebFullView &&
+            screenHeight < 800
+        ? Scrollbar(
+            thumbVisibility: true,
+            controller: controller,
+            child: ListView(
+              controller: controller,
+              children: <Widget>[
+                Container(
+                  color: myModel.cardThemeColor,
+                  height: 600,
+                  child: calendar,
+                )
+              ],
+            ))
+        : Container(color: myModel.cardThemeColor, child: calendar);
   }
 
   void _onCalendarTapped(CalendarTapDetails calendarTapDetails) {
@@ -261,22 +280,6 @@ class _DashboardScreenState extends SampleViewState {
     }
   }
 
-  Widget TabList({Widget? icon, required String title}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        icon ?? SizedBox(),
-        10.width,
-        Text(
-          title,
-          style: TextStyle(color: appStore.textPrimaryColor),
-        ),
-      ],
-    );
-  }
-
   SfCalendar _getRecurrenceCalendar(
       [CalendarController? calendarController,
       CalendarDataSource? calendarDataSource,
@@ -316,7 +319,7 @@ class _DashboardScreenState extends SampleViewState {
     });
   }
 
-  List<Appointment> _getRecursiveAppointments() {
+  List<Appointment> _getRecursiveAppointments(Allconduite) {
     _colorNames.add('Green');
     _colorNames.add('Purple');
     _colorNames.add('Red');
@@ -347,7 +350,17 @@ class _DashboardScreenState extends SampleViewState {
     final List<Appointment> appointments = <Appointment>[];
     final Random random = Random();
 
-    //Recurrence Appointment by maro
+    Allconduite.forEach((subject) {
+      final Appointment alternativeDayAppointment0 = Appointment(
+        startTime: DateTime.parse(subject.date_deb),
+        endTime: DateTime.parse(subject.date_fin),
+        color: _colorCollection[random.nextInt(8)],
+        subject: subject.condidat.nom + " " + subject.condidat.prenom,
+      );
+
+      appointments.add(alternativeDayAppointment0);
+    });
+
     final DateTime currentDate0 = DateTime.now();
     final DateTime startTime0 =
         DateTime(currentDate0.year, currentDate0.month, currentDate0.day, 9);
@@ -363,7 +376,7 @@ class _DashboardScreenState extends SampleViewState {
         startTime: startTime0,
         endTime: endTime0,
         color: _colorCollection[random.nextInt(8)],
-        subject: 'testttt',
+        subject: "aaaaaa",
         recurrenceRule: SfCalendar.generateRRule(
             recurrencePropertiesForAlternativeDay0, startTime0, endTime0));
 
@@ -551,6 +564,7 @@ class _DashboardScreenState extends SampleViewState {
             endTime7));
 
     appointments.add(customYearlyAppointment); */
+
     return appointments;
   }
 }
@@ -560,56 +574,4 @@ class _AppointmentDataSource extends CalendarDataSource {
   List<Appointment> source;
   @override
   List<dynamic> get appointments => source;
-}
-
-Widget scheduleViewBuilder(
-    BuildContext buildContext, ScheduleViewMonthHeaderDetails details) {
-  final String monthName = _getMonthDate(details.date.month);
-  return Stack(
-    children: <Widget>[
-      Image(
-          image: ExactAssetImage('images/' + monthName + '.png'),
-          fit: BoxFit.cover,
-          width: details.bounds.width,
-          height: details.bounds.height),
-      Positioned(
-        left: 55,
-        right: 0,
-        top: 20,
-        bottom: 0,
-        child: Text(
-          monthName + ' ' + details.date.year.toString(),
-          style: const TextStyle(fontSize: 18),
-        ),
-      )
-    ],
-  );
-}
-
-String _getMonthDate(int month) {
-  if (month == 01) {
-    return 'January';
-  } else if (month == 02) {
-    return 'February';
-  } else if (month == 03) {
-    return 'March';
-  } else if (month == 04) {
-    return 'April';
-  } else if (month == 05) {
-    return 'May';
-  } else if (month == 06) {
-    return 'June';
-  } else if (month == 07) {
-    return 'July';
-  } else if (month == 08) {
-    return 'August';
-  } else if (month == 09) {
-    return 'September';
-  } else if (month == 10) {
-    return 'October';
-  } else if (month == 11) {
-    return 'November';
-  } else {
-    return 'December';
-  }
 }
