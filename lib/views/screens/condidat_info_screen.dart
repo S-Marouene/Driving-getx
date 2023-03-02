@@ -37,13 +37,11 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
   static const URLpic = 'https://smdev.tn/storage/condidat_pic/';
   final ExamenController cond_exam_controller = Get.put(ExamenController());
 
-  final PayementController cond_payement_controller =
-      Get.put(PayementController());
+  final PayementController cond_payement_controller = Get.put(PayementController());
 
   final CaisseController caisse_controller = Get.put(CaisseController());
   final BureauController bureau_controller = Get.put(BureauController());
-  final CentreExamController centr_exam_controller =
-      Get.put(CentreExamController());
+  final CentreExamController centr_exam_controller = Get.put(CentreExamController());
 
   late List<Examen> AllExam = [];
   late List<Payement> AllPayement = [];
@@ -91,11 +89,9 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
     modePayementAdd.text = "Espece";
     TypeExamAdd.text = "Conduite";
 
-    cond_payement_controller.datePayementAdd.text =
-        DateFormat('yyyy-MM-dd').format(selectedDate);
+    cond_payement_controller.datePayementAdd.text = DateFormat('yyyy-MM-dd').format(selectedDate);
 
-    cond_exam_controller.date_examenController.text =
-        DateFormat('yyyy-MM-dd').format(selectedDate);
+    cond_exam_controller.date_examenController.text = DateFormat('yyyy-MM-dd').format(selectedDate);
 
     cond_exam_controller.getListExamenByID(thisCondidat.id);
     cond_payement_controller.getListPayementByID(thisCondidat.id);
@@ -120,9 +116,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
               height: 55,
               child: Padding(
                 padding: EdgeInsets.fromLTRB(0, 16, 0, 0),
-                child: Text("Fiche Condidat",
-                    style: boldTextStyle(
-                        color: db6_white, size: 13, fontFamily: fontBold)),
+                child: Text("Fiche Condidat", style: boldTextStyle(color: db6_white, size: 13, fontFamily: fontBold)),
               ),
             ),
             backgroundColor: sdPrimaryColor,
@@ -154,10 +148,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                           fit: BoxFit.cover,
                           placeholder: AssetImage('images/app/loading.gif'),
                           image: Image.network(
-                            URLpic +
-                                (thisCondidat.photo! == ''
-                                    ? 'unknown_profile.png'
-                                    : thisCondidat.photo!),
+                            URLpic + (thisCondidat.photo! == '' ? 'unknown_profile.png' : thisCondidat.photo!),
                           ).image,
                         ),
                       ),
@@ -166,15 +157,10 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(thisCondidat.nom! + ' ' + thisCondidat.prenom!,
-                            style: primaryTextStyle(
-                                size: 16, color: Colors.white)),
+                        Text(thisCondidat.nom! + ' ' + thisCondidat.prenom!, style: primaryTextStyle(size: 16, color: Colors.white)),
                         Padding(
                           padding: const EdgeInsets.only(top: 5),
-                          child: Text(
-                              thisCondidat.num_tel == null
-                                  ? ''
-                                  : "+ 216 " + thisCondidat.num_tel!,
+                          child: Text(thisCondidat.num_tel == null ? '' : "+ 216 " + thisCondidat.num_tel!,
                               style: primaryTextStyle(
                                 size: 10,
                                 color: Colors.white,
@@ -187,23 +173,14 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                 SizedBox(height: 30),
                 Container(
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(20),
-                          topRight: Radius.circular(20)),
-                      color: Colors.white),
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)), color: Colors.white),
                   padding: EdgeInsets.fromLTRB(16, 10, 16, 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      CondOption(
-                          "N° Total",
-                          thisCondidat.nbr_heur_total!.nb_heur_total! +
-                              " Hr(s)"),
+                      CondOption("N° Total", thisCondidat.nbr_heur_total!.nb_heur_total! + " Hr(s)"),
                       Container(height: 25, color: sdViewColor, width: 1),
-                      CondOption(
-                          "N° Affecter",
-                          thisCondidat.nb_heur_affecter!.nb_heur_affecter! +
-                              " Hr(s)"),
+                      CondOption("N° Affecter", thisCondidat.nb_heur_affecter!.nb_heur_affecter! + " Hr(s)"),
                       Container(height: 25, color: sdViewColor, width: 1),
                       CondOption("Examen", thisCondidat.examen!),
                     ],
@@ -220,9 +197,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                         )),
                     Container(
                         margin: const EdgeInsets.only(left: 7.0),
-                        child: Text("Examens programmée :",
-                            style: secondaryTextStyle(
-                                size: 12, color: kTextColor))),
+                        child: Text("Examens programmée :", style: secondaryTextStyle(size: 12, color: kTextColor))),
                     Expanded(
                       child: Align(
                         alignment: Alignment.topRight,
@@ -276,10 +251,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                           size: 18,
                         )),
                     Container(
-                        margin: const EdgeInsets.only(left: 2.0),
-                        child: Text("Payements :",
-                            style: secondaryTextStyle(
-                                size: 14, color: kTextColor))),
+                        margin: const EdgeInsets.only(left: 2.0), child: Text("Payements :", style: secondaryTextStyle(size: 14, color: kTextColor))),
                     Expanded(
                       child: Align(
                         alignment: Alignment.topRight,
@@ -311,8 +283,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                             child: Text("Liste vide"),
                           )
                         : ListView.builder(
-                            itemCount:
-                                AllPayement.isEmpty ? 0 : AllPayement.length,
+                            itemCount: AllPayement.isEmpty ? 0 : AllPayement.length,
                             shrinkWrap: true,
                             padding: EdgeInsets.only(bottom: 16),
                             physics: NeverScrollableScrollPhysics(),
@@ -367,8 +338,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
           CircleAvatar(
             radius: 20,
             backgroundColor: getColorExam(examen),
-            child: Text(examen.resultat!,
-                style: boldTextStyle(color: Colors.black, size: 8)),
+            child: Text(examen.resultat!, style: boldTextStyle(color: Colors.black, size: 8)),
           ),
           SizedBox(
             width: 10,
@@ -379,11 +349,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
               Text(examen.typeExamen!, style: boldTextStyle(size: 13)),
               Padding(
                 padding: const EdgeInsets.only(top: 5),
-                child: Text(
-                    dateformattt(examen.dateExamen!).toString() +
-                        " " +
-                        examen.centreExamen!,
-                    style: secondaryTextStyle(size: 8)),
+                child: Text(dateformattt(examen.dateExamen!).toString() + " " + examen.centreExamen!, style: secondaryTextStyle(size: 8)),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 5),
@@ -397,10 +363,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: Text(
-                    "N° Conv : " +
-                        examen.numConvocation! +
-                        " -- N° Liste : " +
-                        examen.numListe!,
+                    "N° Conv : " + examen.numConvocation! + " -- N° Liste : " + examen.numListe!,
                     style: secondaryTextStyle(size: 10, color: Colors.white),
                   ),
                 ),
@@ -436,12 +399,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      return Alert(
-                          context,
-                          "Confirmation",
-                          "Voulez-vous vraiment supprimer ce paiement ?",
-                          examen.id,
-                          ConfirmDeleteExamen);
+                      return Alert(context, "Confirmation", "Voulez-vous vraiment supprimer ce paiement ?", examen.id, ConfirmDeleteExamen);
                     },
                   );
                 },
@@ -463,15 +421,11 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
         context: aContext,
         isScrollControlled: true,
         builder: (context) {
-          return StatefulBuilder(builder: (BuildContext context,
-              StateSetter setModalState /*You can rename this!*/) {
+          return StatefulBuilder(builder: (BuildContext context, StateSetter setModalState /*You can rename this!*/) {
             return SingleChildScrollView(
               child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20)),
-                    color: Colors.white),
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)), color: Colors.white),
                 padding: EdgeInsets.all(16),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -486,15 +440,13 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         Flexible(
-                          child: editNumericStyle("N° convocation",
-                              cond_exam_controller.num_convocationController),
+                          child: editNumericStyle("N° convocation", cond_exam_controller.num_convocationController),
                         ),
                         SizedBox(
                           width: 20.0,
                         ),
                         Flexible(
-                          child: editNumericStyle("Numéro liste",
-                              cond_exam_controller.num_listeController),
+                          child: editNumericStyle("Numéro liste", cond_exam_controller.num_listeController),
                         ),
                       ],
                     ),
@@ -512,27 +464,18 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                                 cond_exam_controller.date_examenController,
                               );
                             },
-                            controller:
-                                cond_exam_controller.date_examenController,
+                            controller: cond_exam_controller.date_examenController,
                             style: TextStyle(color: blackColor),
                             decoration: InputDecoration(
-                              contentPadding:
-                                  EdgeInsets.fromLTRB(24, 16, 24, 16),
-                              hintStyle: primaryTextStyle(
-                                  color: appStore.isDarkModeOn
-                                      ? white.withOpacity(0.5)
-                                      : grey),
+                              contentPadding: EdgeInsets.fromLTRB(24, 16, 24, 16),
+                              hintStyle: primaryTextStyle(color: appStore.isDarkModeOn ? white.withOpacity(0.5) : grey),
                               filled: true,
                               labelText: "Date Examen",
                               fillColor: appStore.appBarColor,
                               enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                  borderSide: BorderSide(
-                                      color: kPrimaryColor, width: 1.0)),
+                                  borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: kPrimaryColor, width: 1.0)),
                               focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                  borderSide: BorderSide(
-                                      color: kSecondaryColor, width: 1.0)),
+                                  borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: kSecondaryColor, width: 1.0)),
                               suffixIcon: GestureDetector(
                                 onTap: () {
                                   selectDate(
@@ -541,8 +484,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                                     cond_exam_controller.date_examenController,
                                   );
                                 },
-                                child: Icon(Icons.calendar_today,
-                                    color: kPrimaryColor, size: 16),
+                                child: Icon(Icons.calendar_today, color: kPrimaryColor, size: 16),
                               ),
                               labelStyle: TextStyle(color: gray, fontSize: 14),
                             ),
@@ -556,29 +498,20 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                             onTap: () {
                               FocusScope.of(context).requestFocus(FocusNode());
 
-                              selectTime(context, setModalState,
-                                  cond_exam_controller.timeExamController);
+                              selectTime(context, setModalState, cond_exam_controller.timeExamController);
                             },
                             controller: cond_exam_controller.timeExamController,
                             style: TextStyle(color: blackColor),
                             decoration: InputDecoration(
-                              contentPadding:
-                                  EdgeInsets.fromLTRB(24, 16, 24, 16),
-                              hintStyle: primaryTextStyle(
-                                  color: appStore.isDarkModeOn
-                                      ? white.withOpacity(0.5)
-                                      : grey),
+                              contentPadding: EdgeInsets.fromLTRB(24, 16, 24, 16),
+                              hintStyle: primaryTextStyle(color: appStore.isDarkModeOn ? white.withOpacity(0.5) : grey),
                               filled: true,
                               labelText: "Heur Examen",
                               fillColor: appStore.appBarColor,
                               enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                  borderSide: BorderSide(
-                                      color: kPrimaryColor, width: 1.0)),
+                                  borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: kPrimaryColor, width: 1.0)),
                               focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                  borderSide: BorderSide(
-                                      color: kSecondaryColor, width: 1.0)),
+                                  borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: kSecondaryColor, width: 1.0)),
                               suffixIcon: GestureDetector(
                                 onTap: () {
                                   selectDate(
@@ -587,8 +520,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                                     cond_exam_controller.timeExamController,
                                   );
                                 },
-                                child: Icon(Icons.access_time,
-                                    color: kPrimaryColor, size: 16),
+                                child: Icon(Icons.access_time, color: kPrimaryColor, size: 16),
                               ),
                               labelStyle: TextStyle(color: gray, fontSize: 14),
                             ),
@@ -608,8 +540,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                       direction: Axis.horizontal,
                       children: [
                         Theme(
-                          data: Theme.of(context).copyWith(
-                              unselectedWidgetColor: appStore.textPrimaryColor),
+                          data: Theme.of(context).copyWith(unselectedWidgetColor: appStore.textPrimaryColor),
                           child: Radio(
                             value: 'Code',
                             groupValue: TypeExamRadio,
@@ -649,15 +580,11 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                     centr_exam_controller.obx(
                       (state) {
                         AllCentrExam = centr_exam_controller.liste.value;
-                        listOfCategory =
-                            AllCentrExam.map((e) => e.libelle.toString())
-                                .toList();
+                        listOfCategory = AllCentrExam.map((e) => e.libelle.toString()).toList();
                         selectedCentrExam = listOfCategory[0];
                         (!selected_centrExam)
-                            ? cond_exam_controller.centre_examenController
-                                .text = selectedCentrExam!
-                            : cond_exam_controller.centre_examenController
-                                .text = ChangedCentrExam!;
+                            ? cond_exam_controller.centre_examenController.text = selectedCentrExam!
+                            : cond_exam_controller.centre_examenController.text = ChangedCentrExam!;
                         return Card(
                             elevation: 4,
                             child: Padding(
@@ -665,9 +592,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                               child: DropdownButton(
                                 isExpanded: true,
                                 dropdownColor: appStore.appBarColor,
-                                value: ((!selected_centrExam)
-                                    ? selectedCentrExam
-                                    : ChangedCentrExam),
+                                value: ((!selected_centrExam) ? selectedCentrExam : ChangedCentrExam),
                                 style: boldTextStyle(),
                                 icon: Icon(
                                   Icons.keyboard_arrow_down,
@@ -683,9 +608,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                                 items: listOfCategory.map((caisse) {
                                   return DropdownMenuItem(
                                     value: caisse,
-                                    child:
-                                        Text(caisse, style: primaryTextStyle())
-                                            .paddingLeft(8),
+                                    child: Text(caisse, style: primaryTextStyle()).paddingLeft(8),
                                   );
                                 }).toList(),
                               ),
@@ -702,14 +625,11 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                     bureau_controller.obx(
                       (state) {
                         AllBureau = bureau_controller.liste.value;
-                        listOfCategory =
-                            AllBureau.map((e) => e.nom.toString()).toList();
+                        listOfCategory = AllBureau.map((e) => e.nom.toString()).toList();
                         selectedBureau = listOfCategory[0];
                         (!selected_bureau)
-                            ? cond_exam_controller.bureauontroller.text =
-                                selectedBureau!
-                            : cond_exam_controller.bureauontroller.text =
-                                ChangedBureau!;
+                            ? cond_exam_controller.bureauontroller.text = selectedBureau!
+                            : cond_exam_controller.bureauontroller.text = ChangedBureau!;
                         return Card(
                             elevation: 4,
                             child: Padding(
@@ -717,9 +637,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                               child: DropdownButton(
                                 isExpanded: true,
                                 dropdownColor: appStore.appBarColor,
-                                value: ((!selected_bureau)
-                                    ? selectedBureau
-                                    : ChangedBureau),
+                                value: ((!selected_bureau) ? selectedBureau : ChangedBureau),
                                 style: boldTextStyle(),
                                 icon: Icon(
                                   Icons.keyboard_arrow_down,
@@ -735,9 +653,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                                 items: listOfCategory.map((value) {
                                   return DropdownMenuItem(
                                     value: value,
-                                    child:
-                                        Text(value, style: primaryTextStyle())
-                                            .paddingLeft(8),
+                                    child: Text(value, style: primaryTextStyle()).paddingLeft(8),
                                   );
                                 }).toList(),
                               ),
@@ -751,8 +667,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                         addExamModal().then((value) {
                           if (value == "true") {
                             finish(context);
-                            cond_exam_controller
-                                .getListExamenByID(thisCondidat.id);
+                            cond_exam_controller.getListExamenByID(thisCondidat.id);
 
                             toast("Examen ajouter avec succée");
                           } else {
@@ -803,9 +718,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
         thisCondidat.id!.toString(),
         cond_exam_controller.num_listeController.text,
         cond_exam_controller.num_convocationController.text,
-        cond_exam_controller.date_examenController.text +
-            " " +
-            cond_exam_controller.timeExamController.text,
+        cond_exam_controller.date_examenController.text + " " + cond_exam_controller.timeExamController.text,
         /* cond_exam_controller.date_examenController.text, */
         cond_exam_controller.centre_examenController.text,
         TypeExamAdd.text,
@@ -865,8 +778,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
               Text(payement.caisse!, style: boldTextStyle(size: 13)),
               Padding(
                 padding: const EdgeInsets.only(top: 5),
-                child: Text(payement.date_paiement!,
-                    style: secondaryTextStyle(size: 8)),
+                child: Text(payement.date_paiement!, style: secondaryTextStyle(size: 8)),
               ),
               Padding(
                   padding: const EdgeInsets.only(top: 5),
@@ -883,8 +795,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                         ),
                         child: Text(
                           "Type : " + payement.type!,
-                          style:
-                              secondaryTextStyle(size: 10, color: Colors.white),
+                          style: secondaryTextStyle(size: 10, color: Colors.white),
                         ),
                       ),
                       SizedBox(
@@ -901,8 +812,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                         ),
                         child: Text(
                           "Mode : " + payement.mode_paiement!,
-                          style:
-                              secondaryTextStyle(size: 10, color: Colors.white),
+                          style: secondaryTextStyle(size: 10, color: Colors.white),
                         ),
                       ),
                     ],
@@ -921,12 +831,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return Alert(
-                            context,
-                            "Confirmation",
-                            "Voulez-vous vraiment supprimer ce paiement ?",
-                            payement.id,
-                            ConfirmDeletepayement);
+                        return Alert(context, "Confirmation", "Voulez-vous vraiment supprimer ce paiement ?", payement.id, ConfirmDeletepayement);
                       },
                     );
                   },
@@ -949,15 +854,11 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
         context: aContext,
         isScrollControlled: true,
         builder: (context) {
-          return StatefulBuilder(builder: (BuildContext context,
-              StateSetter setModalState /*You can rename this!*/) {
+          return StatefulBuilder(builder: (BuildContext context, StateSetter setModalState /*You can rename this!*/) {
             return SingleChildScrollView(
               child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20)),
-                    color: Colors.white),
+                decoration:
+                    BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)), color: Colors.white),
                 padding: EdgeInsets.all(16),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -976,14 +877,11 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                     caisse_controller.obx(
                       (state) {
                         AllCaisse = caisse_controller.listeCaisse.value;
-                        listOfCategory =
-                            AllCaisse.map((e) => e.caisse.toString()).toList();
+                        listOfCategory = AllCaisse.map((e) => e.caisse.toString()).toList();
                         selectedCaisse = listOfCategory[0];
                         (!selected_caisse)
-                            ? cond_payement_controller
-                                .caisseTextController.text = selectedCaisse!
-                            : cond_payement_controller
-                                .caisseTextController.text = ChangedCaisse!;
+                            ? cond_payement_controller.caisseTextController.text = selectedCaisse!
+                            : cond_payement_controller.caisseTextController.text = ChangedCaisse!;
                         return Card(
                             elevation: 4,
                             child: Padding(
@@ -991,9 +889,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                               child: DropdownButton(
                                 isExpanded: true,
                                 dropdownColor: appStore.appBarColor,
-                                value: ((!selected_caisse)
-                                    ? selectedCaisse
-                                    : ChangedCaisse),
+                                value: ((!selected_caisse) ? selectedCaisse : ChangedCaisse),
                                 style: boldTextStyle(),
                                 icon: Icon(
                                   Icons.keyboard_arrow_down,
@@ -1009,9 +905,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                                 items: listOfCategory.map((caisse) {
                                   return DropdownMenuItem(
                                     value: caisse,
-                                    child:
-                                        Text(caisse, style: primaryTextStyle())
-                                            .paddingLeft(8),
+                                    child: Text(caisse, style: primaryTextStyle()).paddingLeft(8),
                                   );
                                 }).toList(),
                               ),
@@ -1031,8 +925,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                       direction: Axis.horizontal,
                       children: [
                         Theme(
-                          data: Theme.of(context).copyWith(
-                              unselectedWidgetColor: appStore.textPrimaryColor),
+                          data: Theme.of(context).copyWith(unselectedWidgetColor: appStore.textPrimaryColor),
                           child: Radio(
                             value: 'Espece',
                             groupValue: ModeRadio,
@@ -1067,28 +960,20 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                       child: TextFormField(
-                        controller:
-                            cond_payement_controller.montantTextController,
+                        controller: cond_payement_controller.montantTextController,
                         keyboardType: TextInputType.number,
                         style: TextStyle(fontSize: 16, fontFamily: fontRegular),
                         decoration: InputDecoration(
                           contentPadding: EdgeInsets.fromLTRB(24, 16, 24, 16),
                           hintText: "Montant",
-                          hintStyle: primaryTextStyle(
-                              color: appStore.isDarkModeOn
-                                  ? white.withOpacity(0.5)
-                                  : grey),
+                          hintStyle: primaryTextStyle(color: appStore.isDarkModeOn ? white.withOpacity(0.5) : grey),
                           filled: true,
                           labelText: "Montant",
                           fillColor: appStore.appBarColor,
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(16),
-                              borderSide:
-                                  BorderSide(color: kPrimaryColor, width: 1.0)),
-                          focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(16),
-                              borderSide: BorderSide(
-                                  color: kSecondaryColor, width: 1.0)),
+                          enabledBorder:
+                              OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: kPrimaryColor, width: 1.0)),
+                          focusedBorder:
+                              OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: kSecondaryColor, width: 1.0)),
                         ),
                       ),
                     ),
@@ -1104,8 +989,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                       direction: Axis.horizontal,
                       children: [
                         Theme(
-                          data: Theme.of(context).copyWith(
-                              unselectedWidgetColor: appStore.textPrimaryColor),
+                          data: Theme.of(context).copyWith(unselectedWidgetColor: appStore.textPrimaryColor),
                           child: Radio(
                             value: 'Paiement',
                             groupValue: TypeRadio,
@@ -1144,24 +1028,18 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                     TextFormField(
                       onTap: () {
                         FocusScope.of(context).requestFocus(FocusNode());
-                        selectDate(context, setModalState,
-                            cond_payement_controller.datePayementAdd);
+                        selectDate(context, setModalState, cond_payement_controller.datePayementAdd);
                       },
                       controller: cond_payement_controller.datePayementAdd,
                       style: TextStyle(color: blackColor),
                       decoration: InputDecoration(
-                        enabledBorder: UnderlineInputBorder(
-                            borderSide: BorderSide(color: kBlueColor)),
-                        focusedBorder: UnderlineInputBorder(
-                            borderSide:
-                                BorderSide(color: kDefaultIconDarkColor)),
+                        enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: kBlueColor)),
+                        focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: kDefaultIconDarkColor)),
                         suffixIcon: GestureDetector(
                           onTap: () {
-                            selectDate(context, setModalState,
-                                cond_payement_controller.datePayementAdd);
+                            selectDate(context, setModalState, cond_payement_controller.datePayementAdd);
                           },
-                          child: Icon(Icons.calendar_today,
-                              color: kPrimaryColor, size: 16),
+                          child: Icon(Icons.calendar_today, color: kPrimaryColor, size: 16),
                         ),
                         labelStyle: TextStyle(color: gray, fontSize: 14),
                       ),
@@ -1173,8 +1051,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                         addPayementModal().then((value) {
                           if (value == "true") {
                             finish(context);
-                            cond_payement_controller
-                                .getListPayementByID(thisCondidat.id);
+                            cond_payement_controller.getListPayementByID(thisCondidat.id);
 
                             toast("Payement ajouter avec succée");
                           } else {
@@ -1264,8 +1141,7 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
   Widget Alert(context, String title, String msg, id, fnc) {
     AlertDialog mAlertItem = AlertDialog(
       backgroundColor: appStore.scaffoldBackground,
-      title:
-          Text(title, style: boldTextStyle(color: appStore.textPrimaryColor)),
+      title: Text(title, style: boldTextStyle(color: appStore.textPrimaryColor)),
       content: Text(
         msg,
         style: secondaryTextStyle(color: appStore.textSecondaryColor),

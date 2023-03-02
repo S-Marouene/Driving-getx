@@ -12,8 +12,7 @@ import 'package:nb_utils/nb_utils.dart';
 class ResultatExamen extends StatefulWidget {
   final String IDExamen;
   final String CondidatID;
-  const ResultatExamen(
-      {super.key, required this.IDExamen, required this.CondidatID});
+  const ResultatExamen({super.key, required this.IDExamen, required this.CondidatID});
 
   @override
   // ignore: library_private_types_in_public_api, no_logic_in_create_state
@@ -38,8 +37,7 @@ class _ResultatExamenState extends State<ResultatExamen> {
   String? ChangedCentrExam;
   bool selected_centrExam = false;
 
-  final ExaminateurController examinateur_controller =
-      Get.put(ExaminateurController());
+  final ExaminateurController examinateur_controller = Get.put(ExaminateurController());
   final ExamenController cond_exam_controller = Get.find();
 
   @override
@@ -69,9 +67,7 @@ class _ResultatExamenState extends State<ResultatExamen> {
           mainAxisSize: MainAxisSize.min, // To make the card compact
           children: <Widget>[
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Text('Résultat',
-                  style: boldTextStyle(
-                      color: appStore.textPrimaryColor, size: 20)),
+              Text('Résultat', style: boldTextStyle(color: appStore.textPrimaryColor, size: 20)),
               GestureDetector(
                 onTap: () {
                   finish(context);
@@ -91,32 +87,28 @@ class _ResultatExamenState extends State<ResultatExamen> {
                 Row(
                   children: [
                     Theme(
-                      data: Theme.of(context).copyWith(
-                          unselectedWidgetColor: appStore.textPrimaryColor),
+                      data: Theme.of(context).copyWith(unselectedWidgetColor: appStore.textPrimaryColor),
                       child: Radio(
                         value: 'Réussi',
                         groupValue: ResultatExamRadio,
                         onChanged: (dynamic value) {
                           setState(() {
                             ResultatExamRadio = value;
-                            examinateur_controller.ResultatController.text =
-                                ResultatExamRadio;
+                            examinateur_controller.ResultatController.text = ResultatExamRadio;
                           });
                         },
                       ),
                     ),
                     Text('Réussi', style: primaryTextStyle()),
                     Theme(
-                      data: Theme.of(context).copyWith(
-                          unselectedWidgetColor: appStore.textPrimaryColor),
+                      data: Theme.of(context).copyWith(unselectedWidgetColor: appStore.textPrimaryColor),
                       child: Radio(
                         value: 'Ajourné',
                         groupValue: ResultatExamRadio,
                         onChanged: (dynamic value) {
                           setState(() {
                             ResultatExamRadio = value;
-                            examinateur_controller.ResultatController.text =
-                                ResultatExamRadio;
+                            examinateur_controller.ResultatController.text = ResultatExamRadio;
                           });
                         },
                       ),
@@ -127,32 +119,28 @@ class _ResultatExamenState extends State<ResultatExamen> {
                 Row(
                   children: [
                     Theme(
-                      data: Theme.of(context).copyWith(
-                          unselectedWidgetColor: appStore.textPrimaryColor),
+                      data: Theme.of(context).copyWith(unselectedWidgetColor: appStore.textPrimaryColor),
                       child: Radio(
                         value: 'En cours',
                         groupValue: ResultatExamRadio,
                         onChanged: (dynamic value) {
                           setState(() {
                             ResultatExamRadio = value;
-                            examinateur_controller.ResultatController.text =
-                                ResultatExamRadio;
+                            examinateur_controller.ResultatController.text = ResultatExamRadio;
                           });
                         },
                       ),
                     ),
                     Text('En cours', style: primaryTextStyle()),
                     Theme(
-                      data: Theme.of(context).copyWith(
-                          unselectedWidgetColor: appStore.textPrimaryColor),
+                      data: Theme.of(context).copyWith(unselectedWidgetColor: appStore.textPrimaryColor),
                       child: Radio(
                         value: 'Excusé',
                         groupValue: ResultatExamRadio,
                         onChanged: (dynamic value) {
                           setState(() {
                             ResultatExamRadio = value;
-                            examinateur_controller.ResultatController.text =
-                                ResultatExamRadio;
+                            examinateur_controller.ResultatController.text = ResultatExamRadio;
                           });
                         },
                       ),
@@ -171,16 +159,12 @@ class _ResultatExamenState extends State<ResultatExamen> {
             examinateur_controller.obx(
               (state) {
                 AllExaminateur = examinateur_controller.liste.value;
-                listOfCategory = AllExaminateur.map(
-                        (e) => (e.prenom.toString() + " " + e.nom.toString()))
-                    .toList();
+                listOfCategory = AllExaminateur.map((e) => (e.prenom.toString() + " " + e.nom.toString())).toList();
 
                 selectedCentrExam = listOfCategory[0];
                 (!selected_centrExam)
-                    ? examinateur_controller.examinateur.text =
-                        selectedCentrExam!
-                    : examinateur_controller.examinateur.text =
-                        ChangedCentrExam!;
+                    ? examinateur_controller.examinateur.text = selectedCentrExam!
+                    : examinateur_controller.examinateur.text = ChangedCentrExam!;
                 return Card(
                     elevation: 4,
                     child: Padding(
@@ -188,9 +172,7 @@ class _ResultatExamenState extends State<ResultatExamen> {
                       child: DropdownButton(
                         isExpanded: true,
                         dropdownColor: appStore.appBarColor,
-                        value: ((!selected_centrExam)
-                            ? selectedCentrExam
-                            : ChangedCentrExam),
+                        value: ((!selected_centrExam) ? selectedCentrExam : ChangedCentrExam),
                         style: boldTextStyle(),
                         icon: Icon(
                           Icons.keyboard_arrow_down,
@@ -206,8 +188,7 @@ class _ResultatExamenState extends State<ResultatExamen> {
                         items: listOfCategory.map((caisse) {
                           return DropdownMenuItem(
                             value: caisse,
-                            child: Text(caisse, style: primaryTextStyle())
-                                .paddingLeft(8),
+                            child: Text(caisse, style: primaryTextStyle()).paddingLeft(8),
                           );
                         }).toList(),
                       ),

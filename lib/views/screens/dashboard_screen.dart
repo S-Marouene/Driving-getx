@@ -36,13 +36,9 @@ class _DashboardScreenState extends SampleViewState {
   ];
 
   final ScrollController controller = ScrollController();
-  late List<DateTime> _visibleDates;
   CalendarView _view = CalendarView.week;
 
   Appointment? _selectedAppointment;
-  bool _isAllDay = false;
-  String _subject = '';
-  int _selectedColorIndex = 0;
   final GlobalKey _globalKey = GlobalKey();
 
   //final AuthController authController = Get.put(AuthController());
@@ -167,116 +163,20 @@ class _DashboardScreenState extends SampleViewState {
       final DateTime selectedDate = calendarTapDetails.date!;
       final CalendarElement targetElement = calendarTapDetails.targetElement;
 
-      /// To open the appointment editor for web,
-      /// when the screen width is greater than 767.
-      if (myModel.isWebFullView && !myModel.isMobileResolution) {
-        final bool isAppointmentTapped =
-            calendarTapDetails.targetElement == CalendarElement.appointment;
-        showDialog<Widget>(
-            context: context,
-            builder: (BuildContext context) {
-              final List<Appointment> appointment = <Appointment>[];
-              Appointment? newAppointment;
-
-              /// Creates a new appointment, which is displayed on the tapped
-              /// calendar element, when the editor is opened.
-              if (_selectedAppointment == null) {
-                _isAllDay = calendarTapDetails.targetElement ==
-                    CalendarElement.allDayPanel;
-                _selectedColorIndex = 0;
-                _subject = '';
-                final DateTime date = calendarTapDetails.date!;
-
-                newAppointment = Appointment(
-                  startTime: date,
-                  endTime: date.add(const Duration(hours: 1)),
-                  color: _colorCollection[_selectedColorIndex],
-                  isAllDay: _isAllDay,
-                  subject: _subject == '' ? '(No title)' : _subject,
-                );
-                appointment.add(newAppointment);
-
-                _dataSource.appointments.add(appointment[0]);
-
-                SchedulerBinding.instance
-                    .addPostFrameCallback((Duration duration) {
-                  _dataSource.notifyListeners(
-                      CalendarDataSourceAction.add, appointment);
-                });
-
-                _selectedAppointment = newAppointment;
-              }
-
-              return WillPopScope(
-                onWillPop: () async {
-                  if (newAppointment != null) {
-                    /// To remove the created appointment when the pop-up closed
-                    /// without saving the appointment.
-                    _dataSource.appointments.removeAt(
-                        _dataSource.appointments.indexOf(newAppointment));
-                    _dataSource.notifyListeners(CalendarDataSourceAction.remove,
-                        <Appointment>[newAppointment]);
-                  }
-                  return true;
-                },
-                child: Center(
-                    child: SizedBox(
-                        width: isAppointmentTapped ? 400 : 500,
-                        height: isAppointmentTapped
-                            ? (_selectedAppointment!.location == null ||
-                                    _selectedAppointment!.location!.isEmpty
-                                ? 150
-                                : 200)
-                            : 400,
-                        child: Theme(
-                            data: myModel.themeData,
-                            child: Card(
-                              margin: EdgeInsets.zero,
-                              color: myModel.cardThemeColor,
-                              shape: const RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(4))),
-                              child: isAppointmentTapped
-                                  ? displayAppointmentDetails(
-                                      context,
-                                      targetElement,
-                                      selectedDate,
-                                      myModel,
-                                      _selectedAppointment!,
-                                      _colorCollection,
-                                      _colorNames,
-                                      _dataSource,
-                                      _timeZoneCollection,
-                                      _visibleDates)
-                                  : PopUpAppointmentEditor(
-                                      myModel,
-                                      newAppointment,
-                                      appointment,
-                                      _dataSource,
-                                      _colorCollection,
-                                      _colorNames,
-                                      _selectedAppointment!,
-                                      _timeZoneCollection,
-                                      _visibleDates),
-                            )))),
-              );
-            });
-      } else {
-        /// Navigates to the appointment editor page on mobile
-        Navigator.push<Widget>(
-          context,
-          MaterialPageRoute<Widget>(
-              builder: (BuildContext context) => AppointmentEditor(
-                  myModel,
-                  _selectedAppointment,
-                  targetElement,
-                  selectedDate,
-                  _colorCollection,
-                  _colorNames,
-                  _dataSource,
-                  _timeZoneCollection)),
-        );
-      }
+      /// Navigates to the appointment editor page on mobile
+      Navigator.push<Widget>(
+        context,
+        MaterialPageRoute<Widget>(
+            builder: (BuildContext context) => AppointmentEditor(
+                myModel,
+                _selectedAppointment,
+                targetElement,
+                selectedDate,
+                _colorCollection,
+                _colorNames,
+                _dataSource,
+                _timeZoneCollection)),
+      );
     }
   }
 
@@ -301,7 +201,6 @@ class _DashboardScreenState extends SampleViewState {
   }
 
   void _onViewChanged(ViewChangedDetails visibleDatesChangedDetails) {
-    _visibleDates = visibleDatesChangedDetails.visibleDates;
     if (_view == calendarController.view ||
         !myModel.isWebFullView ||
         (_view != CalendarView.month &&
@@ -361,7 +260,7 @@ class _DashboardScreenState extends SampleViewState {
       appointments.add(alternativeDayAppointment0);
     });
 
-    final DateTime currentDate0 = DateTime.now();
+    /* final DateTime currentDate0 = DateTime.now();
     final DateTime startTime0 =
         DateTime(currentDate0.year, currentDate0.month, currentDate0.day, 9);
     final DateTime endTime0 =
@@ -380,7 +279,7 @@ class _DashboardScreenState extends SampleViewState {
         recurrenceRule: SfCalendar.generateRRule(
             recurrencePropertiesForAlternativeDay0, startTime0, endTime0));
 
-    appointments.add(alternativeDayAppointment0);
+    appointments.add(alternativeDayAppointment0); */
 
     //Recurrence Appointment 1
     /* final DateTime currentDate = DateTime.now();
