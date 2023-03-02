@@ -37,7 +37,7 @@ class _DashboardScreenState extends SampleViewState {
   ];
 
   final ScrollController controller = ScrollController();
-  CalendarView _view = CalendarView.week;
+  CalendarView _view = CalendarView.schedule;
   Appointment? _selectedAppointment;
   final GlobalKey _globalKey = GlobalKey();
 
@@ -49,8 +49,13 @@ class _DashboardScreenState extends SampleViewState {
 
   @override
   void initState() {
-    conduite_controller.getAllConduite();
-    examens_controller.getallExmCalndr();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await conduite_controller.getAllConduite();
+      await examens_controller.getallExmCalndr();
+
+      setState(() {});
+    });
+
     calendarController.view = _view;
     super.initState();
   }
