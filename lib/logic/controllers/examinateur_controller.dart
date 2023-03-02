@@ -1,10 +1,10 @@
 import 'package:driving_getx/database/services/Condidat_service.dart';
+import 'package:driving_getx/database/services/examen_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import '../../database/models/examinateur.dart';
 
-class ExaminateurController extends GetxController
-    with StateMixin<List<Examinateur>> {
+class ExaminateurController extends GetxController with StateMixin<List<Examinateur>> {
   Rx<List<Examinateur>> liste = Rx<List<Examinateur>>([]);
 
   TextEditingController examinateur = TextEditingController();
@@ -28,7 +28,7 @@ class ExaminateurController extends GetxController
       "resultat": resultat,
     };
 
-    await ServiceCondidats.UpdateExamRes(examenUpdate, ExamenId).then((data) {
+    await ServiceExamens.UpdateExamRes(examenUpdate, ExamenId).then((data) {
       if (data != null) {
         if (data["success"] != null) {
           res.value = data["success"].toString();

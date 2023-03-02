@@ -7,6 +7,7 @@ import 'package:driving_getx/database/models/payements.dart';
 import 'package:driving_getx/logic/controllers/bureau_controller.dart';
 import 'package:driving_getx/logic/controllers/centre_exam_controller.dart';
 import 'package:driving_getx/logic/controllers/condidatcontroller.dart';
+import 'package:driving_getx/logic/controllers/examen_controller.dart';
 import 'package:driving_getx/main/utils/AppConstant.dart';
 import 'package:driving_getx/main/utils/AppWidget.dart';
 import 'package:driving_getx/main/utils/SDColors.dart';
@@ -157,7 +158,8 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(thisCondidat.nom! + ' ' + thisCondidat.prenom!, style: primaryTextStyle(size: 16, color: Colors.white)),
+                        Text(thisCondidat.nom! + ' ' + thisCondidat.prenom!,
+                            style: primaryTextStyle(size: 16, color: Colors.white)),
                         Padding(
                           padding: const EdgeInsets.only(top: 5),
                           child: Text(thisCondidat.num_tel == null ? '' : "+ 216 " + thisCondidat.num_tel!,
@@ -173,7 +175,8 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                 SizedBox(height: 30),
                 Container(
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)), color: Colors.white),
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+                      color: Colors.white),
                   padding: EdgeInsets.fromLTRB(16, 10, 16, 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -251,7 +254,8 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                           size: 18,
                         )),
                     Container(
-                        margin: const EdgeInsets.only(left: 2.0), child: Text("Payements :", style: secondaryTextStyle(size: 14, color: kTextColor))),
+                        margin: const EdgeInsets.only(left: 2.0),
+                        child: Text("Payements :", style: secondaryTextStyle(size: 14, color: kTextColor))),
                     Expanded(
                       child: Align(
                         alignment: Alignment.topRight,
@@ -349,7 +353,8 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
               Text(examen.typeExamen!, style: boldTextStyle(size: 13)),
               Padding(
                 padding: const EdgeInsets.only(top: 5),
-                child: Text(dateformattt(examen.dateExamen!).toString() + " " + examen.centreExamen!, style: secondaryTextStyle(size: 8)),
+                child: Text(dateformattt(examen.dateExamen!).toString() + " " + examen.centreExamen!,
+                    style: secondaryTextStyle(size: 8)),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 5),
@@ -399,7 +404,8 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      return Alert(context, "Confirmation", "Voulez-vous vraiment supprimer ce paiement ?", examen.id, ConfirmDeleteExamen);
+                      return Alert(context, "Confirmation", "Voulez-vous vraiment supprimer ce paiement ?", examen.id,
+                          ConfirmDeleteExamen);
                     },
                   );
                 },
@@ -424,8 +430,9 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
           return StatefulBuilder(builder: (BuildContext context, StateSetter setModalState /*You can rename this!*/) {
             return SingleChildScrollView(
               child: Container(
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)), color: Colors.white),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+                    color: Colors.white),
                 padding: EdgeInsets.all(16),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -473,9 +480,11 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                               labelText: "Date Examen",
                               fillColor: appStore.appBarColor,
                               enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: kPrimaryColor, width: 1.0)),
+                                  borderRadius: BorderRadius.circular(16),
+                                  borderSide: BorderSide(color: kPrimaryColor, width: 1.0)),
                               focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: kSecondaryColor, width: 1.0)),
+                                  borderRadius: BorderRadius.circular(16),
+                                  borderSide: BorderSide(color: kSecondaryColor, width: 1.0)),
                               suffixIcon: GestureDetector(
                                 onTap: () {
                                   selectDate(
@@ -509,9 +518,11 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                               labelText: "Heur Examen",
                               fillColor: appStore.appBarColor,
                               enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: kPrimaryColor, width: 1.0)),
+                                  borderRadius: BorderRadius.circular(16),
+                                  borderSide: BorderSide(color: kPrimaryColor, width: 1.0)),
                               focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: kSecondaryColor, width: 1.0)),
+                                  borderRadius: BorderRadius.circular(16),
+                                  borderSide: BorderSide(color: kSecondaryColor, width: 1.0)),
                               suffixIcon: GestureDetector(
                                 onTap: () {
                                   selectDate(
@@ -831,7 +842,8 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return Alert(context, "Confirmation", "Voulez-vous vraiment supprimer ce paiement ?", payement.id, ConfirmDeletepayement);
+                        return Alert(context, "Confirmation", "Voulez-vous vraiment supprimer ce paiement ?",
+                            payement.id, ConfirmDeletepayement);
                       },
                     );
                   },
@@ -857,8 +869,9 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
           return StatefulBuilder(builder: (BuildContext context, StateSetter setModalState /*You can rename this!*/) {
             return SingleChildScrollView(
               child: Container(
-                decoration:
-                    BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)), color: Colors.white),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+                    color: Colors.white),
                 padding: EdgeInsets.all(16),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
@@ -970,10 +983,12 @@ class _CondidatInfoScreenState extends State<CondidatInfoScreen> {
                           filled: true,
                           labelText: "Montant",
                           fillColor: appStore.appBarColor,
-                          enabledBorder:
-                              OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: kPrimaryColor, width: 1.0)),
-                          focusedBorder:
-                              OutlineInputBorder(borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: kSecondaryColor, width: 1.0)),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: BorderSide(color: kPrimaryColor, width: 1.0)),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              borderSide: BorderSide(color: kSecondaryColor, width: 1.0)),
                         ),
                       ),
                     ),

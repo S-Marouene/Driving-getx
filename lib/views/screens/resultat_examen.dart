@@ -1,7 +1,7 @@
 import 'package:driving_getx/database/models/examinateur.dart';
+import 'package:driving_getx/logic/controllers/examen_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../logic/controllers/condidatcontroller.dart';
 import '../../logic/controllers/examinateur_controller.dart';
 import '../../main/utils/AppWidget.dart';
 import '../../main/utils/SDStyle.dart';
