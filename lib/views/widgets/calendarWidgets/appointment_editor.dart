@@ -1,9 +1,13 @@
 import 'dart:core';
+import 'package:driving_getx/main/utils/AppWidget.dart';
+import 'package:driving_getx/views/widgets/tools_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'model.dart';
+// ignore: depend_on_referenced_packages
+import 'package:nb_utils/nb_utils.dart';
 
 class AppointmentEditor extends StatefulWidget {
   // ignore: use_key_in_widget_constructors
@@ -18,7 +22,6 @@ class AppointmentEditor extends StatefulWidget {
   final List<Color> colorCollection;
   final List<String> colorNames;
   final CalendarDataSource events;
-  //final List<String> timeZoneCollection;
   final CalendarResource? selectedResource;
   @override
   // ignore: library_private_types_in_public_api
@@ -35,6 +38,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
   bool _isAllDay = false;
   String _subject = '';
   String _photo = '';
+  String _num_tel = '';
   String? _notes;
   List<Object>? _resourceIds;
   List<CalendarResource> _selectedResources = <CalendarResource>[];
@@ -52,7 +56,6 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
     super.didUpdateWidget(oldWidget);
   }
 
-  /// Updates the required editor's default field
   void _updateAppointmentProperties() {
     if (widget.selectedAppointment != null) {
       _startDate = widget.selectedAppointment!.startTime;
@@ -62,6 +65,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
       _subject = widget.selectedAppointment!.subject == '(No title)' ? '' : widget.selectedAppointment!.subject;
 
       _photo = widget.selectedAppointment!.photo == '(No photo)' ? '' : widget.selectedAppointment!.photo;
+      _num_tel = widget.selectedAppointment!.num_tel == 'Contact' ? '' : widget.selectedAppointment!.num_tel;
 
       _notes = widget.selectedAppointment!.notes;
       _resourceIds = widget.selectedAppointment!.resourceIds?.sublist(0);
@@ -71,6 +75,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
       _subject = '';
       _notes = '';
       _photo = '';
+      _num_tel = '';
 
       final DateTime date = widget.selectedDate;
       _startDate = date;
@@ -115,6 +120,7 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                   child: ListTile(
                     contentPadding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
                     title: TextField(
+                      enabled: false,
                       controller: TextEditingController(text: _subject),
                       onChanged: (String value) {
                         _subject = value;
@@ -135,6 +141,27 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
               height: 1.0,
               thickness: 1,
             ),
+            ListTile(
+              contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
+              leading: Icon(
+                Icons.phone,
+                color: defaultColor,
+              ),
+              title: TextField(
+                controller: TextEditingController(text: _num_tel),
+                cursorColor: widget.model.backgroundColor,
+                onChanged: (String value) {
+                  _notes = value;
+                },
+                keyboardType: TextInputType.multiline,
+                maxLines: widget.model.isWebFullView ? 1 : null,
+                style: TextStyle(fontSize: 16, color: defaultColor, fontWeight: FontWeight.w400),
+                decoration: const InputDecoration(
+                  border: InputBorder.none,
+                  hintText: 'Contact',
+                ),
+              ),
+            ),
             const Divider(
               height: 1.0,
               thickness: 1,
@@ -153,12 +180,18 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                       child: Align(
                           alignment: Alignment.centerRight,
                           child: Switch(
-                            value: _isAllDay,
+                            //to disable
+                            onChanged: null,
+                            value: true,
+                            inactiveThumbColor: Colors.tealAccent,
+                            inactiveTrackColor: Colors.tealAccent.withOpacity(0.5),
+                            //to enable
+                            /* value: _isAllDay,
                             onChanged: (bool value) {
                               setState(() {
                                 _isAllDay = value;
                               });
-                            },
+                            }, */
                           ))),
                 ])),
             ListTile(
@@ -343,60 +376,139 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                       }));
                 },
               ),
-            const Divider(
-              height: 1.0,
-              thickness: 1,
-            ),
-            ListTile(
-              contentPadding: const EdgeInsets.fromLTRB(5, 2, 5, 2),
-              leading: Icon(Icons.lens, color: widget.colorCollection[_selectedColorIndex]),
-              title: Text(
-                widget.colorNames[_selectedColorIndex],
-              ),
-              onTap: () {
-                showDialog<Widget>(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return _CalendarColorPicker(
-                      widget.colorCollection,
-                      _selectedColorIndex,
-                      widget.colorNames,
-                      widget.model,
-                      onChanged: (_PickerChangedDetails details) {
-                        _selectedColorIndex = details.index;
-                      },
-                    );
-                  },
-                ).then((dynamic value) => setState(() {
-                      /// update the color picker changes
-                    }));
-              },
-            ),
-            const Divider(
-              height: 1.0,
-              thickness: 1,
-            ),
-            ListTile(
-              contentPadding: const EdgeInsets.all(5),
-              leading: Icon(
-                Icons.subject,
-                color: defaultColor,
-              ),
-              title: TextField(
-                controller: TextEditingController(text: _notes),
-                cursorColor: widget.model.backgroundColor,
-                onChanged: (String value) {
-                  _notes = value;
-                },
-                keyboardType: TextInputType.multiline,
-                maxLines: widget.model.isWebFullView ? 1 : null,
-                style: TextStyle(fontSize: 18, color: defaultColor, fontWeight: FontWeight.w400),
-                decoration: const InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Déscription',
+
+            10.height,
+
+            Separator(color: Colors.grey),
+
+            Row(
+              children: [
+                Align(
+                    alignment: Alignment.centerLeft,
+                    child: Icon(
+                      Icons.work_history_outlined,
+                      size: 20,
+                    )),
+                Container(
+                    margin: const EdgeInsets.only(left: 7.0),
+                    child: Text("Information d'examen",
+                        style: boldTextStyle(
+                          size: 15,
+                        ))),
+              ],
+            ).paddingOnly(top: 30, bottom: 16),
+
+            IntrinsicHeight(
+                child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Column(children: [
+                  Text(
+                    'Examen',
+                    style: boldTextStyle(),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Text(
+                      'Conduite',
+                      style: TextStyle(fontSize: 10, color: Color(0xFF8B1FA9), fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                ]),
+                VerticalDivider(
+                  color: appStore.iconColor,
+                  thickness: 2,
                 ),
-              ),
+                Column(children: [
+                  Text(
+                    'Date',
+                    style: boldTextStyle(),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Text(
+                      '01/12/2012',
+                      style: TextStyle(fontSize: 10, color: Color(0xFF8B1FA9), fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                ]),
+                VerticalDivider(
+                  color: appStore.iconColor,
+                  thickness: 2,
+                ),
+                Column(children: [
+                  Text(
+                    'Nbr',
+                    style: boldTextStyle(),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Text(
+                      '3',
+                      style: TextStyle(fontSize: 10, color: Color(0xFF8B1FA9), fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                ]),
+              ],
+            )),
+            30.height,
+            //Separator(color: Colors.grey),
+            const Divider(
+              height: 1.0,
+              thickness: 1,
             ),
+            Row(
+              children: [
+                Align(
+                    alignment: Alignment.centerLeft,
+                    child: Icon(
+                      Icons.bar_chart,
+                      size: 20,
+                    )),
+                Container(
+                    margin: const EdgeInsets.only(left: 7.0),
+                    child: Text("Avancement",
+                        style: boldTextStyle(
+                          size: 15,
+                        ))),
+              ],
+            ).paddingOnly(top: 30, bottom: 16),
+            IntrinsicHeight(
+                child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Column(children: [
+                  Text(
+                    'Nbr heur Total',
+                    style: boldTextStyle(),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Text(
+                      '20',
+                      style: TextStyle(fontSize: 10, color: Color(0xFF8B1FA9), fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                ]),
+                VerticalDivider(
+                  color: appStore.iconColor,
+                  thickness: 2,
+                ),
+                Column(children: [
+                  Text(
+                    'Nbr heur Total',
+                    style: boldTextStyle(),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10),
+                    child: Text(
+                      '6',
+                      style: TextStyle(fontSize: 10, color: Color(0xFF8B1FA9), fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                ]),
+              ],
+            )),
           ],
         ));
   }
@@ -571,7 +683,6 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
   }
 }
 
-/// Signature for callback which reports the picker value changed
 typedef _PickerChanged = void Function(_PickerChangedDetails pickerChangedDetails);
 
 /// Details for the [_PickerChanged].

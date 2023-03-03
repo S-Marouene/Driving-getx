@@ -10,8 +10,7 @@ import '../../main/utils/SDColors.dart';
 DateTime selectedDate = DateTime.now();
 TimeOfDay selectedTime = TimeOfDay.now();
 
-Future<void> selectDate(
-    BuildContext context, StateSetter setModalState, controller) async {
+Future<void> selectDate(BuildContext context, StateSetter setModalState, controller) async {
   final DateTime? picked = await showDatePicker(
       helpText: 'Selectionner la date',
       cancelText: 'Annuler',
@@ -37,8 +36,7 @@ Future<void> selectDate(
   }
 }
 
-Future<void> selectTime(
-    BuildContext context, StateSetter setModalState, controller) async {
+Future<void> selectTime(BuildContext context, StateSetter setModalState, controller) async {
   final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: selectedTime,
@@ -69,17 +67,14 @@ Padding editTextStyle(var hintText, var namefield) {
       decoration: InputDecoration(
         contentPadding: EdgeInsets.fromLTRB(24, 16, 24, 16),
         hintText: hintText,
-        hintStyle: primaryTextStyle(
-            color: appStore.isDarkModeOn ? white.withOpacity(0.5) : grey),
+        hintStyle: primaryTextStyle(color: appStore.isDarkModeOn ? white.withOpacity(0.5) : grey),
         filled: true,
         labelText: hintText,
         fillColor: appStore.appBarColor,
         enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide(color: kPrimaryColor, width: 1.0)),
+            borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: kPrimaryColor, width: 1.0)),
         focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide(color: kSecondaryColor, width: 1.0)),
+            borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: kSecondaryColor, width: 1.0)),
       ),
     ),
   );
@@ -95,17 +90,14 @@ Padding editNumericStyle(var hintText, var namefield) {
       decoration: InputDecoration(
         contentPadding: EdgeInsets.fromLTRB(24, 16, 24, 16),
         hintText: hintText,
-        hintStyle: primaryTextStyle(
-            color: appStore.isDarkModeOn ? white.withOpacity(0.5) : grey),
+        hintStyle: primaryTextStyle(color: appStore.isDarkModeOn ? white.withOpacity(0.5) : grey),
         filled: true,
         labelText: hintText,
         fillColor: appStore.appBarColor,
         enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide(color: kPrimaryColor, width: 1.0)),
+            borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: kPrimaryColor, width: 1.0)),
         focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide(color: kSecondaryColor, width: 1.0)),
+            borderRadius: BorderRadius.circular(16), borderSide: BorderSide(color: kSecondaryColor, width: 1.0)),
       ),
     ),
   );
@@ -123,17 +115,14 @@ Widget CondOption(var mHeading, var mSubHeading) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
-      Text(mHeading,
-          style: primaryTextStyle(size: 15, color: sdTextPrimaryColor)),
+      Text(mHeading, style: primaryTextStyle(size: 15, color: sdTextPrimaryColor)),
       SizedBox(height: 4),
-      Text(mSubHeading,
-          style: primaryTextStyle(size: 11, color: sdTextSecondaryColor))
+      Text(mSubHeading, style: primaryTextStyle(size: 11, color: sdTextSecondaryColor))
     ],
   );
 }
 
-Widget scheduleViewBuilder(
-    BuildContext buildContext, ScheduleViewMonthHeaderDetails details) {
+Widget scheduleViewBuilder(BuildContext buildContext, ScheduleViewMonthHeaderDetails details) {
   final String monthName = _getMonthDate(details.date.month);
   return Stack(
     children: <Widget>[
@@ -181,5 +170,38 @@ String _getMonthDate(int month) {
     return 'November';
   } else {
     return 'December';
+  }
+}
+
+class Separator extends StatelessWidget {
+  final double height;
+  final double dashWidth;
+  final Color color;
+
+  const Separator({super.key, this.height = 1, this.dashWidth = 10, this.color = Colors.black});
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        final boxWidth = constraints.constrainWidth();
+        final dashWidths = dashWidth;
+        final dashHeight = height;
+        final dashCount = (boxWidth / (2 * dashWidths)).floor();
+        return Flex(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          direction: Axis.horizontal,
+          children: List.generate(dashCount, (_) {
+            return SizedBox(
+              width: dashWidths,
+              height: dashHeight,
+              child: DecoratedBox(
+                decoration: BoxDecoration(color: color),
+              ),
+            );
+          }),
+        );
+      },
+    );
   }
 }

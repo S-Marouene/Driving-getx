@@ -6,9 +6,8 @@ import 'dio.dart';
 
 class ServiceConduite {
   static Future<List<Conduite>> getConduites() async {
-    Dio.Response response = await dio().get(
-        '/conduite/conduitecalndr/getForCalndr',
-        options: Dio.Options(headers: {'auth': true}));
+    Dio.Response response =
+        await dio().get('/conduite/conduitecalndr/GetConduiteAcc', options: Dio.Options(headers: {'auth': true}));
 
     if (response.statusCode == 200) {
       final List conduites = jsonDecode((response.data.toString()))["data"];

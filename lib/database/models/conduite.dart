@@ -1,3 +1,5 @@
+// ignore_for_file: camel_case_types
+
 class Conduite {
   int? id;
   String? school_name;
@@ -10,10 +12,11 @@ class Conduite {
   String? vehicule;
   String? couleur;
   Detailcondidat? condidat;
-  String? detail_examen;
-  String? nbr_heur_affecter;
-  String? nbr_heur_total;
-  String? nbr_exam;
+  Detailexam? detail_examen;
+
+  Nbr_hr_affec? nbr_heur_affecter;
+  Nbr_heur_total? nbr_heur_total;
+  Nbr_exam? nbr_exam;
 
   Conduite({
     this.id,
@@ -23,6 +26,7 @@ class Conduite {
     this.school_name,
     this.school_id,
     this.nbr_heure,
+    this.couleur,
     this.moniteur,
     this.nbr_heur_total,
     this.vehicule,
@@ -43,15 +47,24 @@ class Conduite {
       school_id: json['school_id'],
       nbr_heure: json['nbr_heure'],
       moniteur: json['moniteur'],
-      nbr_heur_total: json['nbr_heur_total'],
+      couleur: json['couleur'],
+      nbr_heur_total: Nbr_heur_total(
+        nb_heur_total: detailcond['nb_heur_total'] ?? "",
+      ),
       vehicule: json['vehicule'],
-      detail_examen: json['detail_examen'],
-      nbr_heur_affecter: json['nbr_heur_affecter'],
-      nbr_exam: json['nbr_exam'],
+      detail_examen: Detailexam(
+        date_examen: detailcond['date_examen'] ?? "",
+        type_examen: detailcond['type_examen'] ?? "",
+      ),
+      nbr_heur_affecter: Nbr_hr_affec(
+        nb_heur_affecter: detailcond['nb_heur_affecter'] ?? "",
+      ),
+      nbr_exam: Nbr_exam(nb_exam: detailcond['nb_exam'] ?? ""),
       condidat: Detailcondidat(
-          nom: detailcond != null ? detailcond['nom'] : "",
-          prenom: detailcond != null ? detailcond['prenom'] : "",
-          photo: detailcond != null ? detailcond['photo'] : ""),
+          nom: detailcond['nom'] ?? "",
+          prenom: detailcond['prenom'] ?? "",
+          photo: detailcond['photo'] ?? "",
+          num_tel: detailcond['num_tel'] ?? ""),
     );
   }
 }
@@ -60,11 +73,13 @@ class Detailcondidat {
   String? nom;
   String? prenom;
   String? photo;
+  String? num_tel;
 
   Detailcondidat({
     this.nom,
     this.prenom,
     this.photo,
+    this.num_tel,
   });
 
   factory Detailcondidat.fromJson(Map<String, dynamic> json) {
@@ -72,6 +87,66 @@ class Detailcondidat {
       nom: json['nom'],
       prenom: json['prenom'],
       photo: json['photo'],
+      num_tel: json['num_tel'],
+    );
+  }
+}
+
+class Detailexam {
+  String? date_examen;
+  String? type_examen;
+
+  Detailexam({
+    this.date_examen,
+    this.type_examen,
+  });
+
+  factory Detailexam.fromJson(Map<String, dynamic> json) {
+    return Detailexam(
+      date_examen: json['date_examen'],
+      type_examen: json['type_examen'],
+    );
+  }
+}
+
+class Nbr_hr_affec {
+  String? nb_heur_affecter;
+
+  Nbr_hr_affec({
+    this.nb_heur_affecter,
+  });
+
+  factory Nbr_hr_affec.fromJson(Map<String, dynamic> json) {
+    return Nbr_hr_affec(
+      nb_heur_affecter: json['nb_heur_affecter'],
+    );
+  }
+}
+
+class Nbr_heur_total {
+  String? nb_heur_total;
+
+  Nbr_heur_total({
+    this.nb_heur_total,
+  });
+
+  factory Nbr_heur_total.fromJson(Map<String, dynamic> json) {
+    return Nbr_heur_total(
+      nb_heur_total: json['nb_heur_total'],
+    );
+  }
+}
+
+class Nbr_exam {
+  String? nb_exam;
+
+  Nbr_exam({
+    this.nb_exam,
+  });
+
+  factory Nbr_exam.fromJson(Map<String, dynamic> json) {
+    return Nbr_exam(
+      nb_exam: json['nb_exam'],
     );
   }
 }

@@ -48,9 +48,10 @@ class Examen {
       resultat: json['resultat'],
       examinateur: json['examinateur'],
       condidat: Detailcondidat(
-          nom: detailcond != null ? detailcond['nom'] : "",
-          prenom: detailcond != null ? detailcond['prenom'] : "",
-          photo: detailcond != null ? detailcond['photo'] : ""),
+          nom: detailcond['nom'] ?? "",
+          prenom: detailcond['prenom'] ?? "",
+          photo: detailcond['photo'] ?? "",
+          num_tel: detailcond['num_tel'] ?? ""),
     );
   }
 
@@ -74,11 +75,13 @@ class Detailcondidat {
   String? nom;
   String? prenom;
   String? photo;
+  String? num_tel;
 
   Detailcondidat({
     this.nom,
     this.prenom,
     this.photo,
+    this.num_tel,
   });
 
   factory Detailcondidat.fromJson(Map<String, dynamic> json) {
@@ -86,6 +89,7 @@ class Detailcondidat {
       nom: json['nom'],
       prenom: json['prenom'],
       photo: json['photo'],
+      num_tel: json['num_tel'],
     );
   }
 }

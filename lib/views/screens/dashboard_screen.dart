@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:driving_getx/database/models/conduite.dart';
 import 'package:driving_getx/database/models/examens.dart';
 import 'package:driving_getx/logic/controllers/conduite_controller.dart';
@@ -25,8 +24,24 @@ class DashboardScreen extends SampleView {
 class _DashboardScreenState extends SampleViewState {
   final CalendarController calendarController = CalendarController();
   late _AppointmentDataSource _dataSource;
-  final List<Color> _colorCollection = <Color>[];
-  final List<String> _colorNames = <String>[];
+  final List<Color> _colorCollection = <Color>[
+    const Color(0xFF0F8644),
+    const Color(0xFF8B1FA9),
+    const Color(0xFFD20100),
+    const Color(0xFFFC571D),
+    const Color(0xFF36B37B),
+    const Color(0xFF01A1EF),
+    const Color(0xFF3D4FB5),
+  ];
+  final List<String> _colorNames = <String>[
+    'Green',
+    'Purple',
+    'Red',
+    'Orange',
+    'Caramel',
+    'Light Green',
+    'Blue',
+  ];
 
   final List<CalendarView> _allowedViews = <CalendarView>[
     CalendarView.day,
@@ -99,7 +114,7 @@ class _DashboardScreenState extends SampleViewState {
                 Allconduite = conduite_controller.listeConduite.value;
                 Allexamen = examens_controller.ListExamClrd.value;
                 _dataSource = _AppointmentDataSource(_getRecursiveAppointments(Allconduite, Allexamen));
-                return BuildCalendar(Allconduite);
+                return BuildCalendar();
               },
               onLoading: showLoadingIndicator(),
             )),
@@ -109,7 +124,7 @@ class _DashboardScreenState extends SampleViewState {
     );
   }
 
-  Widget BuildCalendar(Allconduite) {
+  Widget BuildCalendar() {
     final double screenHeight = MediaQuery.of(context).size.height;
     final Widget calendar = Theme(
         key: _globalKey,
@@ -186,6 +201,7 @@ class _DashboardScreenState extends SampleViewState {
       dataSource: calendarDataSource,
       monthViewSettings: const MonthViewSettings(appointmentDisplayMode: MonthAppointmentDisplayMode.appointment),
       onTap: calendarTapCallback,
+      showCurrentTimeIndicator: true,
     );
   }
 
@@ -203,48 +219,30 @@ class _DashboardScreenState extends SampleViewState {
   }
 
   List<Appointment> _getRecursiveAppointments(Allconduite, Allexamen) {
-    _colorNames.add('Green');
-    _colorNames.add('Purple');
-    _colorNames.add('Red');
-    _colorNames.add('Orange');
-    _colorNames.add('Caramel');
-    _colorNames.add('Light Green');
-    _colorNames.add('Blue');
-    _colorNames.add('Peach');
-    _colorNames.add('Gray');
-
-    _colorCollection.add(const Color(0xFF0F8644));
-    _colorCollection.add(const Color(0xFF8B1FA9));
-    _colorCollection.add(const Color(0xFFD20100));
-    _colorCollection.add(const Color(0xFFFC571D));
-    _colorCollection.add(const Color(0xFF36B37B));
-    _colorCollection.add(const Color(0xFF01A1EF));
-    _colorCollection.add(const Color(0xFF3D4FB5));
-    _colorCollection.add(const Color(0xFFE47C73));
-    _colorCollection.add(const Color(0xFF636363));
-
     final List<Appointment> appointments = <Appointment>[];
-    final Random random = Random();
+    //final Random random = Random();
 
-    Allexamen.forEach((subject) {
+    Allexamen.forEach((examen) {
       final Appointment alternativeDayAppointment0 = Appointment(
-        startTime: DateTime.parse(subject.dateExamen),
-        endTime: DateTime.parse(subject.dateExamen).add(const Duration(hours: 2)),
-        color: _colorCollection[1],
-        subject: subject.condidat.nom + " " + subject.condidat.prenom + " Exam Conduite",
-        photo: subject.condidat.photo,
-      );
+          startTime: DateTime.parse(examen.dateExamen),
+          endTime: DateTime.parse(examen.dateExamen).add(const Duration(hours: 2)),
+          color: _colorCollection[1],
+          subject: examen.condidat.nom + " " + examen.condidat.prenom + " Exam Conduite",
+          photo: examen.condidat.photo,
+          num_tel: examen.condidat.num_tel);
 
       appointments.add(alternativeDayAppointment0);
     });
 
-    Allconduite.forEach((subject) {
+    Allconduite.forEach((conduite) {
       final Appointment alternativeDayAppointment0 = Appointment(
-        startTime: DateTime.parse(subject.date_deb),
-        endTime: DateTime.parse(subject.date_fin),
-        color: _colorCollection[random.nextInt(8)],
-        subject: subject.condidat.nom + " " + subject.condidat.prenom,
-        //photo: subject.condidat.photo,
+        startTime: DateTime.parse(conduite.date_deb),
+        endTime: DateTime.parse(conduite.date_fin),
+        //color: _colorCollection[random.nextInt(6)],
+        color: (conduite.couleur == 'Vert') ? _colorCollection[4] : _colorCollection[3],
+        subject: conduite.condidat.nom + " " + conduite.condidat.prenom,
+        photo: conduite.condidat.photo,
+        num_tel: conduite.condidat.num_tel,
       );
 
       appointments.add(alternativeDayAppointment0);
