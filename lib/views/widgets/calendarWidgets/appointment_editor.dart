@@ -39,6 +39,13 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
   String _subject = '';
   String _photo = '';
   String _num_tel = '';
+
+  String _nbr_heur_affecter = '';
+  String _nbr_heur_total = '';
+  String _nbr_exam = '';
+  String _date_exam = '';
+  String _type_exam = '';
+
   String? _notes;
   List<Object>? _resourceIds;
   List<CalendarResource> _selectedResources = <CalendarResource>[];
@@ -67,6 +74,14 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
       _photo = widget.selectedAppointment!.photo == '(No photo)' ? '' : widget.selectedAppointment!.photo;
       _num_tel = widget.selectedAppointment!.num_tel == 'Contact' ? '' : widget.selectedAppointment!.num_tel;
 
+      _nbr_heur_affecter =
+          widget.selectedAppointment!.nbr_heur_affecter == '' ? '' : widget.selectedAppointment!.nbr_heur_affecter;
+      _nbr_heur_total =
+          widget.selectedAppointment!.nbr_heur_total == 'aaaa' ? '' : widget.selectedAppointment!.nbr_heur_total;
+      _nbr_exam = widget.selectedAppointment!.nbr_exam == '' ? '' : widget.selectedAppointment!.nbr_exam;
+      _date_exam = widget.selectedAppointment!.date_exam == '' ? '' : widget.selectedAppointment!.date_exam;
+      _type_exam = widget.selectedAppointment!.type_exam == '' ? '' : widget.selectedAppointment!.type_exam;
+
       _notes = widget.selectedAppointment!.notes;
       _resourceIds = widget.selectedAppointment!.resourceIds?.sublist(0);
     } else {
@@ -76,6 +91,11 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
       _notes = '';
       _photo = '';
       _num_tel = '';
+      _nbr_heur_affecter = '';
+      _nbr_heur_total = '';
+      _nbr_exam = '';
+      _date_exam = '';
+      _type_exam = '';
 
       final DateTime date = widget.selectedDate;
       _startDate = date;
@@ -379,8 +399,11 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
 
             10.height,
 
-            Separator(color: Colors.grey),
-
+            // Separator(color: Colors.grey),
+            const Divider(
+              height: 1.0,
+              thickness: 1,
+            ),
             Row(
               children: [
                 Align(
@@ -405,12 +428,12 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                 Column(children: [
                   Text(
                     'Examen',
-                    style: boldTextStyle(),
+                    style: primaryTextStyle(size: 12),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10),
                     child: Text(
-                      'Conduite',
+                      _type_exam,
                       style: TextStyle(fontSize: 10, color: Color(0xFF8B1FA9), fontWeight: FontWeight.w400),
                     ),
                   ),
@@ -422,12 +445,12 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                 Column(children: [
                   Text(
                     'Date',
-                    style: boldTextStyle(),
+                    style: primaryTextStyle(size: 12),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10),
                     child: Text(
-                      '01/12/2012',
+                      _date_exam,
                       style: TextStyle(fontSize: 10, color: Color(0xFF8B1FA9), fontWeight: FontWeight.w400),
                     ),
                   ),
@@ -438,13 +461,13 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                 ),
                 Column(children: [
                   Text(
-                    'Nbr',
-                    style: boldTextStyle(),
+                    "Nbr",
+                    style: primaryTextStyle(size: 12),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10),
                     child: Text(
-                      '3',
+                      _nbr_exam,
                       style: TextStyle(fontSize: 10, color: Color(0xFF8B1FA9), fontWeight: FontWeight.w400),
                     ),
                   ),
@@ -480,12 +503,14 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                 Column(children: [
                   Text(
                     'Nbr heur Total',
-                    style: boldTextStyle(),
+                    style: primaryTextStyle(
+                      size: 12,
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10),
                     child: Text(
-                      '20',
+                      _nbr_heur_total,
                       style: TextStyle(fontSize: 10, color: Color(0xFF8B1FA9), fontWeight: FontWeight.w400),
                     ),
                   ),
@@ -497,12 +522,14 @@ class _AppointmentEditorState extends State<AppointmentEditor> {
                 Column(children: [
                   Text(
                     'Nbr heur Total',
-                    style: boldTextStyle(),
+                    style: primaryTextStyle(
+                      size: 12,
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10),
                     child: Text(
-                      '6',
+                      _nbr_heur_affecter,
                       style: TextStyle(fontSize: 10, color: Color(0xFF8B1FA9), fontWeight: FontWeight.w400),
                     ),
                   ),

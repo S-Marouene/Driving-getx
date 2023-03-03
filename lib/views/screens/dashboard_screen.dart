@@ -243,6 +243,11 @@ class _DashboardScreenState extends SampleViewState {
         subject: conduite.condidat.nom + " " + conduite.condidat.prenom,
         photo: conduite.condidat.photo,
         num_tel: conduite.condidat.num_tel,
+        nbr_heur_total: conduite.nbr_heur_total.nb_heur_total,
+        nbr_heur_affecter: conduite.nbr_heur_affecter.nb_heur_affecter,
+        type_exam: conduite.detail_examen.type_examen,
+        date_exam: conduite.detail_examen.date_examen,
+        nbr_exam: conduite.nbr_exam.nb_exam,
       );
 
       appointments.add(alternativeDayAppointment0);

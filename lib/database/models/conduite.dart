@@ -11,12 +11,12 @@ class Conduite {
   String? moniteur;
   String? vehicule;
   String? couleur;
+
   Detailcondidat? condidat;
   Detailexam? detail_examen;
-
   Nbr_hr_affec? nbr_heur_affecter;
   Nbr_heur_total? nbr_heur_total;
-  Nbr_exam? nbr_exam;
+  Nbr_ex? nbr_exam;
 
   Conduite({
     this.id,
@@ -32,12 +32,17 @@ class Conduite {
     this.vehicule,
     this.detail_examen,
     this.nbr_heur_affecter,
-    this.nbr_exam,
     this.condidat,
+    this.nbr_exam,
   });
 
   factory Conduite.fromJson(Map<String, dynamic> json) {
     dynamic detailcond = json['condidat'];
+    dynamic detailexam = json['detail_examen'];
+    List<dynamic> nht = json['nbr_heur_total'];
+    List<dynamic> nhaff = json['nbr_heur_affecter'];
+    List<dynamic> nnn = json['nbr_exam'];
+
     return Conduite(
       id: json['id'],
       condidat_id: json['condidat_id'],
@@ -49,22 +54,24 @@ class Conduite {
       moniteur: json['moniteur'],
       couleur: json['couleur'],
       nbr_heur_total: Nbr_heur_total(
-        nb_heur_total: detailcond['nb_heur_total'] ?? "",
+        nb_heur_total: nht[0]['nb_heur_total'] ?? "0",
       ),
       vehicule: json['vehicule'],
       detail_examen: Detailexam(
-        date_examen: detailcond['date_examen'] ?? "",
-        type_examen: detailcond['type_examen'] ?? "",
+        date_examen: detailexam?['date_examen'] != null ? detailexam['date_examen'] : "--",
+        type_examen: detailexam?['type_examen'] != null ? detailexam['type_examen'] : "--",
       ),
       nbr_heur_affecter: Nbr_hr_affec(
-        nb_heur_affecter: detailcond['nb_heur_affecter'] ?? "",
+        nb_heur_affecter: nhaff[0]['nb_heur_affecter'] ?? "0",
       ),
-      nbr_exam: Nbr_exam(nb_exam: detailcond['nb_exam'] ?? ""),
       condidat: Detailcondidat(
           nom: detailcond['nom'] ?? "",
           prenom: detailcond['prenom'] ?? "",
           photo: detailcond['photo'] ?? "",
           num_tel: detailcond['num_tel'] ?? ""),
+      nbr_exam: Nbr_ex(
+        nb_exam: "nbr ghalet",
+      ),
     );
   }
 }
@@ -137,15 +144,17 @@ class Nbr_heur_total {
   }
 }
 
-class Nbr_exam {
+/***a terminer next  week */
+class Nbr_ex {
   String? nb_exam;
 
-  Nbr_exam({
+  Nbr_ex({
     this.nb_exam,
   });
 
-  factory Nbr_exam.fromJson(Map<String, dynamic> json) {
-    return Nbr_exam(
+  factory Nbr_ex.fromJson(Map<String, dynamic> json) {
+    print(json['nb_exam']);
+    return Nbr_ex(
       nb_exam: json['nb_exam'],
     );
   }
